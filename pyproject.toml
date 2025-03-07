@@ -1,0 +1,36 @@
+[build-system]
+requires      = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dbcheck"
+version = "0.0.1"
+description = "Analizador de bases de datos"
+readme = "README.md"
+authors = [
+    { name = "Fran Vargas", email = "fvarrui.ceu@gmail.com" }
+]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["business", "finder", "places", "api", "google" ]
+dependencies = [
+    "tabulate",    
+    "python-dotenv",
+    "pyodbc"
+]
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
+
+[project.urls]
+
+[project.scripts]
+dbcheck = "cli.__main__:main"
+
+[tool.setuptools]
+include-package-data = true
