@@ -3,9 +3,9 @@ requires      = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dbcheck"
+name = "dbtools"
 version = "0.0.1"
-description = "Analizador de bases de datos"
+description = "Database tools for schema mapping, integrity check and migration"
 readme = "README.md"
 authors = [
     { name = "Fran Vargas", email = "fvarrui.ceu@gmail.com" }
@@ -16,11 +16,14 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
 ]
-keywords = ["business", "finder", "places", "api", "google" ]
+keywords = ["db", "tools", "schema", "mapping", "integrity", "check", "migration", "sql" ]
 dependencies = [
     "tabulate",    
     "python-dotenv",
-    "pyodbc"
+    "sqlalchemy",
+    "pymysql",          # MySQL/MariaDB
+    "pyodbc",           # SQL Server
+    "psycopg2",         # PostgreSQL
 ]
 requires-python = ">=3.12"
 
@@ -30,7 +33,8 @@ dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
 [project.urls]
 
 [project.scripts]
-dbcheck = "cli.__main__:main"
+dbchecker = "dbchecker.__main__:main"
+dbschema = "dbschema.__main__:main"
 
 [tool.setuptools]
 include-package-data = true

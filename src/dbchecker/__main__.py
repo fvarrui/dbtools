@@ -2,12 +2,8 @@ import json
 import argparse
 import sys
 
-from cli.__init__ import __project_name__, __project_description__, __project_name__, __project_version__
-from dbcheck.database import Database
-
-DRIVER="ODBC Driver 17 for SQL Server"
-DB_NAME="PincelPreDB"
-SERVER="SERVERPREPROEDUCA.educacion.org"
+from dbchecker import __module_name__, __module_description__, __module_name__, __module_version__
+from dbchecker.database import Database
 
 def main():
 
@@ -19,13 +15,13 @@ def main():
                 self._add_item(self._format_usage, args)
 
     # define el parser
-    parser = argparse.ArgumentParser(prog=__project_name__, description=f"{__project_description__} (v{__project_version__})", epilog='¡Soy la solución a tu amargura!', add_help=False, formatter_class=CustomHelpFormatter)
+    parser = argparse.ArgumentParser(prog=__module_name__, description=f"{__module_description__} (v{__module_version__})", epilog='¡Soy la solución a tu amargura!', add_help=False, formatter_class=CustomHelpFormatter)
 
     # define los comandos (mutuamente excluyentes)
     commands = parser.add_argument_group('Comandos')
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda y termina')
-    commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__project_name__} v{__project_version__}')
+    commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__module_name__} v{__module_version__}')
     commands.add_argument('--list-tables', metavar='PREFIX', nargs='?', const='', help='Listar todas las tablas (con o sin prefijo)')
     commands.add_argument('--list-views', metavar='PREFIX', nargs='?', const='', help='Listar todas las vistas (con o sin prefijo)')
     commands.add_argument('--show-table', metavar='TABLE', help='Mostrar estructura de la tabla', type=str)

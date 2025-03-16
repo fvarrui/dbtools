@@ -20,10 +20,8 @@ class Column:
                 return "float"
             case "varchar" | "nvarchar" | "char":
                 return f"string"
-            case "bit":
+            case "bit" if max_length == 1:
                 return "boolean"
-            case "date":
-                return "date"
             case "datetime" | "smalldatetime":
                 return "datetime"
             case _:
