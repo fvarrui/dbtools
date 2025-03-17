@@ -4,10 +4,13 @@ import json
 import argparse
 
 from dbschema import __module_name__, __module_description__, __module_version__
+from dbconn.dbini import get_connection_url
 
 from sqlalchemy import create_engine, MetaData, inspect
 from urllib.parse import urlparse
 from tabulate import tabulate
+
+CONFIG_FILE = "dbtools.ini"
 
 def generate_schema(metadata, prefix=None):
     schema = {}
@@ -76,6 +79,7 @@ def main():
 
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
+    options.add_argument('--db', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {CONFIG_FILE}")
     options.add_argument('--dburl', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
     options.add_argument('--json', action='store_true', help='Devuelve el resultado en formato JSON')
 
@@ -88,15 +92,20 @@ def main():
         return
 
     # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla de las variables de entorno
-    if args.dburl:
-        dburl = args.dburl
-    else:
-        dburl = os.getenv("DBTOOLS_CONNECTION_URL")
+    dburl = args.dburl or os.getenv("DBTOOLS_CONNECTION_URL")
+
+    if not dburl:
+        # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
+        try:
+            dburl = get_connection_url(CONFIG_FILE, args.db)
+        except Exception as e:
+            print("No se ha podido obtener la URL de conexión a la base de datos:", e, file=sys.stderr)
+            sys.exit(1)
 
     # Comprueba que se ha especificado una URL de conexión a la base de datos
     if not dburl:
-        print("Debe especificar una URL de conexión a la base de datos", file=sys.stderr)
-        sys.exit(1)    
+        print(f"Debe especificar una URL de conexión a la base de datos o una configuración en {CONFIG_FILE}", file=sys.stderr)
+        sys.exit(1)  
 
     # Conecta a la base de datos
     engine = create_engine(dburl)
