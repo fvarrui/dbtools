@@ -4,11 +4,12 @@ import json
 import argparse
 
 from dbschema import __module_name__, __module_description__, __module_version__
-from dbconn.dbini import get_connection_url
+from dbconn.dbini import get_connection_url, has_undefined_password, replace_password_placeholder
 
 from sqlalchemy import create_engine, MetaData, inspect
 from urllib.parse import urlparse
 from tabulate import tabulate
+from getpass import getpass
 
 CONFIG_FILE = "dbtools.ini"
 
@@ -64,7 +65,7 @@ def main():
                 self._add_item(self._format_usage, args)
 
     # define el parser
-    parser = argparse.ArgumentParser(prog=__module_name__, description=f"{__module_description__} (v{__module_version__})", epilog='¡Soy la solución a tu amargura!', add_help=False, formatter_class=CustomHelpFormatter)
+    parser = argparse.ArgumentParser(prog=__module_name__, description=f"{__module_description__} (v{__module_version__})", epilog='¡Un gran esquema conlleva una gran responsabilidad!', add_help=False, formatter_class=CustomHelpFormatter)
 
     # define los comandos (mutuamente excluyentes)
     commands = parser.add_argument_group('Comandos')
@@ -79,8 +80,9 @@ def main():
 
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
-    options.add_argument('--db', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {CONFIG_FILE}")
     options.add_argument('--dburl', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
+    options.add_argument('--db', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {CONFIG_FILE}")
+    options.add_argument('--password', metavar='PASSWORD', nargs='?', help=f"Contraseña de la base de datos")
     options.add_argument('--json', action='store_true', help='Devuelve el resultado en formato JSON')
 
     # Parsea los argumentos
@@ -98,6 +100,9 @@ def main():
         # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
         try:
             dburl = get_connection_url(CONFIG_FILE, args.db)
+            if has_undefined_password(dburl):
+                password = args.password or getpass("Introduce la contraseña: ")
+                dburl = replace_password_placeholder(dburl, password)
         except Exception as e:
             print("No se ha podido obtener la URL de conexión a la base de datos:", e, file=sys.stderr)
             sys.exit(1)
@@ -108,7 +113,12 @@ def main():
         sys.exit(1)  
 
     # Conecta a la base de datos
-    engine = create_engine(dburl)
+    try:
+        engine = create_engine(dburl)
+        engine.connect()
+    except Exception as e:
+        print("No se ha podido conectar a la base de datos:", e, file=sys.stderr)
+        sys.exit(1)
 
     # Listar las vistas
     if args.list_views is not None:

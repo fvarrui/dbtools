@@ -46,13 +46,16 @@ def get_connection_url(ini_file_path, section_name):
         raise ValueError(f"No se ha encontrado la sección '{section_name}' en el archivo de configuración")
 
     try:
+        # Obtiene los valores de la sección
         section = config[section_name]
         db_type = section["type"]
 
+        # Comprueba que el tipo de base de datos es soportado
         if db_type not in DBMS_DEFAULT_CONFIG:
             raise ValueError(f"Tipo de base de datos no soportado: {db_type}")
 
-        username = quote_plus(section["username"])
+        # Obtiene los valores de la sección o utiliza los valores por defecto
+        username = quote_plus(section["username"])        
         password = quote_plus(section["password"]) if "password" in section else PASSWORD_PLACEHOLDER
         host = section["host"]
         port = section["port"] if "port" in section else DBMS_DEFAULT_CONFIG[db_type]["port"]
@@ -60,7 +63,13 @@ def get_connection_url(ini_file_path, section_name):
         trusted_connection = "yes" if section.getboolean("trusted_connection", fallback=False) else "no"
         driver = quote_plus(section["driver"] if "driver" in section else DBMS_DEFAULT_CONFIG[db_type].get("driver", ""))        
 
+        # Si es SQL Server y no se ha especificado un usuario, se utiliza la autenticación de Windows
+        db_type = f"{db_type}+sspi" if db_type == "sqlserver" and not username else db_type
+
+        # Obtiene la plantilla de la URL de conexión para el SGBD especificado
         template = Template(DBMS_DEFAULT_CONFIG[db_type]["template"])
+
+        # Sustituye los marcadores de posición por los valores de la sección
         connection_url = template.substitute(
             username=username, 
             password=password, 
@@ -69,6 +78,7 @@ def get_connection_url(ini_file_path, section_name):
             driver=driver, 
             trusted_connection=trusted_connection
         )
+
         return connection_url
 
     except KeyError as e:
