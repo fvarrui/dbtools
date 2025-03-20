@@ -38,12 +38,27 @@ $ dbanalyzer --help
 
 Para obtener más información sobre cada comando, consultar la documentación correspondiente.
 
-Las conexiones a la base de datos se configuran mediante una cadena de conexión que se debe especificar en el archivo de configuración `dbtools.ini` o por como una opción en la línea de comandos.
+Las conexiones a la base de datos se configuran en el archivo de configuración `dbtools.ini` y usando la opción `--db`, o bien proporcionando la cadena de conexión con la opción `--dburl` en la línea de comandos.
+
+Ejemplo de archivo de configuración `dbtools.ini`:
 
 ```ini
 [database]
-dburl = postgresql+psycopg2://user:password@host:port/database
+type=<mysql|postgresql|mssql>
+host=<server>
+port=<port>
+username=<username>
+password=<password>
+database=<database name>
+driver=<driver>
+trusted_connection=<yes|no>
 ```
+
+> Si no se proporciona `port`, se usará el puerto por defecto para el tipo de base de datos especificado.
+
+> Si no se proporciona `password` en el archivo de configuración, se solicitará al usuario.
+
+> Las opciones `driver` y `trusted_connection` son específicas de SQL Server.
 
 ```bash
 $ dbanalyzer --db database <opciones>
@@ -65,8 +80,8 @@ Las cadenas de conexión para los distintos sistemas gestores de bases de datos 
 |---------|---------------------|
 | PostgreSQL | `postgresql+psycopg2://{USER}:{PASSWORD}@{SERVER}:{PORT}/{DB_NAME}` |
 | MySQL | `mysql+pymysql://{USER}:{PASSWORD}@{SERVER}:{PORT}/{DB_NAME}` |
-| SQL Server (SQL Server Authentication) | `mssql+pyodbc://{USER}:{PASSWORD}@{SERVER}}:{PORT}}/{DB_NAME}` |
-| SQL Server (Windows Authentication) | `mssql+pyodbc://{USER}:{PASSWORD}@{SERVER}}:{PORT}}/{DB_NAME}` |
+| SQL Server (SQL Server Authentication) | `mssql+pyodbc://{USER}:{PASSWORD}@{SERVER}}:{PORT}}/{DB_NAME}?driver={DRIVER}` |
+| SQL Server (Windows Authentication) [SSPI] | `mssql+pyodbc://{SERVER}}:{PORT}}/{DB_NAME}?driver={DRIVER}&trusted_connection=yes` |
 
 
 ## Para desarrolladores
