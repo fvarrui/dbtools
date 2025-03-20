@@ -55,7 +55,7 @@ def get_connection_url(ini_file_path, section_name):
             raise ValueError(f"Tipo de base de datos no soportado: {db_type}")
 
         # Obtiene los valores de la sección o utiliza los valores por defecto
-        username = quote_plus(section["username"])        
+        username = quote_plus(section["username"]) if "username" in section else ""
         password = quote_plus(section["password"]) if "password" in section else PASSWORD_PLACEHOLDER
         host = section["host"]
         port = section["port"] if "port" in section else DBMS_DEFAULT_CONFIG[db_type]["port"]
