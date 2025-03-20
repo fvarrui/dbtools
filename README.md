@@ -54,11 +54,10 @@ driver=<driver>
 trusted_connection=<yes|no>
 ```
 
-> Si no se proporciona `port`, se usará el puerto por defecto para el tipo de base de datos especificado.
-
-> Si no se proporciona `password` en el archivo de configuración, se solicitará al usuario.
-
-> Las opciones `driver` y `trusted_connection` son específicas de SQL Server.
+> [!WARNING]Importante
+> - Si no se proporciona `port`, se usará el puerto por defecto para el tipo de base de datos especificado.
+> - Si no se proporciona `password` en el archivo de configuración, se solicitará al usuario.
+> - Las opciones `driver` y `trusted_connection` son específicas de SQL Server.
 
 ```bash
 $ dbanalyzer --db database <opciones>
