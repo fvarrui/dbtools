@@ -35,22 +35,20 @@ def generate_schema(metadata, prefix=None):
         }
     return schema
 
-def list_tables(metadata, prefix=None):
+def list_tables(engine, filter=None):
+    inspector = inspect(engine)
     tables = []
-    for table_name in metadata.tables.keys():
-        if prefix and not table_name.startswith(prefix):
+    for table_name in inspector.get_table_names():
+        if filter and not filter in table_name:
             continue
-        tables.append({
-            "name": table_name,
-            "comment": metadata.tables[table_name].comment or ""
-        })
+        tables.append(table_name)
     return tables
 
-def list_views(engine, prefix=None):
+def list_views(engine, filter=None):
     inspector = inspect(engine)
     views = []
     for view_name in inspector.get_view_names():
-        if prefix and not view_name.startswith(prefix):
+        if filter and not filter in view_name:
             continue
         views.append(view_name)
     return views
@@ -72,9 +70,9 @@ def main():
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda')
     commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__module_name__} v{__module_version__}')
-    commands.add_argument('--schema', metavar='PREFIX', nargs='?', const='', help='Genera el esquema de la base de datos')
-    commands.add_argument('--list-tables', metavar='PREFIX', nargs='?', const='', help='Listar todas las tablas')
-    commands.add_argument('--list-views', metavar='PREFIX', nargs='?', const='', help='Listar todas las vistas')
+    commands.add_argument('--schema', metavar='FILTER', nargs='?', const='', help='Genera el esquema de la base de datos')
+    commands.add_argument('--list-tables', metavar='FILTER', nargs='?', const='', help='Listar todas las tablas')
+    commands.add_argument('--list-views', metavar='FILTER', nargs='?', const='', help='Listar todas las vistas')
     commands.add_argument('--show-table', metavar='TABLE', help='Mostrar estructura de la tabla', type=str)
     commands.add_argument('--show-view', metavar='VIEW', help='Mostrar estructura de la vista', type=str)
 
@@ -82,6 +80,7 @@ def main():
     options = parser.add_argument_group('Opciones')
     options.add_argument('--dburl', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
     options.add_argument('--db', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {CONFIG_FILE}")
+    options.add_argument('--output', metavar='FILE', nargs='?', help='Fichero de salida')
     options.add_argument('--password', metavar='PASSWORD', nargs='?', help=f"Contraseña de la base de datos")
     options.add_argument('--json', action='store_true', help='Devuelve el resultado en formato JSON')
 
@@ -116,37 +115,65 @@ def main():
     try:
         engine = create_engine(dburl)
         engine.connect()
+        print("Conectado a la base de datos:", dburl)
     except Exception as e:
-        print("No se ha podido conectar a la base de datos:", e, file=sys.stderr)
+        print(f"No se ha podido conectar a la base de datos {dburl}:", e, file=sys.stderr)
         sys.exit(1)
 
     # Listar las vistas
     if args.list_views is not None:
-        views = list_views(engine, prefix=args.list_views)
-        print("\n".join(views))
+        print("Listando vistas ...")
+        if args.list_views:
+            print(f"- Filtrado vistas que contengan: {args.list_views}\n")
+        view_names = list_views(engine, filter=args.list_views)
+        if args.json:
+            print(json.dumps(view_names, indent=4))
+        else:
+            headers = [ "VIEW_NAME" ]
+            data = [ [ view_name ] for view_name in view_names ]
+            print(tabulate(data, headers=headers, tablefmt="grid"))
+            print(f"\n{len(view_names)} vistas encontradas")
         return
-
-    # Cargar la estructura de la base de datos existente
-    metadata = MetaData()
-    metadata.reflect(bind=engine)
 
     # Listar las tablas
     if args.list_tables is not None:
-        tables = list_tables(metadata, prefix=args.list_tables)
+        print("Listando tablas ...")
+        if args.list_tables:
+            print(f"- Filtrado tablas que contengan: {args.list_tables}\n")
+        view_names = list_tables(engine, filter=args.list_tables)
         if args.json:
-            print(json.dumps(tables, indent=4))
+            print(json.dumps(view_names, indent=4))
         else:
-            headers = [ "TABLE_NAME", "COMMENT" ]
-            data = [ [ table["name"], table["comment"] ] for table in tables]
+            headers = [ "TABLE_NAME" ]
+            data = [ [ table_name ] for table_name in view_names ]
             print(tabulate(data, headers=headers, tablefmt="grid"))
+            print(f"\n{len(view_names)} tablas encontradas")
         return
 
     # Generar el esquema
     if args.schema is not None:
+
+        table_names = list_tables(engine, filter=args.schema) if args.schema else None
+
+        # Cargar la estructura de la base de datos existente
+        print("Recuperando la estructura de la base de datos (metadatos) ...")
+        print("- Tablas a incluir:", table_names or "Todas")
+        metadata = MetaData()
+        metadata.reflect(bind=engine, only=table_names)
+        print("Metadatos recuperados!")
+
+        print(f"Generando esquema de la base de datos a partir de los metadatos ...")
+        if args.schema:
+            print(f"- Incluyendo sólo tablas con prefijo: {args.schema}")
+        else:
+            print(f"- Incluyendo todas las tablas")
+
         # Generar el esquema de la base de datos
         db_schema = generate_schema(metadata, prefix=args.schema)
+        print("Esquema generado!")
 
         # Añade información de la conexión a la base de datos
+        print("Añadiendo información de la conexión a la base de datos al resultado")
         parsedurl = urlparse(dburl)
         db_schema = {
             "database": {
@@ -158,8 +185,17 @@ def main():
         }
 
         # Convertirlo en JSON
+        print("Convirtiendo el resultado en JSON")
         schema_json = json.dumps(db_schema, indent=4)
-        print(schema_json)
+
+        # Guardar en un fichero o mostrar por pantalla
+        if args.output:
+            print(f"Guardando el resultado en el fichero: {args.output}")
+            with open(args.output, "w") as f:
+                f.write(schema_json)
+        else:
+            print(schema_json)
+
         return
     
     print(args)
