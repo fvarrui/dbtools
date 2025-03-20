@@ -33,7 +33,7 @@ Cada comando tiene su propia ayuda, que se puede obtener ejecutando el comando c
 Por ejemplo:
 
 ```bash
-$ dbanalyzer --help
+dbanalyzer --help
 ```
 
 Para obtener más información sobre cada comando, consultar la documentación correspondiente.
@@ -60,13 +60,13 @@ trusted_connection=<yes|no>
 > - Las opciones `driver` y `trusted_connection` son específicas de SQL Server.
 
 ```bash
-$ dbanalyzer --db database <opciones>
+dbanalyzer --db database <opciones>
 ```
 
 ó 
 
 ```bash
-$ dbanalyzer --dburl postgresql://user:password@host:port/database <opciones>
+dbanalyzer --dburl postgresql://user:password@host:port/database <opciones>
 ```
 
 > Siendo `database` el nombre de la sección en el archivo de configuración.
