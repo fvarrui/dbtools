@@ -1,0 +1,5449 @@
+{
+    "database": {
+        "server": "serverpreproeduca.educacion.org",
+        "port": 1433,
+        "database": "PincelPreDB"
+    },
+    "tables": {
+        "PEC_Agrupacion0": {
+            "comment": null,
+            "columns": {
+                "IdGrupo0": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodRamaArbol": {
+                    "type": "VARCHAR(6) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Descripcion": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "idEstado": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "SeMuestra": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EstaVigente": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdGrupo0",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "idEstado": {
+                    "references": "PEC_TEstados",
+                    "column": "IdEstado"
+                }
+            }
+        },
+        "PEC_TEstados": {
+            "comment": null,
+            "columns": {
+                "IdEstado": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodEstado": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(20) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "FechaAlta": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "FechaModificacion": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "FechaBaja": {
+                    "type": "CHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEstado"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_Agrupacion1": {
+            "comment": null,
+            "columns": {
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo0": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodEnsenanza": {
+                    "type": "VARCHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodPincelEnsenanza": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreEnsenanza": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion2": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion3": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion4": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion5": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion6": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreTutor": {
+                    "type": "VARCHAR(20) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAsignaturas": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NroDeAgrupacion2": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "EsNivel": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCiclo": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCurso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsEspecialidad": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsOpcion": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsGratuita": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TieneActa": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ModeloActaPublicacion": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodActa": {
+                    "type": "VARCHAR(12) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "TipoDeTitulo": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "TituloTasas": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TituloCalificacion": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TituloNombre": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodCertificacionTitulo": {
+                    "type": "VARCHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "TituloModeloCertificacion": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "PreUniversitario": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "estaVigenteOLD": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "SePuedeIniciar": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "FechaInicioCurso": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "FechaFinCurso": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "FaltasPorDia": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "MinHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "PermiteAreasFueraPlan": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "PermiteAreasFueraCatalogo": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "PermiteSubAreas": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "PermiteVariasEnsenanzas": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "Logo": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Ratio": {
+                    "type": "SMALLINT",
+                    "comment": null
+                },
+                "MinHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MediaHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "CodPincel_Salida": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "PermiteVariosEstudios": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "HayAreasSingularesPorEval": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "HayCalifSingularesPorEvalArea": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "NroMaxMatriculas": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idEstado": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "PuedeRepertirse": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "SePuedeSolicitarBeca": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "FechaInicioPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "FechaFinPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "TienePruebaAcceso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "IdTurnoHabitual": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdNivelRevisionK": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "SeMuestra": {
+                    "type": "BIT",
+                    "comment": "Nivel de Revisi\u00f3n de eKade. Da una idea de la calidad de los datos de la ense\u00f1anza. A Pincel eKade s\u00f3lo bajar\u00e1n las ense\u00f1anzas con un nivel rK suficiente."
+                },
+                "EstaVigente": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "AdmiteSesionesEvaluacionPorMaterias": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ActasMultiestudios": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "AdmiteImpartirClaseEnPendientes": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "NoPermiteVariosEstudiosEnGrupos": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "NoPermiteTutorGrupo": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "OpcionObligatoriaEnGrupo": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEnsenanza",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdTurnoHabitual": {
+                    "references": "GEN_TTurnos",
+                    "column": "IdTurno"
+                },
+                "IdGrupo0": {
+                    "references": "PEC_Agrupacion0",
+                    "column": "IdGrupo0"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion0",
+                    "column": "IdCursoEscolar"
+                },
+                "idEstado": {
+                    "references": "PEC_TEstados",
+                    "column": "IdEstado"
+                }
+            }
+        },
+        "PEC_Agrupacion2": {
+            "comment": null,
+            "columns": {
+                "IdGrupo2": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo1": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodGrupo2": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodPincelGrupo2": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion2": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion3": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion4": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion5": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion6": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NroDeGrupos3": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "EsNivel": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCiclo": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCurso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsEspecialidad": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsOpcion": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TienePruebaAcceso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TieneActa": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ModeloActaPublicacion": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodActa": {
+                    "type": "VARCHAR(12) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "PuedeRepetirse": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "MinHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "Logo": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Ratio": {
+                    "type": "SMALLINT",
+                    "comment": null
+                },
+                "MinHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MediaHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "NroMaxMatriculas": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idEstado": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "FechaInicioPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "FechaFinPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodTipoCriterioPromocion": {
+                    "type": "CHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "SeMuestra": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EstaVigente": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdGrupo2",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                },
+                "IdGrupo1": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                },
+                "idEstado": {
+                    "references": "PEC_TEstados",
+                    "column": "IdEstado"
+                }
+            }
+        },
+        "PEC_Agrupacion3": {
+            "comment": null,
+            "columns": {
+                "IdGrupo3": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo2": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodGrupo3": {
+                    "type": "VARCHAR(6) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodPincelGrupo3": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion3": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion4": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion5": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion6": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NroDeGrupos4": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "EsNivel": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCiclo": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCurso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsEspecialidad": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsOpcion": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TienePruebaAcceso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TieneActa": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ModeloActaPublicacion": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodActa": {
+                    "type": "VARCHAR(12) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "PuedeRepetirse": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "MinHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "Logo": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Ratio": {
+                    "type": "SMALLINT",
+                    "comment": null
+                },
+                "MinHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MediaHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "NroMaxMatriculas": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idEstado": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "FechaInicioPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "FechaFinPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodTipoCriterioPromocion": {
+                    "type": "CHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "SeMuestra": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EstaVigente": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdGrupo3",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "idEstado": {
+                    "references": "PEC_TEstados",
+                    "column": "IdEstado"
+                }
+            }
+        },
+        "PEC_Agrupacion4": {
+            "comment": null,
+            "columns": {
+                "IdGrupo4": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo3": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodGrupo4": {
+                    "type": "VARCHAR(8) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodPincelGrupo4": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion4": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion5": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion6": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NroDeGrupos5": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "EsNivel": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCiclo": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCurso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsEspecialidad": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsOpcion": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TienePruebaAcceso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TieneActa": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ModeloActaPublicacion": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodActa": {
+                    "type": "VARCHAR(12) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "PuedeRepetirse": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "estaVigenteOLD": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "SeMuestraOLD": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "MinHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "Logo": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Ratio": {
+                    "type": "SMALLINT",
+                    "comment": null
+                },
+                "MinHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MediaHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "NroMaxMatriculas": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idEstado": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "FechaInicioPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "FechaFinPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodTipoCriterioPromocion": {
+                    "type": "CHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "SeMuestra": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EstaVigente": {
+                    "type": "BIT",
+                    "comment": "MA = Manual; AU = Autom\u00e1tico; CA = Criterio Administrativo"
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdGrupo4",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdGrupo3": {
+                    "references": "PEC_Agrupacion3",
+                    "column": "IdGrupo3"
+                },
+                "idEstado": {
+                    "references": "PEC_TEstados",
+                    "column": "IdEstado"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion3",
+                    "column": "IdCursoEscolar"
+                }
+            }
+        },
+        "PEC_Agrupacion5": {
+            "comment": null,
+            "columns": {
+                "IdGrupo5": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo4": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodGrupo5": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodPincelGrupo5": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion5": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion6": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NroDeGrupos6": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "EsNivel": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCiclo": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCurso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsEspecialidad": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsOpcion": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TienePruebaAcceso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TieneActa": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ModeloActaPublicacion": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodActa": {
+                    "type": "VARCHAR(12) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "PuedeRepetirse": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "estaVigenteOLD": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "SeMuestraOLD": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "MinHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "Logo": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Ratio": {
+                    "type": "SMALLINT",
+                    "comment": null
+                },
+                "MinHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MediaHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "NroMaxMatriculas": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idEstado": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "FechaInicioPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "FechaFinPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodTipoCriterioPromocion": {
+                    "type": "CHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "SeMuestra": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EstaVigente": {
+                    "type": "BIT",
+                    "comment": "MA = Manual; AU = Autom\u00e1tico; CA = Criterio Administrativo"
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdGrupo5",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion4",
+                    "column": "IdCursoEscolar"
+                },
+                "IdGrupo4": {
+                    "references": "PEC_Agrupacion4",
+                    "column": "IdGrupo4"
+                },
+                "idEstado": {
+                    "references": "PEC_TEstados",
+                    "column": "IdEstado"
+                }
+            }
+        },
+        "PEC_Agrupacion6": {
+            "comment": null,
+            "columns": {
+                "IdGrupo6": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo5": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodGrupo6": {
+                    "type": "VARCHAR(12) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodPincelGrupo6": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NombreAgrupacion6": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NroDeGrupos7": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "EsNivel": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCiclo": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsCurso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsEspecialidad": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsOpcion": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TienePruebaAcceso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TieneActa": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ModeloActaPublicacion": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodActa": {
+                    "type": "VARCHAR(12) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "PuedeRepetirse": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "estaVigenteOLD": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "SeMuestraOLD": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "MinHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "Logo": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Ratio": {
+                    "type": "SMALLINT",
+                    "comment": null
+                },
+                "MinHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MediaHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "NroMaxMatriculas": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idEstado": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "FechaInicioPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "FechaFinPeriodoLectivo": {
+                    "type": "SMALLDATETIME",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodTipoCriterioPromocion": {
+                    "type": "CHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "SeMuestra": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EstaVigente": {
+                    "type": "BIT",
+                    "comment": "MA = Manual; AU = Autom\u00e1tico; CA = Criterio Administrativo"
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdGrupo6",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion5",
+                    "column": "IdCursoEscolar"
+                },
+                "IdGrupo5": {
+                    "references": "PEC_Agrupacion5",
+                    "column": "IdGrupo5"
+                },
+                "idEstado": {
+                    "references": "PEC_TEstados",
+                    "column": "IdEstado"
+                }
+            }
+        },
+        "PEC_Areas": {
+            "comment": null,
+            "columns": {
+                "IdArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDAsigna": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdTipoArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodArea": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodSistemaCalificacion": {
+                    "type": "VARCHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodCaracter": {
+                    "type": "VARCHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "MinHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MediaHorasSemanales": {
+                    "type": "REAL",
+                    "comment": null
+                },
+                "MinHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "EntraEnMedia": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EntraEnActas": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "SeCalifica": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "Faltas": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ZZZ_EsHabitual": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "IdEspProfe": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdDepartamento": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "UsaEnPromocion": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ZZZ_SeCalificaDeOtras": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EntraEnHorario": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ZZZ_SeCursa": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "ObligadaOferta": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "MinHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "RatioDesglose": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "HorasDesgloseMin": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "HorasDesgloseMax": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MediaHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "SeExcluyeCalPlan": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "NroMaxMatriculas": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "EsSingularEval": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsSingularCalif": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "PublicadaEnBOC": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "SeCursa": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsHabitual": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "SeCalificaDeOtras": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "CreditosECTS": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Convocatorias": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "ConvocatoriasExcepcional": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "EntraEnRCEA": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "AdmiteImparticionEnOtrosIdiomas": {
+                    "type": "BIT",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdArea",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdEspProfe": {
+                    "references": "GEN_TEspDocentes",
+                    "column": "IdEspDocente"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                },
+                "IdDepartamento": {
+                    "references": "GEN_TDepartamentos",
+                    "column": "IdDepartamento"
+                },
+                "IdTipoArea": {
+                    "references": "PEC_TiposAreas",
+                    "column": "IdTipoArea"
+                },
+                "IDAsigna": {
+                    "references": "PEC_TAsignas",
+                    "column": "IDAsigna"
+                },
+                "IdEstudio": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                }
+            }
+        },
+        "PEC_TAsignas": {
+            "comment": null,
+            "columns": {
+                "IDAsigna": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodArea": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "ESTADO": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(120) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CURSO_ALTA": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CURSO_BAJA": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Den_Larga": {
+                    "type": "VARCHAR(120) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Den_Corta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "CodMEC": {
+                    "type": "CHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IDAsigna",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_EstudiosGeneral": {
+            "comment": null,
+            "columns": {
+                "IdEstudioGeneral": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodEstudio": {
+                    "type": "VARCHAR(12) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdEstudioSiguiente": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "EsPrimero": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsUltimo": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(22) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CursoDeAlta": {
+                    "type": "SMALLINT",
+                    "comment": null
+                },
+                "CursoDeBaja": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo1": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo2": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo3": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo4": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo5": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdGrupo6": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "MinHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanalesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnualesProf": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasSemanales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MinHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "MaxHorasAnuales": {
+                    "type": "DECIMAL(18, 2)",
+                    "comment": null
+                },
+                "SeExcluyeCalPlan": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "NombreOpciones": {
+                    "type": "VARCHAR(20) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Curso": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstado": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "SoloCursoCompleto": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "IdSistemaEducativo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "NumeroMateriasEnCursoCompleto": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdModalidad": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "NumDecimalesEnMedia": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "NumeroDecimalesEnMediaEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Ratio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "OrdenPresentacion": {
+                    "type": "VARCHAR(24) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "SeExcluyeGestionCentros": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "MinEdad": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "MaxEdad": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CreditosECTS": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "NoPermiteCursarMateriasSuperadas": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "AdmiteMultimatriculaPorCursoEscolar": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TieneActa": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEstudioGeneral",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdSistemaEducativo": {
+                    "references": "PEC_TSistemaEducativo",
+                    "column": "IdSistemaEducativo"
+                },
+                "IdModalidad": {
+                    "references": "PEC_TModalidad",
+                    "column": "IdModalidad"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_TModalidad",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEstado": {
+                    "references": "PEC_TEstados",
+                    "column": "IdEstado"
+                },
+                "IdGrupo6": {
+                    "references": "PEC_Agrupacion6",
+                    "column": "IdGrupo6"
+                },
+                "IdGrupo5": {
+                    "references": "PEC_Agrupacion5",
+                    "column": "IdGrupo5"
+                },
+                "IdGrupo4": {
+                    "references": "PEC_Agrupacion4",
+                    "column": "IdGrupo4"
+                },
+                "IdGrupo3": {
+                    "references": "PEC_Agrupacion3",
+                    "column": "IdGrupo3"
+                },
+                "IdGrupo1": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_TModalidad": {
+            "comment": null,
+            "columns": {
+                "IdModalidad": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Descripcion": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodModalidad": {
+                    "type": "CHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdModalidad",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_TSistemaEducativo": {
+            "comment": null,
+            "columns": {
+                "IdSistemaEducativo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Descripcion": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdSistemaEducativo",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_TiposAreas": {
+            "comment": null,
+            "columns": {
+                "IdTipoArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(70) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodTipoAreaPincel": {
+                    "type": "VARCHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodTipoArea": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "SeExcluyeCalPlan": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "EntraEnSIPE": {
+                    "type": "BIT",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdTipoArea",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_AreasIguales": {
+            "comment": null,
+            "columns": {
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodIgualdad": {
+                    "type": "SMALLINT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "Id",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Areas",
+                    "column": "IdCursoEscolar"
+                },
+                "IdArea": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                }
+            }
+        },
+        "PEC_AreasOpcionesEstudios": {
+            "comment": null,
+            "columns": {
+                "IdAreaOpcionEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdOpcionEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdBloqueEleccion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdAreaOpcionEstudio",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_OpcionesEstudios",
+                    "column": "IdCursoEscolar"
+                },
+                "IdBloqueEleccion": {
+                    "references": "PEC_BloquesEleccion",
+                    "column": "IdBloqueEleccion"
+                },
+                "IdArea": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                },
+                "IdOpcionEstudio": {
+                    "references": "PEC_OpcionesEstudios",
+                    "column": "IdOpcionEstudio"
+                }
+            }
+        },
+        "PEC_BloquesEleccion": {
+            "comment": null,
+            "columns": {
+                "IdBloqueEleccion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "MaximoAEscoger": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "MinimoAEscoger": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "SeExcluyeCalPlan": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(15) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(70) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdTipoAreaAlternativo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdBloqueEleccion",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                },
+                "IdTipoAreaAlternativo": {
+                    "references": "PEC_TiposAreas",
+                    "column": "IdTipoArea"
+                },
+                "IdEstudio": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                }
+            }
+        },
+        "PEC_OpcionesEstudios": {
+            "comment": null,
+            "columns": {
+                "IdOpcionEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudioGeneral": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(100) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionOpcion": {
+                    "type": "VARCHAR(100) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Codigo": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdOpcionEstudio",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEstudioGeneral": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                }
+            }
+        },
+        "PEC_AreasSuperAreas": {
+            "comment": null,
+            "columns": {
+                "IdAreaSuperArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdSuperArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdAreaSuperArea",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdSuperArea": {
+                    "references": "PEC_SuperAreas",
+                    "column": "IdSuperArea"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_SuperAreas",
+                    "column": "IdCursoEscolar"
+                },
+                "IdArea": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                }
+            }
+        },
+        "PEC_SuperAreas": {
+            "comment": null,
+            "columns": {
+                "IdSuperArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdPadre": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdNivelSuperArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdAsigna": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Creditos": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CreditosMinimos": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Compensable": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "Horas": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "Orden": {
+                    "type": "INTEGER",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdSuperArea",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdNivelSuperArea": {
+                    "references": "PEC_TNivelesSuperAreas",
+                    "column": "IdNivelSuperArea"
+                },
+                "IdAsigna": {
+                    "references": "PEC_TAsignas",
+                    "column": "IDAsigna"
+                },
+                "IdPadre": {
+                    "references": "PEC_SuperAreas",
+                    "column": "IdSuperArea"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_SuperAreas",
+                    "column": "IdCursoEscolar"
+                }
+            }
+        },
+        "PEC_TNivelesSuperAreas": {
+            "comment": null,
+            "columns": {
+                "IdNivelSuperArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Nivel": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(250) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdNivelSuperArea",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_BloquesEleccionAreas": {
+            "comment": null,
+            "columns": {
+                "IdBloqueEleccionArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdBloqueEleccion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdBloqueEleccionArea",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_BloquesEleccion",
+                    "column": "IdCursoEscolar"
+                },
+                "IdArea": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                },
+                "IdBloqueEleccion": {
+                    "references": "PEC_BloquesEleccion",
+                    "column": "IdBloqueEleccion"
+                }
+            }
+        },
+        "PEC_Calificaciones": {
+            "comment": null,
+            "columns": {
+                "IdCalificacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodPincelEnsenanza": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodCalificacion": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "OrdenPresentacion": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "EsPositiva": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsGlobal": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "Baremo": {
+                    "type": "REAL",
+                    "comment": null
+                },
+                "RangoInf": {
+                    "type": "REAL",
+                    "comment": null
+                },
+                "RangoSup": {
+                    "type": "REAL",
+                    "comment": null
+                },
+                "EsSubnota": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "Observaciones": {
+                    "type": "NVARCHAR COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "ConsumeConvocatoria": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(40) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "EsSingular": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsAsignable": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "ValidoEnCierreDeAreas": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "SoloValidoEnPendientes": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "SeExcluyeEnPendientes": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ConllevaValoracion": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ExigeCalificacionNumerica": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdCalificacion",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_CalifNumerica": {
+            "comment": null,
+            "columns": {
+                "IdCalifNumerica": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "ValorMinimo": {
+                    "type": "REAL",
+                    "comment": null
+                },
+                "ValorMaximo": {
+                    "type": "REAL",
+                    "comment": null
+                },
+                "ValorPositivo": {
+                    "type": "REAL",
+                    "comment": null
+                },
+                "NroDecimales": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "EsPorCreditos": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsSingular": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(30) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(100) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "SoloValidoEnPendientes": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "SeExcluyeEnPendientes": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdCalifNumerica",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_CierresAreas": {
+            "comment": null,
+            "columns": {
+                "IdCierre": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdAreaCerrada": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodTipoCierre": {
+                    "type": "VARCHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CursoEscolarDesde": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CursoEscolarHasta": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdCierre",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdAreaCerrada": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_Areas",
+                    "column": "IdCursoEscolar"
+                },
+                "IdArea": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                }
+            }
+        },
+        "PEC_CierresAsignas": {
+            "comment": null,
+            "columns": {
+                "IdCierre": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdAsigna": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdAsignaCerrada": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodTipoCierre": {
+                    "type": "VARCHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdCierre",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdAsignaCerrada": {
+                    "references": "PEC_TAsignas",
+                    "column": "IDAsigna"
+                },
+                "IdAsigna": {
+                    "references": "PEC_TAsignas",
+                    "column": "IDAsigna"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                }
+            }
+        },
+        "PEC_CompetenciasCalificacionesEnsenanzas": {
+            "comment": null,
+            "columns": {
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdCompetenciaCalificacionEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCalificacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdSistemaEducativo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Orden": {
+                    "type": "INTEGER",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdCompetenciaCalificacionEnsenanza",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                },
+                "IdSistemaEducativo": {
+                    "references": "PEC_TSistemaEducativo",
+                    "column": "IdSistemaEducativo"
+                },
+                "IdCalificacion": {
+                    "references": "PEC_TCompetenciasCalificaciones",
+                    "column": "IdCalificacion"
+                }
+            }
+        },
+        "PEC_TCompetenciasCalificaciones": {
+            "comment": "Contiene las diferentes calificaciones de las competencias definidas en las ense\u00f1anzas del PEC por curso escolar",
+            "columns": {
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdCalificacion": {
+                    "type": "INTEGER",
+                    "comment": "Identificador de la calificaci\u00f3n."
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodCalificacion": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "C\u00f3digo de la calificaci\u00f3n. El definido en la normativa."
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "Descripci\u00f3n breve de la calificaci\u00f3n. Por defecto ponemos el c\u00f3digo de la calificaci\u00f3n."
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(120) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "Descripci\u00f3n detallada y oficial de la calificaci\u00f3n"
+                }
+            },
+            "primary_key": [
+                "IdCalificacion",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_CompetenciasEnsenanzas": {
+            "comment": "Contiene las competencias en relaci\u00f3n con las ese\u00f1anzas y sistemas educativos por curso escolarlos tipos de Competencias definidos en las ense\u00f1anzas del PEC por curso escolar",
+            "columns": {
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdCompetenciaEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCompetencia": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdSistemaEducativo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Orden": {
+                    "type": "INTEGER",
+                    "comment": "Orden de presentaci\u00f3n de la competencia dentro de un mismo curso escolar, ense\u00f1anza y sistema educativo."
+                }
+            },
+            "primary_key": [
+                "IdCompetenciaEnsenanza",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                },
+                "IdSistemaEducativo": {
+                    "references": "PEC_TSistemaEducativo",
+                    "column": "IdSistemaEducativo"
+                },
+                "IdCompetencia": {
+                    "references": "PEC_TCompetencias",
+                    "column": "IdCompetencia"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_TCompetencias": {
+            "comment": "Contiene los tipos de Competencias definidos en las ense\u00f1anzas del PEC por curso escolar",
+            "columns": {
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdCompetencia": {
+                    "type": "INTEGER",
+                    "comment": "Identificador de la competencia."
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodCompetencia": {
+                    "type": "VARCHAR(5) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "C\u00f3digo de la competencia. El definido en la normativa."
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "Descripci\u00f3n breve de la competencia. Por defecto ponemos el c\u00f3digo de la competencia."
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(120) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "Descripci\u00f3n detallada y oficial de la competencia"
+                }
+            },
+            "primary_key": [
+                "IdCompetencia",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_CompetenciasSistemas": {
+            "comment": null,
+            "columns": {
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdCompetenciaSistema": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodSistema": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "CHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(100) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdSistemaEducativo": {
+                    "type": "INTEGER",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdCompetenciaSistema",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdSistemaEducativo": {
+                    "references": "PEC_TSistemaEducativo",
+                    "column": "IdSistemaEducativo"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_TSistemaEducativo",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_CreditosCalificacion": {
+            "comment": null,
+            "columns": {
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdSuperArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CreditosRangoInferior": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CreditosRangoSuperior": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CalifNumerica": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Calificacion": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodCalificacion": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "Id",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_SuperAreas",
+                    "column": "IdCursoEscolar"
+                },
+                "IdSuperArea": {
+                    "references": "PEC_SuperAreas",
+                    "column": "IdSuperArea"
+                }
+            }
+        },
+        "PEC_DecisionesEstudios": {
+            "comment": null,
+            "columns": {
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdDecision": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudioGeneral": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "NoRepite": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "Exito": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstado": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodPincelEnsenanza": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Orden": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEvaluacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "EsDecisionTerminal": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "EsDecisionPorDefecto": {
+                    "type": "BIT",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "Id",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdEstado": {
+                    "references": "PEC_TEstados",
+                    "column": "IdEstado"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_TDecisionesProm",
+                    "column": "IdCursoEscolar"
+                },
+                "IdDecision": {
+                    "references": "PEC_TDecisionesProm",
+                    "column": "IdDecision"
+                },
+                "IdEvaluacion": {
+                    "references": "PEC_Evaluaciones",
+                    "column": "IdEvaluacion"
+                },
+                "IdEstudioGeneral": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_Evaluaciones": {
+            "comment": null,
+            "columns": {
+                "IdEvaluacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodEvaluacion": {
+                    "type": "VARCHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodPincelEnsenanza": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(100) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Observaciones": {
+                    "type": "NVARCHAR COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "FechaFin": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "EsOrdinaria": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsFinal": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "SoloPendientes": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "PuedePendientes": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "NroOrden": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "CodEvalAnterior": {
+                    "type": "VARCHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodEvalPenAnterior": {
+                    "type": "VARCHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodEvalPosterior": {
+                    "type": "VARCHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdConvocatoria": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEvaluacionExcluyente": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEvaluacion",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_TDecisionesProm": {
+            "comment": null,
+            "columns": {
+                "IdDecision": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Codigo": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "NoRepite": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "Exito": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdDecision",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_DiccionarioCamposIdiomas": {
+            "comment": null,
+            "columns": {
+                "IdCampoTabla": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "NombreCampo": {
+                    "type": "VARCHAR(100) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdTabla": {
+                    "type": "INTEGER",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdCampoTabla"
+            ],
+            "foreign_keys": {
+                "IdTabla": {
+                    "references": "PEC_DiccionarioTablasIdiomas",
+                    "column": "IdTabla"
+                }
+            }
+        },
+        "PEC_DiccionarioTablasIdiomas": {
+            "comment": null,
+            "columns": {
+                "IdTabla": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "NombreTabla": {
+                    "type": "VARCHAR(100) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdTabla"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_DiccionarioDatos": {
+            "comment": null,
+            "columns": {
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Tabla": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Campo": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Descripcion": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "MensajeAyuda": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Obligatorio": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "Indice": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Revisado": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "DescripcionDetallada": {
+                    "type": "NVARCHAR COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "Id"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_Enlaces": {
+            "comment": null,
+            "columns": {
+                "idEnlace": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "URL": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Descripcion": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "idAgrupa1": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idAgrupa2": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idAgrupa3": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idAgrupa4": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idAgrupa5": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idAgrupa6": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "idEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Ordenpub": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "idEnlace",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                },
+                "idEstudio": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                },
+                "idAgrupa6": {
+                    "references": "PEC_Agrupacion6",
+                    "column": "IdGrupo6"
+                },
+                "idAgrupa5": {
+                    "references": "PEC_Agrupacion5",
+                    "column": "IdGrupo5"
+                },
+                "idAgrupa4": {
+                    "references": "PEC_Agrupacion4",
+                    "column": "IdGrupo4"
+                },
+                "idAgrupa3": {
+                    "references": "PEC_Agrupacion3",
+                    "column": "IdGrupo3"
+                },
+                "idAgrupa2": {
+                    "references": "PEC_Agrupacion2",
+                    "column": "IdGrupo2"
+                },
+                "idAgrupa1": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_EnsenanzasIncompatibles": {
+            "comment": null,
+            "columns": {
+                "IdEnsenanzaIncompatible": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza1": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza2": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEnsenanzaIncompatible"
+            ],
+            "foreign_keys": {
+                "IdEnsenanza2": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                },
+                "IdEnsenanza1": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                }
+            }
+        },
+        "PEC_TCursosEscolares": {
+            "comment": null,
+            "columns": {
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Codigo": {
+                    "type": "CHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "CHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "CHAR(7) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdEstado": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "FechaAlta": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "FechaBaja": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "FechaModificacion": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdEstado": {
+                    "references": "PEC_TEstados",
+                    "column": "IdEstado"
+                }
+            }
+        },
+        "PEC_EnsenanzasTipoFinalMatricula": {
+            "comment": null,
+            "columns": {
+                "IdEnsenanzaTipoFinalMatricula": {
+                    "type": "INTEGER",
+                    "comment": "Identificador del tipo de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": "C\u00f3digo de la ensenanza."
+                },
+                "IdTipoFinalizaMatricula": {
+                    "type": "INTEGER",
+                    "comment": "Codigo de identificacion tipo de finalizacion matricula."
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": "Idenitificador del curso escolar"
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEnsenanzaTipoFinalMatricula",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                }
+            }
+        },
+        "PEC_EspecialistasAreas": {
+            "comment": null,
+            "columns": {
+                "IdEspecialistaArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEspProfe": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Orden": {
+                    "type": "SMALLINT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "EspecialistaParaCompletarHorario": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "IdDepartamento": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEspecialistaArea",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Areas",
+                    "column": "IdCursoEscolar"
+                },
+                "IdArea": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                },
+                "IdEspProfe": {
+                    "references": "GEN_TEspDocentes",
+                    "column": "IdEspDocente"
+                },
+                "IdDepartamento": {
+                    "references": "GEN_TDepartamentos",
+                    "column": "IdDepartamento"
+                }
+            }
+        },
+        "PEC_EstudiosDecretos": {
+            "comment": null,
+            "columns": {
+                "IdEstudioDecreto": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudioGeneral": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdRelacionDecreto": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEstudioDecreto",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEstudioGeneral": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                }
+            }
+        },
+        "PEC_EstudiosEquivalentes": {
+            "comment": null,
+            "columns": {
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodEquivalencia": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodTipoEquivalenciaEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "Id",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_EstudiosIguales": {
+            "comment": null,
+            "columns": {
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodIgualdad": {
+                    "type": "SMALLINT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Agrupacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdCursoEscolar",
+                "IdEstudio"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEstudio": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                }
+            }
+        },
+        "PEC_EstudiosNormaCurriculo": {
+            "comment": null,
+            "columns": {
+                "IdEstudioNormaCurriculo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdNormaCurriculo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudioGeneral": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEstudioNormaCurriculo",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                },
+                "IdNormaCurriculo": {
+                    "references": "PEC_NormasCurriculo",
+                    "column": "IdNormaCurriculo"
+                },
+                "IdEstudioGeneral": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                }
+            }
+        },
+        "PEC_NormasCurriculo": {
+            "comment": null,
+            "columns": {
+                "IdNormaCurriculo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdTipoNorma": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(250) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "FechaPublicacion": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "Leyenda": {
+                    "type": "VARCHAR(250) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Observaciones": {
+                    "type": "VARCHAR(250) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdNormaCurriculo",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_TipoNorma",
+                    "column": "IdCursoEscolar"
+                },
+                "IdTipoNorma": {
+                    "references": "PEC_TipoNorma",
+                    "column": "IdTipoNorma"
+                }
+            }
+        },
+        "PEC_TipoNorma": {
+            "comment": null,
+            "columns": {
+                "IdTipoNorma": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Codigo": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(250) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdTipoNorma",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_EstudiosTipoOtraGlobal": {
+            "comment": null,
+            "columns": {
+                "IdEstudioTipoOtraGlobal": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudioGeneral": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdTipoDeGlobal": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "NumDecimalesEnMedia": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEstudioTipoOtraGlobal",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                },
+                "IdTipoDeGlobal": {
+                    "references": "PEC_TTiposDeGlobales",
+                    "column": "IdTipoDeGlobal"
+                },
+                "IdEstudioGeneral": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                }
+            }
+        },
+        "PEC_TTiposDeGlobales": {
+            "comment": null,
+            "columns": {
+                "IdTipoDeGlobal": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodTipoDeGlobal": {
+                    "type": "VARCHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(20) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Fecha_Alta": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "Fecha_Baja": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "Fecha_Modificacion": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "EsNotaGlobalEtapa": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsNotaGlobalCurso": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsOtraGlobal": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "EsEntidad": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdTipoDeGlobal",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_EvalCalificaciones": {
+            "comment": null,
+            "columns": {
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEvaluacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCalificacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodEvaluacion": {
+                    "type": "VARCHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodNota": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "Id",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Calificaciones",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEvaluacion": {
+                    "references": "PEC_Evaluaciones",
+                    "column": "IdEvaluacion"
+                },
+                "IdCalificacion": {
+                    "references": "PEC_Calificaciones",
+                    "column": "IdCalificacion"
+                }
+            }
+        },
+        "PEC_EvalCalifNumericas": {
+            "comment": null,
+            "columns": {
+                "IdEvalCalifNumerica": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEvaluacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCalifNumerica": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEvalCalifNumerica",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_CalifNumerica",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEvaluacion": {
+                    "references": "PEC_Evaluaciones",
+                    "column": "IdEvaluacion"
+                },
+                "IdCalifNumerica": {
+                    "references": "PEC_CalifNumerica",
+                    "column": "IdCalifNumerica"
+                }
+            }
+        },
+        "PEC_EvalCalifNumSingularesAreas": {
+            "comment": null,
+            "columns": {
+                "IdEvalCalifNumSingularArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEvaluacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCalifNumerica": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEvalCalifNumSingularArea",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Areas",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEvaluacion": {
+                    "references": "PEC_Evaluaciones",
+                    "column": "IdEvaluacion"
+                },
+                "IdCalifNumerica": {
+                    "references": "PEC_CalifNumerica",
+                    "column": "IdCalifNumerica"
+                },
+                "IDArea": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                }
+            }
+        },
+        "PEC_EvalCalifSingularesAreas": {
+            "comment": null,
+            "columns": {
+                "IDEvalCalifSingularArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEvaluacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCalificacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IDEvalCalifSingularArea",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Areas",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEvaluacion": {
+                    "references": "PEC_Evaluaciones",
+                    "column": "IdEvaluacion"
+                },
+                "IdCalificacion": {
+                    "references": "PEC_Calificaciones",
+                    "column": "IdCalificacion"
+                },
+                "IdArea": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                }
+            }
+        },
+        "PEC_EvalSingularesAreas": {
+            "comment": null,
+            "columns": {
+                "IDEvalSingularArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDEvaluacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IDEvalSingularArea",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Areas",
+                    "column": "IdCursoEscolar"
+                },
+                "IDEvaluacion": {
+                    "references": "PEC_Evaluaciones",
+                    "column": "IdEvaluacion"
+                },
+                "IDArea": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                }
+            }
+        },
+        "PEC_EvaluacionesNoValidasAgrupacion": {
+            "comment": null,
+            "columns": {
+                "IDEvaluacionNoValidaAgrupacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDEvaluacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDAgrupacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "NivelAgrupacion": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IDEvaluacionNoValidaAgrupacion",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Evaluaciones",
+                    "column": "IdCursoEscolar"
+                },
+                "IDEvaluacion": {
+                    "references": "PEC_Evaluaciones",
+                    "column": "IdEvaluacion"
+                }
+            }
+        },
+        "PEC_GeneralPosteriores": {
+            "comment": null,
+            "columns": {
+                "IdPosterior": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodEstudio": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudioPosterior": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "ValidoParaPendientes": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ValidoParaPosteriores": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdPosterior",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEstudioPosterior": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                },
+                "IdEstudio": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                }
+            }
+        },
+        "PEC_GruposEstudiosDef": {
+            "comment": null,
+            "columns": {
+                "IDgrupo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDPadre": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Descripcion": {
+                    "type": "VARCHAR(200) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IDVista": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "FechaAlta": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "FechaModificacion": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IDgrupo",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_GruposEstudiosDef",
+                    "column": "IdCursoEscolar"
+                },
+                "IDVista": {
+                    "references": "PEC_TiposVistas",
+                    "column": "IDVista"
+                },
+                "IDPadre": {
+                    "references": "PEC_GruposEstudiosDef",
+                    "column": "IDgrupo"
+                }
+            }
+        },
+        "PEC_TiposVistas": {
+            "comment": null,
+            "columns": {
+                "IDVista": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Nombre": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Descripcion": {
+                    "type": "VARCHAR(500) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "FechaAlta": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "FechaModificacion": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IDVista",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_GruposRelaciones": {
+            "comment": null,
+            "columns": {
+                "IDgrupo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDEstudioGeneral": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "FechaAlta": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "FechaModificacion": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                },
+                "IDgrupo": {
+                    "references": "PEC_GruposEstudiosDef",
+                    "column": "IDgrupo"
+                },
+                "IDEstudioGeneral": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                }
+            }
+        },
+        "PEC_HorasSemanalesSuperAreas": {
+            "comment": null,
+            "columns": {
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEstudioGeneral": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdSuperArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "HorasSemanales": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TutoriaBasicaQuincenal": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TutoriaTelematicaQuincenal": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "Id",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdCursoEscolar"
+                },
+                "IdSuperArea": {
+                    "references": "PEC_SuperAreas",
+                    "column": "IdSuperArea"
+                },
+                "IdEstudioGeneral": {
+                    "references": "PEC_EstudiosGeneral",
+                    "column": "IdEstudioGeneral"
+                }
+            }
+        },
+        "PEC_ItemsCalificacionesEnsenanzas": {
+            "comment": null,
+            "columns": {
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdItemCalificacionEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCalificacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdSistemaEducativo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Orden": {
+                    "type": "INTEGER",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdItemCalificacionEnsenanza",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                },
+                "IdSistemaEducativo": {
+                    "references": "PEC_TSistemaEducativo",
+                    "column": "IdSistemaEducativo"
+                },
+                "IdCalificacion": {
+                    "references": "PEC_TItemsCalificaciones",
+                    "column": "IdItemsCalificacion"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_TItemsCalificaciones": {
+            "comment": null,
+            "columns": {
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdItemsCalificacion": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodItemsCalificacion": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(120) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdItemsCalificacion",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_ItemsEnsenanzas": {
+            "comment": null,
+            "columns": {
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdItemsEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdItem": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdSistemaEducativo": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Orden": {
+                    "type": "INTEGER",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdItemsEnsenanza",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_TItems",
+                    "column": "IdCursoEscolar"
+                },
+                "IdSistemaEducativo": {
+                    "references": "PEC_TSistemaEducativo",
+                    "column": "IdSistemaEducativo"
+                },
+                "IdItem": {
+                    "references": "PEC_TItems",
+                    "column": "IdItem"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_TItems": {
+            "comment": null,
+            "columns": {
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdItem": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodItem": {
+                    "type": "VARCHAR(5) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(120) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdItem",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_ItemsSistemas": {
+            "comment": null,
+            "columns": {
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdItemsSistema": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodSistema": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "CHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(100) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdSistemaEducativo": {
+                    "type": "INTEGER",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdItemsSistema",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                },
+                "IdSistemaEducativo": {
+                    "references": "PEC_TSistemaEducativo",
+                    "column": "IdSistemaEducativo"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_LogEventos": {
+            "comment": null,
+            "columns": {
+                "IdEvento": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Evento": {
+                    "type": "CHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Tabla": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Fecha": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "UID": {
+                    "type": "VARCHAR(128) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdEvento",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_LogOperaciones": {
+            "comment": null,
+            "columns": {
+                "IdSinKro": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Tabla": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Evento": {
+                    "type": "CHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "Fecha": {
+                    "type": "DATETIME",
+                    "comment": null
+                },
+                "UID": {
+                    "type": "VARCHAR(128) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Contenido": {
+                    "type": "NVARCHAR(2000) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdSinKro",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_PendienteCambioPincel": {
+            "comment": null,
+            "columns": {
+                "IDgrupo1": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDgrupo2": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDgrupo3": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDgrupo4": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDgrupo5": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IDgrupo6": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodPincel": {
+                    "type": "VARCHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [],
+            "foreign_keys": {
+                "IDgrupo6": {
+                    "references": "PEC_Agrupacion6",
+                    "column": "IdGrupo6"
+                },
+                "IDgrupo3": {
+                    "references": "PEC_Agrupacion3",
+                    "column": "IdGrupo3"
+                },
+                "IDgrupo5": {
+                    "references": "PEC_Agrupacion5",
+                    "column": "IdGrupo5"
+                },
+                "IDgrupo2": {
+                    "references": "PEC_Agrupacion2",
+                    "column": "IdGrupo2"
+                },
+                "IDgrupo4": {
+                    "references": "PEC_Agrupacion4",
+                    "column": "IdGrupo4"
+                },
+                "IDgrupo1": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                }
+            }
+        },
+        "PEC_Posteriores": {
+            "comment": null,
+            "columns": {
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanzaPosterior": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "OrdenPresentaArbol": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "Id",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                },
+                "IdEnsenanzaPosterior": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_SubAreas": {
+            "comment": null,
+            "columns": {
+                "Id": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdAreaDependiente": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdAreaAporta": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "PesoAporta": {
+                    "type": "REAL",
+                    "comment": null
+                },
+                "CreditosAporta": {
+                    "type": "SMALLINT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "Id",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Areas",
+                    "column": "IdCursoEscolar"
+                },
+                "IdAreaDependiente": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                },
+                "IdAreaAporta": {
+                    "references": "PEC_Areas",
+                    "column": "IdArea"
+                }
+            }
+        },
+        "PEC_TCausasFinalizaMatricula": {
+            "comment": "Especificaci\u00f3n de las causas por las que la matr\u00edcula ha terminado antes del periodo normal",
+            "columns": {
+                "IdCausaFinalizaMatricula": {
+                    "type": "INTEGER",
+                    "comment": "Identificador de la causa de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "CodCausasFinalizaMatricula": {
+                    "type": "CHAR(3) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "C\u00f3digo de la causa de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(20) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "Denominaci\u00f3n corta de la causa de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "Denominaci\u00f3n larga de la causa de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "Fecha_Alta": {
+                    "type": "DATETIME",
+                    "comment": "Fecha de alta de la causa de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "Fecha_Baja": {
+                    "type": "DATETIME",
+                    "comment": "Fecha de baja de la causa de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "Fecha_Modificacion": {
+                    "type": "DATETIME",
+                    "comment": "Fecha de modificaci\u00f3n de la causa de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "EsEntidad": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdTipoFinalizaMatricula": {
+                    "type": "INTEGER",
+                    "comment": "Identificador del tipo de  finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "AdmiteCentroDestinoCanario": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "AdmiteCentroDestinoNoCanario": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "SeExigeCentroDestino": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdCausaFinalizaMatricula",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdTipoFinalizaMatricula": {
+                    "references": "PEC_TTiposFinalizaMatricula",
+                    "column": "IdTipoFinalizaMatricula"
+                },
+                "IdCursoEscolar": {
+                    "references": "PEC_TTiposFinalizaMatricula",
+                    "column": "IdCursoEscolar"
+                }
+            }
+        },
+        "PEC_TTiposFinalizaMatricula": {
+            "comment": "Tipolog\u00eda (agrupaci\u00f3n) de las causas por las que la matr\u00edcula ha terminado antes del periodo normal",
+            "columns": {
+                "IdTipoFinalizaMatricula": {
+                    "type": "INTEGER",
+                    "comment": "Identificador del tipo de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "CodTiposFinalizaMatricula": {
+                    "type": "CHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "C\u00f3digo del tipo de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(20) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "Denominaci\u00f3n corta del tipo de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(50) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "Denominaci\u00f3n larga del tipo de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "Fecha_Alta": {
+                    "type": "DATETIME",
+                    "comment": "Fecha de alta del tipo de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "Fecha_Baja": {
+                    "type": "DATETIME",
+                    "comment": "Fecha de baja del tipo de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "Fecha_Modificacion": {
+                    "type": "DATETIME",
+                    "comment": "Fecha de modificaci\u00f3n del tipo de finalizaci\u00f3n de la matr\u00edcula."
+                },
+                "EsEntidad": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "CuentaConvocatoria": {
+                    "type": "BIT",
+                    "comment": "\u00bfCuenta la convocatoria cuando la matr\u00edcula finaliza por este tipo?"
+                },
+                "SePermiteMasDeUnaVez": {
+                    "type": "BIT",
+                    "comment": "\u00bfEs posible finalizar la matr\u00edcula de un estudio m\u00e1s de una vez por este tipo?"
+                },
+                "SeRecogeEnDocumentosEvaluacion": {
+                    "type": "BIT",
+                    "comment": "\u00bfSe recoge esta situaci\u00f3n en los documentos de evaluaci\u00f3n?"
+                },
+                "ObligaCausa": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": "Idenitificador del curso escolar"
+                }
+            },
+            "primary_key": [
+                "IdTipoFinalizaMatricula",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_TConvocatorias": {
+            "comment": null,
+            "columns": {
+                "IdConvocatoria": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodConvocatoria": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(255) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "Orden": {
+                    "type": "TINYINT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdConvocatoria",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_TIdiomas": {
+            "comment": null,
+            "columns": {
+                "IdIdioma": {
+                    "type": "INTEGER",
+                    "comment": "Clave primaria de la tabla de tipo autonum\u00e9rico"
+                },
+                "OrdenPresentacion": {
+                    "type": "INTEGER",
+                    "comment": "Orden de presentaci\u00f3n de los idiomas disponibles"
+                },
+                "CodigoISO": {
+                    "type": "VARCHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "C\u00f3digo del Lenguaje seg\u00fan ISO-639-1"
+                },
+                "NombreES": {
+                    "type": "VARCHAR(100) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "Nombre del Lenguaje traducci\u00f3n al espa\u00f1ol"
+                },
+                "NombreISO": {
+                    "type": "VARCHAR(100) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "Nombre del Lenguaje oficial ISO, seg\u00fan ISO-639-1"
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdIdioma"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_TipoMatriculaArea": {
+            "comment": null,
+            "columns": {
+                "IdTipoMatriculaArea": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdEnsenanza": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodTipoMatriArea": {
+                    "type": "VARCHAR(1) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "SeCalificaEnParcial": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "SeCalificaEnFinal": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "SeCalificaEnPendientes": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "DenCortaActa": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCalificacionEquivalente": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "RequiereCalifAnterior": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EsPositivaPromocion": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "DenominacionCorta": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DenominacionLarga": {
+                    "type": "VARCHAR(60) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "EntraEnActaParcial": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EntraEnActaFinal": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "EntraEnActaPendientes": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "ValorCalificacion": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "ImplicaAsistencia": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdTipoMatriculaArea",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {
+                "IdCursoEscolar": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdCursoEscolar"
+                },
+                "IdCalificacionEquivalente": {
+                    "references": "PEC_Calificaciones",
+                    "column": "IdCalificacion"
+                },
+                "IdEnsenanza": {
+                    "references": "PEC_Agrupacion1",
+                    "column": "IdEnsenanza"
+                }
+            }
+        },
+        "PEC_Traducciones": {
+            "comment": null,
+            "columns": {
+                "IdTraduccion": {
+                    "type": "INTEGER",
+                    "comment": "Clave primaria de la tabla PEC_Traducciones autonum\u00e9rico"
+                },
+                "IdRegistro": {
+                    "type": "INTEGER",
+                    "comment": "IdRegistro valor contextualizado con la clave primaria Id asociada a la tabla referida en el campo NombreTabla"
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": "Curso Escolar en el que se realiza la operaci\u00f3n, 4 d\u00edgitos"
+                },
+                "TraduccionCampoTabla": {
+                    "type": "VARCHAR COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": "Traducci\u00f3n del campo al idioma correspondiente"
+                },
+                "IdIdioma": {
+                    "type": "INTEGER",
+                    "comment": "Foreign key con la IdIdioma de la tabla PEC_TIdiomas"
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                },
+                "IdTabla": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "IdCampoTabla": {
+                    "type": "INTEGER",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IdTraduccion"
+            ],
+            "foreign_keys": {
+                "IdTabla": {
+                    "references": "PEC_DiccionarioTablasIdiomas",
+                    "column": "IdTabla"
+                },
+                "IdCampoTabla": {
+                    "references": "PEC_DiccionarioCamposIdiomas",
+                    "column": "IdCampoTabla"
+                },
+                "IdIdioma": {
+                    "references": "PEC_TIdiomas",
+                    "column": "IdIdioma"
+                }
+            }
+        },
+        "PEC_TTipoAsignas": {
+            "comment": null,
+            "columns": {
+                "IDTipoAsigna": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "CodTipoArea": {
+                    "type": "VARCHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "ESTADO": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "DEN_LARGA": {
+                    "type": "VARCHAR(70) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "DEN_CORTA": {
+                    "type": "VARCHAR(10) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CURSO_ALTA": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CURSO_BAJA": {
+                    "type": "VARCHAR(4) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "CodTipoAreaPincel": {
+                    "type": "VARCHAR(2) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [
+                "IDTipoAsigna",
+                "IdCursoEscolar"
+            ],
+            "foreign_keys": {}
+        },
+        "PEC_Usuarios": {
+            "comment": null,
+            "columns": {
+                "IdUsuario": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "NombreUsuario": {
+                    "type": "VARCHAR(20) COLLATE \"Modern_Spanish_CI_AI\"",
+                    "comment": null
+                },
+                "ModificaCodsPincel": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "PuedeTraspasarAHistorico": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "PuedeModificarMantenimiento": {
+                    "type": "BIT",
+                    "comment": null
+                },
+                "IdCursoEscolar": {
+                    "type": "INTEGER",
+                    "comment": null
+                },
+                "TMS": {
+                    "type": "TIMESTAMP",
+                    "comment": null
+                }
+            },
+            "primary_key": [],
+            "foreign_keys": {}
+        }
+    }
+}

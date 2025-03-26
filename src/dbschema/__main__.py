@@ -3,36 +3,23 @@ import sys
 import json
 import argparse
 
-from dbschema import __module_name__, __module_description__, __module_version__
-from dbconn.dbini import get_connection_url, has_undefined_password, replace_password_placeholder
-
 from sqlalchemy import create_engine, MetaData, inspect
-from urllib.parse import urlparse
 from tabulate import tabulate
 from getpass import getpass
 
-CONFIG_FILE = "dbtools.ini"
+from dbschema import __module_name__, __module_description__, __module_version__
+from dbschema.schema import Schema
+from dbschema.database import Database
+from dbschema.table import Table
 
-def generate_schema(metadata, prefix=None):
-    schema = {}
-    for table_name, table in metadata.tables.items():
+from dbconn.dbini import get_connection_url, has_undefined_password, replace_password_placeholder, DEFAULT_INI_FILE
+
+def generate_schema(metadata, prefix=None) -> list[Table]:
+    schema : list[Table] = []
+    for table_name, table_metadata in metadata.tables.items():
         if prefix and not table_name.startswith(prefix):
             continue
-        schema[table_name] = {
-            "comment": table.comment,  # Comentario de la tabla
-            "columns": {
-                col.name: {
-                    "type": str(col.type),
-                    "comment": col.comment  # Comentario de la columna
-                }
-                for col in table.columns
-            },
-            "primary_key": [col.name for col in table.primary_key.columns],
-            "foreign_keys": {
-                fk.parent.name: {"references": fk.column.table.name, "column": fk.column.name}
-                for fk in table.foreign_keys
-            },
-        }
+        schema.append(Table(table_metadata))
     return schema
 
 def list_tables(engine, filter=None):
@@ -79,10 +66,9 @@ def main():
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
     options.add_argument('--dburl', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
-    options.add_argument('--db', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {CONFIG_FILE}")
-    options.add_argument('--output', metavar='FILE', nargs='?', help='Fichero de salida')
+    options.add_argument('--db', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DEFAULT_INI_FILE}")
+    options.add_argument('--json', metavar='FILE', nargs='?', help='Guarda el resultado en un fichero JSON')
     options.add_argument('--password', metavar='PASSWORD', nargs='?', help=f"Contraseña de la base de datos")
-    options.add_argument('--json', action='store_true', help='Devuelve el resultado en formato JSON')
 
     # Parsea los argumentos
     args = parser.parse_args()
@@ -98,7 +84,7 @@ def main():
     if not dburl:
         # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
         try:
-            dburl = get_connection_url(CONFIG_FILE, args.db)
+            dburl = get_connection_url(DEFAULT_INI_FILE, args.db)
             if has_undefined_password(dburl):
                 password = args.password or getpass("Introduce la contraseña: ")
                 dburl = replace_password_placeholder(dburl, password)
@@ -108,7 +94,7 @@ def main():
 
     # Comprueba que se ha especificado una URL de conexión a la base de datos
     if not dburl:
-        print(f"Debe especificar una URL de conexión a la base de datos o una configuración en {CONFIG_FILE}", file=sys.stderr)
+        print(f"Debe especificar una URL de conexión a la base de datos o una configuración en {DEFAULT_INI_FILE}", file=sys.stderr)
         sys.exit(1)  
 
     # Conecta a la base de datos
@@ -127,12 +113,13 @@ def main():
             print(f"- Filtrado vistas que contengan: {args.list_views}\n")
         view_names = list_views(engine, filter=args.list_views)
         if args.json:
-            print(json.dumps(view_names, indent=4))
+            with open(args.json, "w") as f:
+                f.write(json.dumps(view_names, indent=4))
         else:
             headers = [ "VIEW_NAME" ]
             data = [ [ view_name ] for view_name in view_names ]
             print(tabulate(data, headers=headers, tablefmt="grid"))
-            print(f"\n{len(view_names)} vistas encontradas")
+        print(f"\n{len(view_names)} vistas encontradas")
         return
 
     # Listar las tablas
@@ -140,14 +127,15 @@ def main():
         print("Listando tablas ...")
         if args.list_tables:
             print(f"- Filtrado tablas que contengan: {args.list_tables}\n")
-        view_names = list_tables(engine, filter=args.list_tables)
+        table_names = list_tables(engine, filter=args.list_tables)
         if args.json:
-            print(json.dumps(view_names, indent=4))
+            with open(args.json, "w") as f:
+                f.write(json.dumps(table_names, indent=4))
         else:
             headers = [ "TABLE_NAME" ]
-            data = [ [ table_name ] for table_name in view_names ]
+            data = [ [ table_name ] for table_name in table_names ]
             print(tabulate(data, headers=headers, tablefmt="grid"))
-            print(f"\n{len(view_names)} tablas encontradas")
+        print(f"\n{len(table_names)} tablas encontradas")
         return
 
     # Generar el esquema
@@ -174,24 +162,16 @@ def main():
 
         # Añade información de la conexión a la base de datos
         print("Añadiendo información de la conexión a la base de datos al resultado")
-        parsedurl = urlparse(dburl)
-        db_schema = {
-            "database": {
-                "server": parsedurl.hostname,
-                "port": parsedurl.port,
-                "database": parsedurl.path[1:]
-            },
-            "tables": db_schema
-        }
+        schema = Schema(Database(dburl), db_schema)
 
         # Convertirlo en JSON
         print("Convirtiendo el resultado en JSON")
-        schema_json = json.dumps(db_schema, indent=4)
+        schema_json = json.dumps(schema, indent=4)
 
         # Guardar en un fichero o mostrar por pantalla
-        if args.output:
-            print(f"Guardando el resultado en el fichero: {args.output}")
-            with open(args.output, "w") as f:
+        if args.json and len(args.json) > 0:
+            print(f"Guardando el resultado en el fichero: {args.json}")
+            with open(args.json, "w") as f:
                 f.write(schema_json)
         else:
             print(schema_json)

@@ -3,6 +3,8 @@ from string import Template
 from urllib.parse import quote_plus
 import configparser
 
+DEFAULT_INI_FILE = "dbtools.ini"
+
 DBMS_DEFAULT_CONFIG = {
     "mysql": {
         "port": 3306,

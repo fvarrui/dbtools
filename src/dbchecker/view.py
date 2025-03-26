@@ -1,6 +1,6 @@
 from tabulate import tabulate
 from textwrap import shorten
-from .column import Column
+from ..dbschema.column import Column
 
 class View:
     

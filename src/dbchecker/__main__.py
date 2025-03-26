@@ -3,7 +3,7 @@ import argparse
 import sys
 
 from dbchecker import __module_name__, __module_description__, __module_name__, __module_version__
-from dbchecker.database import Database
+from dbschema.database import Database
 
 def main():
 
