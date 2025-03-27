@@ -18,12 +18,13 @@ classifiers = [
 ]
 keywords = ["db", "tools", "schema", "mapping", "integrity", "check", "migration", "sql" ]
 dependencies = [
-    "tabulate",         # Pretty tables
-    "python-dotenv",    # Environment variables
+    "networkx",         # Graphs
     "sqlalchemy",       # DB metadata
+    "tabulate",         # Pretty tables
     "pydantic",         # Data validation (JSON serialization)
     "pymysql",          # MySQL/MariaDB 
     "pyodbc",           # SQL Server
+    "python-dotenv",    # Environment variables
     "psycopg2",         # PostgreSQL
 ]
 requires-python = ">=3.12"
