@@ -55,8 +55,6 @@ def main():
     commands.add_argument('--schema', metavar='FILTER', nargs='?', const='', help='Genera el esquema de la base de datos')
     commands.add_argument('--list-tables', metavar='FILTER', nargs='?', const='', help='Listar todas las tablas')
     commands.add_argument('--list-views', metavar='FILTER', nargs='?', const='', help='Listar todas las vistas')
-    commands.add_argument('--show-table', metavar='TABLE', help='Mostrar estructura de la tabla', type=str)
-    commands.add_argument('--show-view', metavar='VIEW', help='Mostrar estructura de la vista', type=str)
 
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
