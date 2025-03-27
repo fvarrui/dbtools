@@ -8,11 +8,6 @@ from dbmapper.score import Score
 def remove_prefix(text):
     return text.split("_", 1)[1]
 
-def load_schema(json_path) -> Schema: 
-    with open(json_path, "r", encoding="utf-8") as f:
-        schema_json = json.load(f)
-    return Schema.model_validate(schema_json['schema'])
-
 def get_table_map(source_tables, tgt_table_names, cutoff=0.0):
     mapping = {}
     src_table_names = [t["name"] for t in source_tables]
@@ -41,11 +36,11 @@ def get_column_map(src_columns, tgt_columns, cutoff=0.6):
     return mapping
 
 def generate_mapping(source_path, target_path, output_path):
-    src_schema = load_schema(source_path)
-    dst_schema = load_schema(target_path)
+    src_schema = Schema.from_json(source_path)
+    dst_schema = Schema.from_json(target_path)
 
-    source_tables = src_schema["schema"]["tables"]
-    target_tables = dst_schema["schema"]["tables"]
+    source_tables = src_schema.tables
+    target_tables = dst_schema.tables
 
     table_matches = get_table_map(source_tables, target_tables)
 
@@ -145,8 +140,6 @@ def match_tables(src_table, dst_table):
 def match_columns(src_table, dst_table):
     pass
 
-
-
 def match_schemas(src_schema, dst_schema, threshold=0.7):
     src_tables = [ table['name'] for table in src_schema["schema"]["tables"] ]
     dst_tables = [ table['name'] for table in dst_schema["schema"]["tables"] ]
@@ -189,7 +182,7 @@ def match_schemas(src_schema, dst_schema, threshold=0.7):
 def main():
     #generate_mapping("schemas/pec_schema.json", "schemas/xes_schema.json", "schemas/mapa_migracion_pec_a_xes.json")
 
-    src_schema = load_schema("schemas/xes_schema.json")
+    src_schema = Schema.from_json("schemas/xes_schema.json")
     for table in src_schema.tables:
         table.print()
 

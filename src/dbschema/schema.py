@@ -1,3 +1,4 @@
+import json
 from pydantic import BaseModel
 
 from dbschema.table import Table
@@ -14,4 +15,12 @@ class Schema(BaseModel):
             if table_names and table_name not in table_names:
                 continue
             tables.append(Table.from_metadata(table_metadata))
-        return cls(tables=tables)
+        return cls(
+            tables=tables
+        )
+    
+    @staticmethod
+    def from_json(json_path: str) -> "Schema":
+        with open(json_path, "r", encoding="utf-8") as f:
+            schema_json = json.load(f)
+        return Schema.model_validate(schema_json['schema'])

@@ -11,6 +11,7 @@ class Database:
         self.server = parsedurl.hostname
         self.port = parsedurl.port
         self.name = parsedurl.path[1:]
+        self.type = parsedurl.scheme.split("+")[0]
     
     def connect(self):
         """
@@ -72,6 +73,7 @@ class Database:
 
     def __dict__(self) -> dict:
         return {
+            "type": self.type,
             "name": self.name,
             "server": self.server,
             "port": self.port

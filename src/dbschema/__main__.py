@@ -34,7 +34,7 @@ def main():
     options = parser.add_argument_group('Opciones')
     options.add_argument('--db-url', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
     options.add_argument('--db-name', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DEFAULT_INI_FILE}")
-    options.add_argument('--json', metavar='FILE', nargs='?', help='Guarda el resultado en un fichero JSON')
+    options.add_argument('--json', metavar='FILE', nargs='?', const='', help='Guarda el resultado en un fichero JSON')
     options.add_argument('--password', metavar='PASSWORD', nargs='?', help=f"Contraseña de la base de datos")
 
     # Parsea los argumentos
@@ -105,30 +105,25 @@ def main():
         schema = database.get_schema(prefix=prefix)
 
         # Guardar en un fichero o mostrar por pantalla
-        if args.json:
+        if args.json is not None:
 
             # Añade información de la base de datos junto con el esquema
             result = {
-                "database": {
-                    "name": database.name,
-                    "server": database.server,
-                    "port": database.port
-                },
+                "database": database.__dict__(),
                 "schema": schema.model_dump()
             }
          
             # Convertir el resultado en JSON
-            print("Convirtiendo el resultado en JSON")
-            schema_json = json.dumps(result, indent=4)
+            result_json = json.dumps(result, indent=4)
 
             # Guardar el resultado en un fichero
             if len(args.json) > 0:
-                print(f"Guardando el resultado en el fichero: {args.json}")
                 with open(args.json, "w") as f:
-                    f.write(schema_json)
+                    f.write(result_json)
+                print(f"\nEsquema guardado en: {args.json}")
             # Mostrar el resultado en formato JSON en la consola
             else:
-                print(schema_json)
+                print(f"\n{result_json}")
 
         else:
 
