@@ -23,8 +23,10 @@ class Database:
     def get_schema(self, prefix=None) -> Schema:
         """
         Recupera el esquema de la base de datos
-        :param prefix: Prefijo para las tablas a incluir
-        :return: Esquema de la base
+        Args:
+            prefix: Prefijo para las tablas a incluir
+        Returns:
+            Esquema de la base de datos
         """
 
         # Recuperando la lista de tablas de la base de datos con el prefijo indicado
@@ -41,8 +43,10 @@ class Database:
     def list_tables(self, filter=None) -> list[str]:
         """
         Recupera la lista de tablas de la base de datos
-        :param filter: Filtro para las tablas
-        :return: Lista de nombres de tablas
+        Args:
+            filter: Filtro para las tablas
+        Returns:
+            Lista de nombres de tablas
         """
         tables = []
         for table_name in self.inspector.get_table_names():
@@ -54,8 +58,10 @@ class Database:
     def list_views(self, filter=None) -> list[str]:
         """
         Recupera la lista de vistas de la base de datos
-        :param filter: Filtro para las vistas
-        :return: Lista de nombres de vistas
+        Args:
+            filter: Filtro para las vistas
+        Returns:
+            Lista de nombres de vistas
         """
         views = []
         for view_name in self.inspector.get_view_names():
