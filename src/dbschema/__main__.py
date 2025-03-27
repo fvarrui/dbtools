@@ -1,39 +1,13 @@
-import os
 import sys
 import json
 import argparse
 
 from tabulate import tabulate
-from getpass import getpass
 
 from dbschema import __module_name__, __module_description__, __module_version__
 from dbschema.database import Database
 
-from dbconn.dbini import get_connection_url, has_undefined_password, replace_password_placeholder, DEFAULT_INI_FILE
-
-def resolve_dburl(args):
-    """
-    Resuelve la URL de conexión a la base de datos a partir de los argumentos de línea de comandos y las variables de entorno.
-    :args: Argumentos de línea de comandos
-    :return: URL de conexión a la base de datos    
-    """
-    # Busca la URL de conexión a la base de datos en los argumentos de línea de comandos o en las variables de entorno
-    dburl = args.dburl or os.getenv("DBTOOLS_CONNECTION_URL")
-    
-    # Si aún así no hay URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
-    if not dburl:
-        # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
-        try:
-            dburl = get_connection_url(DEFAULT_INI_FILE, args.db)
-            # Si la URL de conexión requiere una contraseña, se solicita al usuario
-            if has_undefined_password(dburl):
-                password = args.password or getpass("Introduce la contraseña: ")
-                dburl = replace_password_placeholder(dburl, password)
-        except Exception as e:
-            print("No se ha podido obtener la URL de conexión a la base de datos:", e, file=sys.stderr)
-            sys.exit(1)
-
-    return dburl
+from dbutils.dbini import resolve_dburl, DEFAULT_INI_FILE
 
 def main():
 
@@ -58,8 +32,8 @@ def main():
 
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
-    options.add_argument('--dburl', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
-    options.add_argument('--db', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DEFAULT_INI_FILE}")
+    options.add_argument('--db-url', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
+    options.add_argument('--db-name', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DEFAULT_INI_FILE}")
     options.add_argument('--json', metavar='FILE', nargs='?', help='Guarda el resultado en un fichero JSON')
     options.add_argument('--password', metavar='PASSWORD', nargs='?', help=f"Contraseña de la base de datos")
 
@@ -72,15 +46,15 @@ def main():
         return
 
     # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla de las variables de entorno
-    dburl = resolve_dburl(args)  
+    db_url = resolve_dburl(args.db_url, args.db_name, args.password)  
 
     # Conecta a la base de datos
     try:
-        database = Database(dburl)
+        database = Database(db_url)
         database.connect()
-        print("Conectado a la base de datos:", dburl)
+        print("Conectado a la base de datos:", db_url)
     except Exception as e:
-        print(f"No se ha podido conectar a la base de datos {dburl}:", e, file=sys.stderr)
+        print(f"No se ha podido conectar a la base de datos {db_url}:", e, file=sys.stderr)
         sys.exit(1)
 
     # Listar las vistas

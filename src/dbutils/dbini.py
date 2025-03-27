@@ -1,7 +1,9 @@
 import os
+import sys
 from string import Template
 from urllib.parse import quote_plus
 import configparser
+from getpass import getpass
 
 DEFAULT_INI_FILE = "dbtools.ini"
 
@@ -107,3 +109,31 @@ def replace_password_placeholder(connection_url, password):
     """
     password = quote_plus(password)
     return connection_url.replace(PASSWORD_PLACEHOLDER, password)
+
+def resolve_dburl(db_url, db_name = None, password = None):
+    """
+    Resuelve la URL de conexión a la base de datos a partir de los argumentos de línea de comandos y las variables de entorno.
+    Args:
+        db_url (str): URL de conexión a la base de datos.
+        db_name (str): Nombre de la base de datos en el archivo de configuración.
+        password (str): Contraseña de la base de datos.
+    Returns:
+        str: URL de conexión a la base de datos.
+    """
+    # Busca la URL de conexión a la base de datos en los argumentos de línea de comandos o en las variables de entorno
+    db_url = db_url or os.getenv("DBTOOLS_CONNECTION_URL")
+    
+    # Si aún así no hay URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
+    if not db_url:
+        # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
+        try:
+            db_url = get_connection_url(DEFAULT_INI_FILE, db_name)
+            # Si la URL de conexión requiere una contraseña, se solicita al usuario
+            if has_undefined_password(db_url):
+                password = password or getpass("Introduce la contraseña: ")
+                db_url = replace_password_placeholder(db_url, password)
+        except Exception as e:
+            print("No se ha podido obtener la URL de conexión a la base de datos:", e, file=sys.stderr)
+            sys.exit(1)
+
+    return db_url

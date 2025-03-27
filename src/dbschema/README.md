@@ -9,7 +9,7 @@ Para saber cómo se usa `dbschema` lo mejor es consulta la ayuda:
 ```bash
 $ dbschema --help
 
-Uso: dbschema (-h | -v | --schema [FILTER] | --list-tables [FILTER] | --list-views [FILTER] | --show-table TABLE | --show-view VIEW) [--dburl [URL]] [--db [DB]] [--json [FILE]] [--password [PASSWORD]]
+Uso: dbschema (-h | -v | --schema [FILTER] | --list-tables [FILTER] | --list-views [FILTER]) [--db-url [URL]] [--db-name [DB]] [--json [FILE]] [--password [PASSWORD]]
 
 Genera un esquema de la base de datos para su posterior análisis (v0.0.1)
 
@@ -23,8 +23,8 @@ Comandos:
                         Listar todas las vistas
 
 Opciones:
-  --dburl [URL]         URL de conexión a la base de datos
-  --db [DB]             Nombre de la base de datos en el fichero dbtools.ini
+  --db-url [URL]        URL de conexión a la base de datos
+  --db-name [DB]        Nombre de la base de datos en el fichero dbtools.ini
   --json [FILE]         Guarda el resultado en un fichero JSON
   --password [PASSWORD]
                         Contraseña de la base de datos
