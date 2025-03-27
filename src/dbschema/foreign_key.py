@@ -1,23 +1,21 @@
-from dataclasses import dataclass, asdict
+from pydantic import BaseModel
 
-@dataclass
-class ForeignKey:
+from dbschema.reference import Reference
 
-    column : str = None
-    references : dict = None
+class ForeignKey(BaseModel):
 
-    def __init__(self, metadata: any):
-        self.column = metadata.parent.name
-        self.references = {
-            "table": metadata.column.table.name,
-            "column": metadata.column.name
-        }
+    column : str
+    reference : Reference
+
+    @classmethod
+    def from_metadata(cls, fk_metadata: any):
+        return cls(
+            column = fk_metadata.parent.name,
+            reference = Reference.from_metadata(fk_metadata.column)
+        )
 
     def __str__(self):
-        return f"{self.column} -> {self.references['table']}.{self.references['column']}"
+        return f"{self.column} -> {self.reference}"
     
     def __repr__(self):
         return self.__str__()
-
-    def __dict__(self):
-        return asdict(self)

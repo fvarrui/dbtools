@@ -3,42 +3,37 @@ import sys
 import json
 import argparse
 
-from sqlalchemy import create_engine, MetaData, inspect
 from tabulate import tabulate
 from getpass import getpass
 
 from dbschema import __module_name__, __module_description__, __module_version__
-from dbschema.schema import Schema
 from dbschema.database import Database
-from dbschema.table import Table
 
 from dbconn.dbini import get_connection_url, has_undefined_password, replace_password_placeholder, DEFAULT_INI_FILE
 
-def generate_schema(metadata, prefix=None) -> list[Table]:
-    schema : list[Table] = []
-    for table_name, table_metadata in metadata.tables.items():
-        if prefix and not table_name.startswith(prefix):
-            continue
-        schema.append(Table(table_metadata))
-    return schema
+def resolve_dburl(args):
+    """
+    Resuelve la URL de conexión a la base de datos a partir de los argumentos de línea de comandos y las variables de entorno.
+    :args: Argumentos de línea de comandos
+    :return: URL de conexión a la base de datos    
+    """
+    # Busca la URL de conexión a la base de datos en los argumentos de línea de comandos o en las variables de entorno
+    dburl = args.dburl or os.getenv("DBTOOLS_CONNECTION_URL")
+    
+    # Si aún así no hay URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
+    if not dburl:
+        # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
+        try:
+            dburl = get_connection_url(DEFAULT_INI_FILE, args.db)
+            # Si la URL de conexión requiere una contraseña, se solicita al usuario
+            if has_undefined_password(dburl):
+                password = args.password or getpass("Introduce la contraseña: ")
+                dburl = replace_password_placeholder(dburl, password)
+        except Exception as e:
+            print("No se ha podido obtener la URL de conexión a la base de datos:", e, file=sys.stderr)
+            sys.exit(1)
 
-def list_tables(engine, filter=None):
-    inspector = inspect(engine)
-    tables = []
-    for table_name in inspector.get_table_names():
-        if filter and not filter in table_name:
-            continue
-        tables.append(table_name)
-    return tables
-
-def list_views(engine, filter=None):
-    inspector = inspect(engine)
-    views = []
-    for view_name in inspector.get_view_names():
-        if filter and not filter in view_name:
-            continue
-        views.append(view_name)
-    return views
+    return dburl
 
 def main():
 
@@ -79,28 +74,12 @@ def main():
         return
 
     # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla de las variables de entorno
-    dburl = args.dburl or os.getenv("DBTOOLS_CONNECTION_URL")
-
-    if not dburl:
-        # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
-        try:
-            dburl = get_connection_url(DEFAULT_INI_FILE, args.db)
-            if has_undefined_password(dburl):
-                password = args.password or getpass("Introduce la contraseña: ")
-                dburl = replace_password_placeholder(dburl, password)
-        except Exception as e:
-            print("No se ha podido obtener la URL de conexión a la base de datos:", e, file=sys.stderr)
-            sys.exit(1)
-
-    # Comprueba que se ha especificado una URL de conexión a la base de datos
-    if not dburl:
-        print(f"Debe especificar una URL de conexión a la base de datos o una configuración en {DEFAULT_INI_FILE}", file=sys.stderr)
-        sys.exit(1)  
+    dburl = resolve_dburl(args)  
 
     # Conecta a la base de datos
     try:
-        engine = create_engine(dburl)
-        engine.connect()
+        database = Database(dburl)
+        database.connect()
         print("Conectado a la base de datos:", dburl)
     except Exception as e:
         print(f"No se ha podido conectar a la base de datos {dburl}:", e, file=sys.stderr)
@@ -111,7 +90,7 @@ def main():
         print("Listando vistas ...")
         if args.list_views:
             print(f"- Filtrado vistas que contengan: {args.list_views}\n")
-        view_names = list_views(engine, filter=args.list_views)
+        view_names = database.list_views(filter=args.list_views)
         if args.json:
             with open(args.json, "w") as f:
                 f.write(json.dumps(view_names, indent=4))
@@ -127,7 +106,7 @@ def main():
         print("Listando tablas ...")
         if args.list_tables:
             print(f"- Filtrado tablas que contengan: {args.list_tables}\n")
-        table_names = list_tables(engine, filter=args.list_tables)
+        table_names = database.list_tables(filter=args.list_tables)
         if args.json:
             with open(args.json, "w") as f:
                 f.write(json.dumps(table_names, indent=4))
@@ -141,32 +120,31 @@ def main():
     # Generar el esquema
     if args.schema is not None:
 
-        table_names = list_tables(engine, filter=args.schema) if args.schema else None
+        prefix = args.schema
 
-        # Cargar la estructura de la base de datos existente
-        print("Recuperando la estructura de la base de datos (metadatos) ...")
-        print("- Tablas a incluir:", table_names or "Todas")
-        metadata = MetaData()
-        metadata.reflect(bind=engine, only=table_names)
-        print("Metadatos recuperados!")
+        # Generar el esquema de la base de datos
 
-        print(f"Generando esquema de la base de datos a partir de los metadatos ...")
-        if args.schema:
-            print(f"- Incluyendo sólo tablas con prefijo: {args.schema}")
+        print(f"Generando esquema de la base de datos ...")
+        if prefix:
+            print(f"- Incluyendo sólo tablas con prefijo: {prefix}")
         else:
             print(f"- Incluyendo todas las tablas")
 
-        # Generar el esquema de la base de datos
-        db_schema = generate_schema(metadata, prefix=args.schema)
-        print("Esquema generado!")
+        schema = database.get_schema(prefix=prefix)
 
-        # Añade información de la conexión a la base de datos
-        print("Añadiendo información de la conexión a la base de datos al resultado")
-        schema = Schema(Database(dburl), db_schema)
-
+        # Añade información de la base de datos junto con el esquema
+        result = {
+            "database": {
+                "name": database.name,
+                "server": database.server,
+                "port": database.port
+            },
+            "schema": schema.model_dump()
+        }
+ 
         # Convertirlo en JSON
         print("Convirtiendo el resultado en JSON")
-        schema_json = json.dumps(schema, indent=4)
+        schema_json = json.dumps(result, indent=4)
 
         # Guardar en un fichero o mostrar por pantalla
         if args.json and len(args.json) > 0:

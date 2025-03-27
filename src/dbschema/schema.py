@@ -1,17 +1,18 @@
-from dataclasses import dataclass, asdict, field
+from pydantic import BaseModel
 
-from .database import Database
-from .table import Table
+from dbschema.table import Table
 
-@dataclass
-class Schema:
+class Schema(BaseModel):
 
-    database: Database
-    tables: list[Table] = field(default_factory=list)
+    tables: list[Table] = []
 
-    def __init__(self, database: Database, tables: list[Table]):
-        self.database = database
-        self.tables = tables
-
-    def __dict__(self):
-        return asdict(self)
+    @classmethod
+    def from_metadata(cls, metadata: any, prefix: str = None):
+        tables = []
+        for table_name, table_metadata in metadata.tables.items():
+            if prefix and not table_name.startswith(prefix):
+                continue
+            tables.append(Table.from_metadata(table_metadata))
+        return cls(
+            tables=tables
+        )
