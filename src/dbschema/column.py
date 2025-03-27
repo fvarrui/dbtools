@@ -17,7 +17,7 @@ class Column(BaseModel):
             nullable = column_metadata.nullable,
             comment = column_metadata.comment,
             default = column_metadata.default,
-        )         
+        )
 
     @staticmethod
     def __prettify_type__(type):

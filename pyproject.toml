@@ -18,10 +18,11 @@ classifiers = [
 ]
 keywords = ["db", "tools", "schema", "mapping", "integrity", "check", "migration", "sql" ]
 dependencies = [
-    "tabulate",    
-    "python-dotenv",
-    "sqlalchemy",
-    "pymysql",          # MySQL/MariaDB
+    "tabulate",         # Pretty tables
+    "python-dotenv",    # Environment variables
+    "sqlalchemy",       # DB metadata
+    "pydantic",         # Data validation (JSON serialization)
+    "pymysql",          # MySQL/MariaDB 
     "pyodbc",           # SQL Server
     "psycopg2",         # PostgreSQL
 ]

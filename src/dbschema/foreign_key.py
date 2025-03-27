@@ -11,7 +11,7 @@ class ForeignKey(BaseModel):
     def from_metadata(cls, fk_metadata: any):
         return cls(
             column = fk_metadata.parent.name,
-            reference = Reference.from_metadata(fk_metadata.column)
+            reference = Reference.from_metadata(fk_metadata)
         )
 
     def __str__(self):

@@ -6,6 +6,7 @@ from typing import Optional
 from dbschema.column import Column
 from dbschema.foreign_key import ForeignKey
 
+
 class Table(BaseModel):
 
     name: str
@@ -19,15 +20,24 @@ class Table(BaseModel):
         return cls(
             name=table_metadata.name,
             comment=table_metadata.comment,
-            columns=[Column.from_metadata(column_metadata) for column_metadata in table_metadata.columns],
-            primary_keys=[column_metadata.name for column_metadata in table_metadata.primary_key.columns],
-            foreign_keys=[ForeignKey.from_metadata(fk_metadata) for fk_metadata in table_metadata.foreign_keys],
+            columns=[
+                Column.from_metadata(column_metadata)
+                for column_metadata in table_metadata.columns
+            ],
+            primary_keys=[
+                column_metadata.name
+                for column_metadata in table_metadata.primary_key.columns
+            ],
+            foreign_keys=[
+                ForeignKey.from_metadata(fk_metadata)
+                for fk_metadata in table_metadata.foreign_keys
+            ],
         )
 
     def print(self):
         print("Tabla       :", self.name)
         print("Descripción :", self.comment)
-        headers = [ "PK", "COLUMN_NAME", "TYPE", "NULLABLE", "RELATION", "COMMENT" ]
+        headers = ["PK", "COLUMN_NAME", "TYPE", "NULLABLE", "RELATION", "COMMENT"]
         data = []
         for column in self.columns:
             type = column.type
@@ -36,13 +46,19 @@ class Table(BaseModel):
             relations = []
             for fk in self.foreign_keys:
                 if column.name == fk.column:
-                    relations.append(f"{fk.reference.table}.{fk.reference.column}")
-            data.append([ 
-                is_pk, 
-                column.name, 
-                type, 
-                is_nullable,
-                "\n".join(relations),
-                shorten(column.comment if column.comment else "", width=100, placeholder="...") 
-            ])
+                    relations.append(f"{fk.reference}")
+            data.append(
+                [
+                    is_pk,
+                    column.name,
+                    type,
+                    is_nullable,
+                    "\n".join(relations),
+                    shorten(
+                        column.comment if column.comment else "",
+                        width=100,
+                        placeholder="...",
+                    ),
+                ]
+            )
         print(tabulate(data, headers=headers, tablefmt="grid"))

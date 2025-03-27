@@ -2,7 +2,6 @@ from urllib.parse import urlparse
 from sqlalchemy import create_engine, inspect, MetaData
 
 from dbschema.schema import Schema
-from dbschema.table import Table
 
 class Database:
 
@@ -37,7 +36,7 @@ class Database:
         metadata.reflect(bind=self.engine, only=table_names)
 
         # Generar el esquema de la base de datos
-        return Schema.from_metadata(metadata)
+        return Schema.from_metadata(metadata, table_names)
 
     def list_tables(self, filter=None) -> list[str]:
         """

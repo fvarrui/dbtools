@@ -132,31 +132,38 @@ def main():
 
         schema = database.get_schema(prefix=prefix)
 
-        # Añade información de la base de datos junto con el esquema
-        result = {
-            "database": {
-                "name": database.name,
-                "server": database.server,
-                "port": database.port
-            },
-            "schema": schema.model_dump()
-        }
- 
-        # Convertirlo en JSON
-        print("Convirtiendo el resultado en JSON")
-        schema_json = json.dumps(result, indent=4)
-
         # Guardar en un fichero o mostrar por pantalla
-        if args.json and len(args.json) > 0:
-            print(f"Guardando el resultado en el fichero: {args.json}")
-            with open(args.json, "w") as f:
-                f.write(schema_json)
-        else:
-            print(schema_json)
+        if args.json:
 
-        return
-    
-    print(args)
+            # Añade información de la base de datos junto con el esquema
+            result = {
+                "database": {
+                    "name": database.name,
+                    "server": database.server,
+                    "port": database.port
+                },
+                "schema": schema.model_dump()
+            }
+         
+            # Convertir el resultado en JSON
+            print("Convirtiendo el resultado en JSON")
+            schema_json = json.dumps(result, indent=4)
+
+            # Guardar el resultado en un fichero
+            if len(args.json) > 0:
+                print(f"Guardando el resultado en el fichero: {args.json}")
+                with open(args.json, "w") as f:
+                    f.write(schema_json)
+            # Mostrar el resultado en formato JSON en la consola
+            else:
+                print(schema_json)
+
+        else:
+
+            # Mostrar tablas del esquema en la consola
+            for table in schema.tables:
+                print()
+                table.print()
 
 if __name__ == "__main__":
     main()

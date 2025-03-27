@@ -6,7 +6,8 @@ class Reference(BaseModel):
     column : str
 
     @classmethod
-    def from_metadata(cls, column_metadata: any):
+    def from_metadata(cls, fk_metadata: any):
+        column_metadata = fk_metadata.column
         return cls(
             table = column_metadata.table.name,
             column = column_metadata.name
