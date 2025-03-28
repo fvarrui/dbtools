@@ -1,12 +1,25 @@
-class Score:
+from pydantic import BaseModel
+from typing import Any
 
-    name: str
+class Score(BaseModel):
+
+    src: Any
+    dst: Any
     ratio: float
 
-    def __init__(self, name, ratio):
-        self.name = name
-        self.ratio = ratio
+    @classmethod
+    def create(cls, src, dst, ratio: float = 0.0) -> "Score":
+        return cls(
+            src=src,
+            dst=dst,
+            ratio=ratio
+        )
 
     def __compare__(self, other):
         return self.ratio - other.ratio
-        
+    
+    def __str__(self):
+        return f"{self.src.name} -> {self.dst.name} ({self.ratio})"
+
+    class Config:
+        arbitrary_types_allowed = True  # Permitir tipos arbitrarios

@@ -33,6 +33,9 @@ class Table(BaseModel):
                 for fk_metadata in table_metadata.foreign_keys
             ],
         )
+    
+    def __str__(self):
+        return self.name
 
     def print(self):
         print("Tabla       :", self.name)
