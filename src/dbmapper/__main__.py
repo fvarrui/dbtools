@@ -272,20 +272,35 @@ def main():
             tablefmt="grid"
         ))
         # Muestra las columnas no emparejadas del origen en la consola
-        print(f"\nColumnas no emparejadas del esquema origen {src_table.name} ({len(columns_result.unmatched_srcs)})")
-        print(tabulate(
-            [ [ column.name ] for column in columns_result.unmatched_srcs ],
-            headers=["COLUMNA ORIGEN"],
-            tablefmt="grid"
-        ))
+        if len(columns_result.unmatched_srcs) > 0:
+            print(f"\nColumnas no emparejadas del esquema origen {src_table.name} ({len(columns_result.unmatched_srcs)})")
+            print(tabulate(
+                [ [ column.name ] for column in columns_result.unmatched_srcs ],
+                headers=["COLUMNA ORIGEN"],
+                tablefmt="grid"
+            ))
         # Muestra las columnas no emparejadas del destino en la consola
-        print(f"\nColumnas no emparejadas del esquema destino {dst_table.name} ({len(columns_result.unmatched_dsts)})")
-        print(tabulate(
-            [ [ column.name ] for column in columns_result.unmatched_dsts ],
-            headers=["COLUMNA DESTINO"],
-            tablefmt="grid"
-        ))
+        if len(columns_result.unmatched_dsts) > 0:
+            print(f"\nColumnas no emparejadas del esquema destino {dst_table.name} ({len(columns_result.unmatched_dsts)})")
+            print(tabulate(
+                [ [ column.name ] for column in columns_result.unmatched_dsts ],
+                headers=["COLUMNA DESTINO"],
+                tablefmt="grid"
+            ))
 
+    # Muestra en una tabla la cantidad de tablas emparejadas y no emparejadas
+    print("\n\nResumen del emparejamiento:")
+    print(tabulate(
+        [
+            [ "Tablas emparejadas", "", len(result.matched) ],
+            [ "Tablas NO emparejadas", "ORIGEN", len(result.unmatched_srcs) ],
+            [ "Tablas NO emparejadas", "DESTINO", len(result.unmatched_dsts) ]
+        ],
+        headers=["DESCRIPCIÓN", "", "TOTAL"],
+        tablefmt="grid"
+    ))
+
+    # Muestra el tiempo de ejecución
     ellapsed_time = time.time() - start_time
     print(f"\n\nTiempo de ejecución: {ellapsed_time:.2f} segundos")
 
