@@ -34,8 +34,21 @@ class Table(BaseModel):
             ],
         )
     
+    def __lt__(self, other):
+        if not isinstance(other, Table):
+            return NotImplemented
+        return self.name < other.name
+    
     def __str__(self):
         return self.name
+    
+    def __hash__(self):
+        return hash(self.name)
+    
+    def __eq__(self, value):
+        if not isinstance(value, Table):
+            return NotImplemented
+        return self.name == value.name
 
     def print(self):
         print("Tabla       :", self.name)

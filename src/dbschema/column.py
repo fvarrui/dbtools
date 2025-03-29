@@ -19,6 +19,11 @@ class Column(BaseModel):
             default = column_metadata.default,
         )
 
+    def __lt__(self, other):
+        if not isinstance(other, Column):
+            return NotImplemented
+        return self.name < other.name
+    
     @staticmethod
     def __prettify_type__(type):
         pretty = type.__class__.__name__
@@ -31,4 +36,12 @@ class Column(BaseModel):
                 return pretty
 
     def __eq__(self, value):
-        return self.name == value.name and self.type == value.type
+        if not isinstance(value, Column):
+            return NotImplemented
+        return self.name == value.name
+    
+    def __str__(self):
+        return f"{self.name}[{self.type}]"
+    
+    def __hash__(self):
+        return hash(self.name)
