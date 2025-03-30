@@ -264,8 +264,8 @@ def main():
         # Imprime el resultado del emparejamiento de columnas
         print("\n")
         print("-" * 80)
-        print(f"\n{src_table.name} -> {dst_table.name} ({len(columns_result.matched)})")
-        print(f"Ratio de similitud: {matched_table.ratio:.2f}")
+        print(f"\n ")
+        print(f"\nColumnas emparejadas entre las tablas {src_table.name} -> {dst_table.name} ({len(columns_result.matched)}):")
         print(tabulate(
             [ [ column.src.name, column.dst.name, column.ratio ] for column in columns_result.matched ],
             headers=["COLUMNA ORIGEN", "COLUMNA DESTINO", "RATIO"],
@@ -273,7 +273,7 @@ def main():
         ))
         # Muestra las columnas no emparejadas del origen en la consola
         if len(columns_result.unmatched_srcs) > 0:
-            print(f"\nColumnas no emparejadas del esquema origen {src_table.name} ({len(columns_result.unmatched_srcs)})")
+            print(f"\nColumnas no emparejadas de la tabla origen {src_table.name} ({len(columns_result.unmatched_srcs)})")
             print(tabulate(
                 [ [ column.name ] for column in columns_result.unmatched_srcs ],
                 headers=["COLUMNA ORIGEN"],
@@ -281,7 +281,7 @@ def main():
             ))
         # Muestra las columnas no emparejadas del destino en la consola
         if len(columns_result.unmatched_dsts) > 0:
-            print(f"\nColumnas no emparejadas del esquema destino {dst_table.name} ({len(columns_result.unmatched_dsts)})")
+            print(f"\nColumnas no emparejadas de la tabla destino {dst_table.name} ({len(columns_result.unmatched_dsts)})")
             print(tabulate(
                 [ [ column.name ] for column in columns_result.unmatched_dsts ],
                 headers=["COLUMNA DESTINO"],
