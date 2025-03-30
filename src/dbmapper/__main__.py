@@ -183,7 +183,7 @@ def main():
                 self._add_item(self._format_usage, args)
 
     # define el parser
-    parser = argparse.ArgumentParser(prog=__module_name__, description=f"{__module_description__} (v{__module_version__})", epilog='¡Un gran esquema conlleva una gran responsabilidad!', add_help=False, formatter_class=CustomHelpFormatter)
+    parser = argparse.ArgumentParser(prog=__module_name__, description=f"{__module_description__} (v{__module_version__})", epilog='A mapear tus esquemitas', add_help=False, formatter_class=CustomHelpFormatter)
 
     # define los comandos (mutuamente excluyentes)
     commands = parser.add_argument_group('Comandos')
@@ -197,7 +197,7 @@ def main():
     options.add_argument('--src-schema', metavar='FILE', help='Esquema de la base de datos origen')
     options.add_argument('--dst-schema', metavar='FILE', help='Esquema de la base de datos destino')
     options.add_argument('--threshold', metavar='THRESHOLD', type=float, default=0.7, help='Umbral de similitud para considerar un emparejamiento válido (default: 0.7)')
-    options.add_argument('--json', metavar='FILE', nargs='?', const='', help='Exporta el resultado en un fichero JSON (si no se especifica, se imprime en la salida estándar)')
+    options.add_argument('--json', metavar='FILE', nargs='?', const='', help='Exporta el resultado en un fichero JSON')
 
     # Parsea los argumentos
     args = parser.parse_args()
