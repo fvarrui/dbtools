@@ -31,11 +31,14 @@ class Mapper:
         """
         src = f"{src_column.name}[{src_column.type}]"
         dst = f"{dst_column.name}[{dst_column.type}]"
+        # Calcula el ratio de similitud entre los nombres de las columnas
         type_ratio = SequenceMatcher(None, src_column.type, dst_column.type).ratio()
+        # Calcula el ratio de similitud entre los tipos de las columnas
         if type_ratio > threshold:
             ratio = SequenceMatcher(None, src, dst).ratio()
         else:
             ratio = 0.0
+        # Crea el score de similitud entre las columnas
         score = Score.create(
             src=src_column,
             dst=dst_column,
