@@ -4,7 +4,7 @@ Conjunto de comandos implementados en Python para facilitar tareas relacionadas 
 
 - `dbanalyzer`: Analiza la estructura de una base de datos usando IA, obteniendo información semántica de las tablas y columnas.
 - `dbchecker`: Verifica la integridad de una base de datos.
-- `dbmapper`: Crea mapas de entre esquemas de bases de datos para facilitar la migración de datos.
+- [`dbmapper`](src/dbmapper/README.md): Crea mapas de entre esquemas de bases de datos para facilitar la migración de datos.
 - `dbsequel`: ...
 - [`dbschema`](src/dbschema/README.md): Genera un esquema de la base de datos en formato JSON.
 

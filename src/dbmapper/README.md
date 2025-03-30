@@ -9,28 +9,31 @@ Para saber cómo se usa `dbmapper` lo mejor es consulta la ayuda:
 ```bash
 $ dbmapper --help
 
+Uso: dbmapper (-h | -v | --map) [--src-schema FILE] [--dst-schema FILE] [--threshold THRESHOLD] [--json FILE]
+
+Genera el mapeo entre dos esquemas de bases de datos (v0.0.1)
+
+Comandos:
+  -h, --help            Muestra esta ayuda
+  -v, --version         Mostrar versión
+  --map                 Genera el mapa de emparejamiento
+
+Opciones:
+  --src-schema FILE     Esquema de la base de datos origen
+  --dst-schema FILE     Esquema de la base de datos destino
+  --threshold THRESHOLD
+                        Umbral de similitud para considerar un emparejamiento válido (default: 0.7)
+  --json FILE           Exporta el resultado en un fichero JSON
+
+A mapear tus esquemitas
 ```
 
 ### Algunos ejemplos
 
-Aquí  tienes también algunos ejemplos de como se usa el comando `dbmapper`.
+Aquí tienes también algunos ejemplos de como se usa el comando `dbmapper`.
 
-Para generar el esquema de la base de datos `mydb` en formato JSON en el fichero `mydb-schema.json`:
-
-```bash
-dbschema --db mydb --schema --json mydb-schema.json
-```
-
-> :warning: `mydb` debe estar definido en el fichero `dbtools.ini`.
-
-Si quieres generar el esquema de la base de datos `mydb` en formato JSON en consola para las tablas que contengan `tbl` en su nombre:
+Para generar el mapeo entre dos esquemas de bases de datos, por ejemplo `src-schema.json` y `dst-schema.json`, y exportar el resultado a un fichero JSON:
 
 ```bash
-dbschema --db mydb --schema tbl --json
-```
-
-O si lo que quieres es mostrar el esquema completo de la base de datos `mydb` en formato tablas en consola:
-
-```bash
-dbschema --db mydb --schema
+dbmapper --map --src-schema src-schema.json --dst-schema dst-schema.json --json result.json
 ```
