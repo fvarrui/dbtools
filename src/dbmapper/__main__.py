@@ -190,14 +190,14 @@ def main():
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda')
     commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__module_name__} v{__module_version__}')
-    commands.add_argument('-m', '--map', action='store_true', help='Genera el mapa de emparejamiento')
+    commands.add_argument('--map', action='store_true', help='Genera el mapa de emparejamiento')
 
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
     options.add_argument('--src-schema', metavar='FILE', help='Esquema de la base de datos origen')
     options.add_argument('--dst-schema', metavar='FILE', help='Esquema de la base de datos destino')
     options.add_argument('--threshold', metavar='THRESHOLD', type=float, default=0.7, help='Umbral de similitud para considerar un emparejamiento válido (default: 0.7)')
-    options.add_argument('--json', metavar='FILE', nargs='?', const='', help='Exporta el resultado en un fichero JSON')
+    options.add_argument('--json', metavar='FILE', help='Exporta el resultado en un fichero JSON')
 
     # Parsea los argumentos
     args = parser.parse_args()
