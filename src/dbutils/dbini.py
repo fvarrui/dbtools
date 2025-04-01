@@ -1,139 +1,98 @@
 import os
-import sys
-from string import Template
-from urllib.parse import quote_plus
-import configparser
-from getpass import getpass
+from configparser import ConfigParser
+from dbutils.dbconfig import DBConfig
 
-DEFAULT_INI_FILE = "dbtools.ini"
+DEFAULT_DB_INIFILE = "dbtools.ini"
+DEFAULT_CONFIG_INIFILE = "config.ini"
+DEFAULT_ENV_VAR_PREFIX = "DBTOOLS_"
 
-DBMS_DEFAULT_CONFIG = {
-    "mysql": {
-        "port": 3306,
-        "template": "mysql+pymysql://${username}:${password}@${host}:${port}/${database}"
-    },
-    "postgresql": {
-        "port": 5432,
-        "template": "postgresql+psycopg2://${username}:${password}@${host}:${port}/${database}"
-    },
-    "sqlserver": {
-        "port": 1433,
-        "template": "mssql+pyodbc://${username}:${password}@${host}:${port}/${database}?driver=${driver}&trusted_connection=${trusted_connection}",
-        "driver": "ODBC Driver 17 for SQL Server"
-    },
-    "sqlserver+sspi": {
-        "port": 1433,
-        "template": "mssql+pyodbc://${host}:${port}/${database}?driver=${driver}&trusted_connection=yes",
-        "driver": "ODBC Driver 17 for SQL Server"
-    }
-}
+class DBIni():
 
-PASSWORD_PLACEHOLDER = "{PASSWORD}"
+    inifile: str = None
+    config: ConfigParser = None
 
-def get_connection_url(ini_file_path, section_name):
-    """
-    Obtiene la URL de conexión a la base de datos desde un archivo .ini.
-    Args:
-        ini_file_path (str): Ruta al archivo .ini.
-        section_name (str): Nombre de la sección que contiene la configuración de la base de datos.
-    Returns:
-        str: URL de conexión a la base de datos.
-    """
+    def __init__(self, inifile: str):
+        """
+        Inicializa la clase DBIni.
+        Args:
+            inifile (str): Ruta al archivo de configuración .ini.
+        """
+        self.inifile = inifile
+        if not os.path.exists(inifile):
+            raise FileNotFoundError(f"No se ha encontrado el archivo de configuración: {inifile}")
+        self.config = ConfigParser()
+        self.config.read(inifile)
+ 
+    @classmethod
+    def load(cls) -> "DBIni":
+        """
+        Carga la configuración de un archivo .ini.
+        Args:
+            inifile (str): Ruta al archivo .ini.
+        Returns:
+            DBIni: Instancia de la clase DBIni.
+        """
+        local_inifile = os.path.join(os.getcwd(), DEFAULT_DB_INIFILE)
+        user_inifile = os.path.join(os.path.expanduser("~"), DEFAULT_DB_INIFILE)
+        if os.path.exists(local_inifile):
+            return cls(local_inifile)
+        elif os.path.exists(user_inifile):
+            return cls(user_inifile)
+        raise FileNotFoundError(f"No se ha encontrado el archivo de configuración: {local_inifile} o {user_inifile}")
 
-    if os.path.exists(ini_file_path) is False:
-        raise FileNotFoundError(f"No se ha encontrado el archivo de configuración: {ini_file_path}")
+    def save(self):
+        """
+        Guarda los cambios en el archivo .ini.
+        """
+        dirname = os.path.dirname(self.inifile)
+        if dirname != '' and not os.path.exists(dirname):
+            os.makedirs(dirname)
+        with open(self.inifile, "w") as configfile:
+            self.config.write(configfile)
 
-    config = configparser.ConfigParser()
-    config.read(ini_file_path)
-
-    if section_name not in config:
-        raise ValueError(f"No se ha encontrado la sección '{section_name}' en el archivo de configuración")
-
-    try:
-        # Obtiene los valores de la sección
-        section = config[section_name]
-        db_type = section["type"]
-
-        # Comprueba que el tipo de base de datos es soportado
-        if db_type not in DBMS_DEFAULT_CONFIG:
-            raise ValueError(f"Tipo de base de datos no soportado: {db_type}")
-
-        # Obtiene los valores de la sección o utiliza los valores por defecto
-        username = quote_plus(section["username"]) if "username" in section else ""
-        password = quote_plus(section["password"]) if "password" in section else PASSWORD_PLACEHOLDER
-        host = section["host"]
-        port = section["port"] if "port" in section else DBMS_DEFAULT_CONFIG[db_type]["port"]
-        database = quote_plus(section["database"])
-        trusted_connection = "yes" if section.getboolean("trusted_connection", fallback=False) else "no"
-        driver = quote_plus(section["driver"] if "driver" in section else DBMS_DEFAULT_CONFIG[db_type].get("driver", ""))        
-
-        # Si es SQL Server y no se ha especificado un usuario, se utiliza la autenticación de Windows
-        db_type = f"{db_type}+sspi" if db_type == "sqlserver" and not username else db_type
-
-        # Obtiene la plantilla de la URL de conexión para el SGBD especificado
-        template = Template(DBMS_DEFAULT_CONFIG[db_type]["template"])
-
-        # Sustituye los marcadores de posición por los valores de la sección
-        connection_url = template.substitute(
-            username=username, 
-            password=password, 
-            host=host, port=port, 
-            database=database, 
-            driver=driver, 
-            trusted_connection=trusted_connection
-        )
-
-        return connection_url
-
-    except KeyError as e:
-        raise ValueError(f"Falta la clave requerida en la sección '{section}': {e}")
-
-def has_undefined_password(connection_url):
-    """
-    Comprueba si la URL de conexión contiene una contraseña no definida.
-    Args:
-        connection_url (str): URL de conexión.
-    Returns:
-        bool: True si la URL de conexión contiene una contraseña no definida, False en caso contrario.
-    """
-    return PASSWORD_PLACEHOLDER in connection_url
-
-def replace_password_placeholder(connection_url, password):
-    """
-    Reemplaza el marcador de posición de la contraseña en la URL de conexión.
-    Args:
-        connection_url (str): URL de conexión.
-        password (str): Contraseña a reemplazar.
-    Returns:
-        str: URL de conexión con la contraseña reemplazada.
-    """
-    password = quote_plus(password)
-    return connection_url.replace(PASSWORD_PLACEHOLDER, password)
-
-def resolve_dburl(db_url, db_name = None, password = None):
-    """
-    Resuelve la URL de conexión a la base de datos a partir de los argumentos de línea de comandos y las variables de entorno.
-    Args:
-        db_url (str): URL de conexión a la base de datos.
-        db_name (str): Nombre de la base de datos en el archivo de configuración.
-        password (str): Contraseña de la base de datos.
-    Returns:
-        str: URL de conexión a la base de datos.
-    """
-    # Busca la URL de conexión a la base de datos en los argumentos de línea de comandos o en las variables de entorno
-    db_url = db_url or os.getenv("DBTOOLS_CONNECTION_URL")
+    def get_config(self, section_name: str) -> DBConfig:
+        """
+        Obtiene la configuración de una sección del archivo .ini.
+        Args:
+            section_name (str): Nombre de la sección a obtener.
+        Returns:
+            dict: Diccionario con la configuración de la sección.
+        """
+        if section_name not in self.config:
+            raise ValueError(f"No se ha encontrado la sección '{section_name}' en el archivo de configuración")
+        return DBConfig.from_section(self.config[section_name])
     
-    # Si aún así no hay URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
-    if not db_url:
-        # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla del fichero de configuración
-        try:
-            db_url = get_connection_url(DEFAULT_INI_FILE, db_name)
-            # Si la URL de conexión requiere una contraseña, se solicita al usuario
-            if has_undefined_password(db_url):
-                password = password or getpass("Introduce la contraseña: ")
-                db_url = replace_password_placeholder(db_url, password)
-        except Exception as e:
-            print("No se ha podido obtener la URL de conexión a la base de datos:", e, file=sys.stderr)
-            sys.exit(1)
+    def get_url(self, section_name: str, placeholders: dict[str,any] = None) -> str:
+        """
+        Obtiene la URL de conexión a la base de datos a partir de una sección del archivo .ini.
+        Args:
+            section_name (str): Nombre de la sección a obtener.
+        Returns:
+            str: URL de conexión a la base de datos.
+        """
+        return self.get_config(section_name).to_url(placeholders=placeholders)
 
-    return db_url
+    def add_config(self, section_name: str, config: DBConfig):
+        """
+        Añade una sección de configuración a un archivo .ini. (si existe la sección, la actualiza)
+        Args:
+            section_name (str): Nombre de la sección a añadir.
+            config (dict): Diccionario con la configuración a añadir.
+        """
+        if section_name not in self.config:
+            self.config.add_section(section_name)
+        for key, value in config.to_section().items():
+            self.config.set(section_name, key, str(value))
+
+    def remove_config(self, section_name: str):
+        """
+        Elimina una sección de configuración de un archivo .ini.
+        Args:
+            section_name (str): Nombre de la sección a eliminar.
+        """
+        if section_name not in self.config:
+            raise ValueError(f"No se ha encontrado la sección '{section_name}' en el archivo de configuración")
+        self.config.remove_section(section_name)
+
+
+

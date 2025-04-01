@@ -7,19 +7,20 @@ from tabulate import tabulate
 from dbschema import __module_name__, __module_description__, __module_version__
 from dbschema.database import Database
 
-from dbutils.dbini import resolve_dburl, DEFAULT_INI_FILE
+from dbutils.customhelp import CustomHelpFormatter
+
+from dbutils.dbini import DEFAULT_DB_INIFILE, DBIni
 
 def main():
 
-        # declara un HelpFormatter personalizado para reemplazar el texto 'usage:' por 'Uso:'
-    class CustomHelpFormatter(argparse.HelpFormatter):
-        def add_usage(self, usage, actions, groups, prefix='Uso: '):
-            if usage is not argparse.SUPPRESS:
-                args = usage, actions, groups, prefix
-                self._add_item(self._format_usage, args)
-
     # define el parser
-    parser = argparse.ArgumentParser(prog=__module_name__, description=f"{__module_description__} (v{__module_version__})", epilog='¡Un gran esquema conlleva una gran responsabilidad!', add_help=False, formatter_class=CustomHelpFormatter)
+    parser = argparse.ArgumentParser(
+        prog=__module_name__, 
+        description=f"{__module_description__} (v{__module_version__})", 
+        epilog='¡Un gran esquema conlleva una gran responsabilidad!', 
+        add_help=False, 
+        formatter_class=CustomHelpFormatter
+    )
 
     # define los comandos (mutuamente excluyentes)
     commands = parser.add_argument_group('Comandos')
@@ -33,9 +34,8 @@ def main():
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
     options.add_argument('--db-url', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
-    options.add_argument('--db-name', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DEFAULT_INI_FILE}")
+    options.add_argument('--db-name', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DEFAULT_DB_INIFILE}")
     options.add_argument('--json', metavar='FILE', nargs='?', const='', help='Guarda el resultado en un fichero JSON')
-    options.add_argument('--password', metavar='PASSWORD', nargs='?', help=f"Contraseña de la base de datos")
 
     # Parsea los argumentos
     args = parser.parse_args()
@@ -46,7 +46,7 @@ def main():
         return
 
     # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla de las variables de entorno
-    db_url = resolve_dburl(args.db_url, args.db_name, args.password)  
+    db_url = args.db_url or DBIni.load().get_url(args.db_name)
 
     # Conecta a la base de datos
     try:

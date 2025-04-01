@@ -1,5 +1,4 @@
 import time
-import sys
 import json
 import argparse
 
@@ -10,14 +9,9 @@ from dbmapper.mapper import Mapper
 
 from dbschema.schema import Schema
 
-def main():
+from dbutils.customhelp import CustomHelpFormatter
 
-    # declara un HelpFormatter personalizado para reemplazar el texto 'usage:' por 'Uso:'
-    class CustomHelpFormatter(argparse.HelpFormatter):
-        def add_usage(self, usage, actions, groups, prefix='Uso: '):
-            if usage is not argparse.SUPPRESS:
-                args = usage, actions, groups, prefix
-                self._add_item(self._format_usage, args)
+def main():
 
     # define el parser
     parser = argparse.ArgumentParser(prog=__module_name__, description=f"{__module_description__} (v{__module_version__})", epilog='A mapear tus esquemitas', add_help=False, formatter_class=CustomHelpFormatter)
