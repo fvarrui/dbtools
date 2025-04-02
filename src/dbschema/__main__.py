@@ -9,7 +9,7 @@ from dbschema.database import Database
 
 from dbutils.customhelp import CustomHelpFormatter
 
-from dbutils.dbini import DEFAULT_DB_INIFILE, DBIni
+from dbutils.dbini import DB_INIFILE, DBIni
 
 def main():
 
@@ -34,7 +34,7 @@ def main():
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
     options.add_argument('--db-url', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
-    options.add_argument('--db-name', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DEFAULT_DB_INIFILE}")
+    options.add_argument('--db-name', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DB_INIFILE}")
     options.add_argument('--json', metavar='FILE', nargs='?', const='', help='Guarda el resultado en un fichero JSON')
 
     # Parsea los argumentos

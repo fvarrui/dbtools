@@ -44,7 +44,7 @@ class DBConfig():
     driver: str
     trusted_connection: bool
 
-    def __init__(self, type: str, host: str, port: int, database: str, username: str = None, password: str = None, driver: str = None, trusted_connection: bool = False):
+    def __init__(self, type: str, host: str, port: int, database: str, username: str = None, password: str = None, driver: str = None, trusted_connection: bool = None):
         """
         Inicializa la configuración de la base de datos.
         Args:
@@ -147,6 +147,10 @@ class DBConfig():
         Returns:
             dict: Representación en diccionario de la configuración de la base de datos.
         """
+        if self.trusted_connection:
+            trusted_connection = "yes" if self.trusted_connection == True else "no"
+        else:
+            trusted_connection = None
         config = {
             "type": self.type,
             "username": self.username,
@@ -155,11 +159,11 @@ class DBConfig():
             "port": self.port,
             "database": self.database,
             "driver": self.driver,
-            "trusted_connection": "yes" if self.trusted_connection else "no"
+            "trusted_connection": trusted_connection
         }
         return {k: v for k, v in config.items() if v is not None}  # Elimina valores None
 
-    def to_url(self, include_lib = True, placeholders: dict = None) -> str:
+    def to_url(self, include_lib = True, placeholders: dict = None, censored: bool = False) -> str:
         """
         Devuelve una representación en cadena de la configuración de la base de datos.
         Returns:
@@ -171,10 +175,11 @@ class DBConfig():
 
         # Compone las credenciales de la URL de conexión
         if self.username:
+            password = self.password if not censored else DBConfig.censor(self.password)
             credentials_template = Template(CREDENTIALS_TEMPLATE)
             credentials = credentials_template.substitute(
                 username=quote_plus(self.username) if self.username else "", 
-                password=quote_plus(self.password) if self.password != PASSWORD_PLACEHOLDER else PASSWORD_PLACEHOLDER
+                password=quote_plus(password) if password != PASSWORD_PLACEHOLDER else PASSWORD_PLACEHOLDER
             )
         else:
             credentials = ""
@@ -224,3 +229,14 @@ class DBConfig():
                 value = quote_plus(value)
             connection_url = url.replace(f"{{{key}}}", str(value))
         return connection_url
+    
+    @staticmethod
+    def censor(value: str, char: str = "*") -> str:
+        """
+        Censura un valor de entrada, reemplazando su contenido con un carácter específico.
+        Args:
+            url (str): URL de conexión.
+        Returns:
+            str: URL con la contraseña censurada.
+        """
+        return char * len(value)

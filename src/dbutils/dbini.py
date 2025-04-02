@@ -2,9 +2,7 @@ import os
 from configparser import ConfigParser
 from dbutils.dbconfig import DBConfig
 
-DEFAULT_DB_INIFILE = "dbtools.ini"
-DEFAULT_CONFIG_INIFILE = "config.ini"
-DEFAULT_ENV_VAR_PREFIX = "DBTOOLS_"
+DB_INIFILE = "dbtools.ini"
 
 class DBIni():
 
@@ -18,11 +16,20 @@ class DBIni():
             inifile (str): Ruta al archivo de configuración .ini.
         """
         self.inifile = inifile
-        if not os.path.exists(inifile):
-            raise FileNotFoundError(f"No se ha encontrado el archivo de configuración: {inifile}")
         self.config = ConfigParser()
-        self.config.read(inifile)
+        if os.path.exists(inifile):
+            self.config.read(inifile)
  
+    def exists(self, section_name: str) -> bool:
+        """
+        Comprueba si una sección existe en el archivo .ini.
+        Args:
+            section_name (str): Nombre de la sección a comprobar.
+        Returns:
+            bool: True si la sección existe, False en caso contrario.
+        """
+        return self.config.has_section(section_name)
+
     @classmethod
     def load(cls) -> "DBIni":
         """
@@ -32,8 +39,8 @@ class DBIni():
         Returns:
             DBIni: Instancia de la clase DBIni.
         """
-        local_inifile = os.path.join(os.getcwd(), DEFAULT_DB_INIFILE)
-        user_inifile = os.path.join(os.path.expanduser("~"), DEFAULT_DB_INIFILE)
+        local_inifile = os.path.join(os.getcwd(), DB_INIFILE)
+        user_inifile = os.path.join(os.path.expanduser("~"), DB_INIFILE)
         if os.path.exists(local_inifile):
             return cls(local_inifile)
         elif os.path.exists(user_inifile):
@@ -47,7 +54,7 @@ class DBIni():
         dirname = os.path.dirname(self.inifile)
         if dirname != '' and not os.path.exists(dirname):
             os.makedirs(dirname)
-        with open(self.inifile, "w") as configfile:
+        with open(self.inifile, "w", encoding="utf-8") as configfile:
             self.config.write(configfile)
 
     def get_config(self, section_name: str) -> DBConfig:
@@ -62,7 +69,7 @@ class DBIni():
             raise ValueError(f"No se ha encontrado la sección '{section_name}' en el archivo de configuración")
         return DBConfig.from_section(self.config[section_name])
     
-    def get_url(self, section_name: str, placeholders: dict[str,any] = None) -> str:
+    def get_url(self, section_name: str, placeholders: dict[str,any] = None, censored: bool = False) -> str:
         """
         Obtiene la URL de conexión a la base de datos a partir de una sección del archivo .ini.
         Args:
@@ -70,7 +77,7 @@ class DBIni():
         Returns:
             str: URL de conexión a la base de datos.
         """
-        return self.get_config(section_name).to_url(placeholders=placeholders)
+        return self.get_config(section_name).to_url(placeholders=placeholders, censored=censored)
 
     def add_config(self, section_name: str, config: DBConfig):
         """
@@ -81,6 +88,8 @@ class DBIni():
         """
         if section_name not in self.config:
             self.config.add_section(section_name)
+        else:
+            raise ValueError(f"La sección '{section_name}' ya existe en el archivo de configuración")
         for key, value in config.to_section().items():
             self.config.set(section_name, key, str(value))
 
