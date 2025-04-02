@@ -5,11 +5,10 @@ from getpass import getpass
 from dbutils import __module_name__, __module_description__, __module_version__
 from dbutils.config import Config, CONFIG_INIFILE
 from dbutils.dbconfig import DBConfig, DBMS_DEFAULT_CONFIG
-from dbutils.dbini import DBIni, DB_INIFILE
+from dbutils.dbini import DBIni, DB_INIFILE, DBTOOLS_DIR
 from dbutils.customhelp import CustomHelpFormatter
 from dbutils.dbutils import test_connection
 
-DBTOOLS_DIR = os.path.join(os.path.expanduser("~"), ".dbtools")
 DEFAULT_CONFIG_INIFILE = os.path.join(DBTOOLS_DIR, CONFIG_INIFILE)
 DEFAULT_DB_INIFILE = os.path.join(DBTOOLS_DIR, DB_INIFILE)
 

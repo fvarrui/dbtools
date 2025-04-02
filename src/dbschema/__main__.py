@@ -45,16 +45,20 @@ def main():
         parser.print_help()
         return
 
-    # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla de las variables de entorno
-    db_url = args.db_url or DBIni.load().get_url(args.db_name)
+    try:
+        # Si no se ha especificado una URL de conexión a la base de datos, intenta obtenerla de las variables de entorno
+        db_url = args.db_url or DBIni.load().get_url(args.db_name)
+    except Exception as e:
+        print(f"No se ha podido obtener la URL de conexión a la base de datos: {e}", file=sys.stderr)
+        sys.exit(1)
 
     # Conecta a la base de datos
     try:
         database = Database(db_url)
         database.connect()
-        print("Conectado a la base de datos:", db_url)
+        print("Conectado a la base de datos...")
     except Exception as e:
-        print(f"No se ha podido conectar a la base de datos {db_url}:", e, file=sys.stderr)
+        print(f"¡No se ha podido conectar a la base de datos!", e, file=sys.stderr)
         sys.exit(1)
 
     # Listar las vistas

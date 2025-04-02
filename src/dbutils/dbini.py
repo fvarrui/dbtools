@@ -2,6 +2,7 @@ import os
 from configparser import ConfigParser
 from dbutils.dbconfig import DBConfig
 
+DBTOOLS_DIR = os.path.join(os.path.expanduser("~"), ".dbtools")
 DB_INIFILE = "dbtools.ini"
 
 class DBIni():
@@ -40,7 +41,7 @@ class DBIni():
             DBIni: Instancia de la clase DBIni.
         """
         local_inifile = os.path.join(os.getcwd(), DB_INIFILE)
-        user_inifile = os.path.join(os.path.expanduser("~"), DB_INIFILE)
+        user_inifile = os.path.join(DBTOOLS_DIR, DB_INIFILE)
         if os.path.exists(local_inifile):
             return cls(local_inifile)
         elif os.path.exists(user_inifile):
