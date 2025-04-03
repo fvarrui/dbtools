@@ -1,10 +1,12 @@
 import os
 from configparser import ConfigParser
 
+DBTOOLS_DIR = os.path.join(os.path.expanduser("~"), ".dbtools")
 CONFIG_INIFILE = "config.ini"
+DEFAULT_CONFIG_INIFILE = os.path.join(DBTOOLS_DIR, CONFIG_INIFILE)
 SECTION_NAME = "DBTools"
 DEFAULT_PROPS = {
-    "open.apikey": ""
+    "openai.apikey": ""
 }
 
 class Config:
@@ -12,16 +14,16 @@ class Config:
     inifile: str = None
     config: ConfigParser = None
 
-    def __init__(self, inifile: str):
+    def __init__(self, inifile: str = DEFAULT_CONFIG_INIFILE):
         """
         Inicializa la clase DBIni.
         Args:
             inifile (str): Ruta al archivo de configuración .ini.
         """
+        print(f"Cargando configuración de DBTools en {inifile}")
         self.inifile = inifile
         self.config = ConfigParser()
-        if os.path.exists(self.inifile):
-            self.config.read(self)
+        self.config.read(self.inifile)
         if not self.config.has_section(SECTION_NAME):
             self.config.add_section(SECTION_NAME)
             for key, value in DEFAULT_PROPS.items():
@@ -54,4 +56,6 @@ class Config:
         Returns:
             any: Valor almacenado con la clave especificada.
         """
+        if not self.config.has_option(SECTION_NAME, key):
+            raise KeyError(f"La clave '{key}' no existe en la sección '{SECTION_NAME}' del archivo de configuración {self.inifile}")
         return self.config.get(SECTION_NAME, key)
