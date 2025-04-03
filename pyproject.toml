@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dbtools"
-version = "0.0.1"
+version = "0.1.0"
 description = "Database tools for schema mapping, integrity check and migration"
 readme = "README.md"
 authors = [
@@ -20,6 +20,7 @@ keywords = ["db", "tools", "schema", "mapping", "integrity", "check", "migration
 dependencies = [
     "networkx",         # Graphs
     "sqlalchemy",       # DB metadata
+    "openai",           # OpenAI API
     "tabulate",         # Pretty tables
     "pydantic",         # Data validation (JSON serialization)
     "pymysql",          # MySQL/MariaDB 
@@ -43,6 +44,7 @@ dbchecker = "dbchecker.__main__:main"
 dbschema = "dbschema.__main__:main"
 dbmapper = "dbmapper.__main__:main"
 dbutils = "dbutils.__main__:main"
+dbanalyzer = "dbanalyzer.__main__:main"
 
 [tool.setuptools]
 include-package-data = true
