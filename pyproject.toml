@@ -18,6 +18,7 @@ classifiers = [
 ]
 keywords = ["db", "tools", "schema", "mapping", "integrity", "check", "migration", "sql" ]
 dependencies = [
+    "lmstudio",         # LM Studio Python API
     "networkx",         # Graphs
     "sqlalchemy",       # DB metadata
     "openai",           # OpenAI API

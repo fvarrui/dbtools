@@ -1,14 +1,14 @@
 import sys
 import json
+import lmstudio as lms
+from time import time
 from openai import OpenAI
 
 from dbschema.schema import Schema
 from dbutils.config import Config
 
-def main():
+def openai():
     try:
-        # Cargar el esquema desde un archivo JSON
-        schema = Schema.from_json("schemas/pec.json")
 
         # Cargar la configuración y obtener la API key
         config = Config()
@@ -23,6 +23,7 @@ def main():
         #for model in models.data:
         #    print(f"- {model.id}")
 
+        # Cargar el esquema desde un archivo JSON
         schema = Schema.from_json("schemas/pec.json")
 
         # Generar un mensaje simplificado por cada tabla
@@ -95,6 +96,20 @@ def main():
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         return
+    
+def main():
+    start = time()
+
+    model = lms.llm("meta-llama-3.1-8b-instruct")
+    chat = lms.Chat("Eres un experto en bases de datos y JSON.")
+    chat.add_user_message
+
+    result = model.respond("Cuál es el sentido de la vida?")
+    print(result)
+
+
+    ellapsed_time = time() - start
+    print(f"Tiempo de ejecución: {ellapsed_time:.2f} segundos")
 
 if __name__ == "__main__":
     main()
