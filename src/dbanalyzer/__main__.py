@@ -1,6 +1,8 @@
 import sys
 import json
 import lmstudio as lms
+import tiktoken
+from pprint import pprint
 from time import time
 from openai import OpenAI
 
@@ -17,6 +19,12 @@ def openai():
         # Inicializar el cliente de OpenAI
         client = OpenAI(api_key=apikey)
 
+        # Indicar el modelo a utilizar
+        model = "gpt-4-1106-preview"
+
+        # Crear el tokenizador para el modelo
+        tokenizer = tiktoken.encoding_for_model(model) 
+
         #Listar modelos soportados
         #models = client.models.list()
         #print("Modelos soportados:")
@@ -25,25 +33,48 @@ def openai():
 
         # Cargar el esquema desde un archivo JSON
         schema = Schema.from_json("schemas/pec.json")
+        tables = schema.model_dump()['tables']
+
+        reduced_tables = {
+            table["name"]: {
+                "columns": {
+                    column["name"]: {
+                        key: value
+                        for key, value in column.items()
+                        if value is not None  # Excluir claves con valor None
+                    }
+                    for column in table["columns"]
+                },
+                "primary_keys": table["primary_keys"],
+                "foreign_keys": [
+                    {
+                        "column": fk["column"],
+                        "reference": f"{fk["reference"]["table"]}.{fk["reference"]["column"]}"
+                    }
+                    for fk in table["foreign_keys"]
+                ],
+            }
+            for table in tables
+        }
+
+        json_minimizado = json.dumps(reduced_tables, indent=None, separators=(",", ":"))
+        print(f"JSON minimizado: {json_minimizado}")
+        print(f"Longitud del JSON minimizado: {len(json_minimizado)}")  
 
         # Generar un mensaje simplificado por cada tabla
         messages = [
             {
                 "type": "input_text",
-                "text": json.dumps({
-                    "table_name": table.name,
-                    "columns": [{"name": col.name, "type": col.type} for col in table.columns]
-                }),
-            } for table in schema.tables
+                "text": json_minimizado,
+            } 
         ]
         messages.append({
             "type": "input_text",
             "text": """
-                Usa inferencia para determinar que me des los comentarios sobre todas 
+                Usa inferencia para que me des comentarios sobre todas 
                 las tablas y columnas que te he pasado como un esquema,
                 indican la información que contienen y su relación con otras tablas.
-                Es necesario que la salida sea un JSON válido. La base de datos es el 
-                Plan de Estudios de Canarias.
+                La base de datos es el Plan de Estudios de Canarias.
             """,
         })
 
@@ -55,9 +86,16 @@ def openai():
             }
         ]
 
+        # Contar los tokens del mensaje
+        tokens = tokenizer.encode(json.dumps(conversation))
+        print(f"Tokens: {len(tokens)}")
+        #if len(tokens) > 30000:
+        #    print("El mensaje es demasiado largo para el modelo.")
+        #    return
+
         # Enviar la solicitud inicial
         response = client.responses.create(
-            model= "gpt-4o",
+            model= model,
             instructions="Eres un experto en bases de datos y JSON.",
             input=conversation
         )
@@ -79,7 +117,7 @@ def openai():
 
             # Enviar la solicitud con el historial actualizado
             response = client.responses.create(
-                model="gpt-4o",
+                model=model,
                 instructions="Eres un experto en bases de datos y JSON.",
                 input=conversation
             )
@@ -95,18 +133,20 @@ def openai():
 
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
+        e.print(f"Traceback: {sys.exc_info()[2]}", file=sys.stderr)
         return
     
 def main():
     start = time()
 
-    model = lms.llm("meta-llama-3.1-8b-instruct")
-    chat = lms.Chat("Eres un experto en bases de datos y JSON.")
-    chat.add_user_message
+    #model = lms.llm("meta-llama-3.1-8b-instruct")
+    #chat = lms.Chat("Eres un experto en bases de datos y JSON.")
+    #chat.add_user_message
 
-    result = model.respond("Cuál es el sentido de la vida?")
-    print(result)
+    #result = model.respond("Cuál es el sentido de la vida?")
+    #print(result)
 
+    openai()
 
     ellapsed_time = time() - start
     print(f"Tiempo de ejecución: {ellapsed_time:.2f} segundos")

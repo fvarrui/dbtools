@@ -25,6 +25,6 @@ class Schema(BaseModel):
             schema_json = json.load(f)
         return Schema.model_validate(schema_json['schema'])
     
-    def to_json(self) -> str:
+    def to_json(self, indent=4, separators=None) -> str:
         schema_dict = self.model_dump()
-        return json.dumps(schema_dict, indent=4)
+        return json.dumps(schema_dict, indent=indent, separators=separators)
