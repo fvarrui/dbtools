@@ -28,3 +28,26 @@ class Schema(BaseModel):
     def to_json(self, indent=4, separators=None) -> str:
         schema_dict = self.model_dump()
         return json.dumps(schema_dict, indent=indent, separators=separators)
+    
+    def reduce(self) -> dict:
+        return {
+            table.name: {
+                "columns": {
+                    column.name: {
+                        key: value
+                        for key, value in column.__dict__.items()
+                        if (key == 'nullable' and value == False) or (value is not None and key not in ['name', 'nullable'])  # Incluir sólo claves con valor
+                    }
+                    for column in table.columns
+                },
+                "primary_keys": table.primary_keys,
+                "foreign_keys": [
+                    {
+                        "column": fk.column,
+                        "reference": f"{fk.reference.table}.{fk.reference.column}"
+                    }
+                    for fk in table.foreign_keys
+                ],
+            }
+            for table in self. tables
+        }

@@ -9,6 +9,43 @@ from openai import OpenAI
 from dbschema.schema import Schema
 from dbutils.config import Config
 
+def test():
+    
+    # Cargar la configuración y obtener la API key
+    config = Config()
+    apikey = config.get_value("openai.apikey")
+
+    # Inicializar el cliente de OpenAI
+    client = OpenAI(api_key=apikey)
+
+    # Recupera el asistente especializado en bases de datos y SQL
+    assistant = client.beta.assistants.retrieve(
+        assistant_id="asst_cNhjPcFXhk0jLPmkW7LienS7"
+    )
+    print("Usando asistente:", assistant.name)
+
+    # Crea un hilo de conversación
+    thread = client.beta.threads.create()
+    print("Hilo de conversación creado:", thread.id)
+
+    # Sube el esquema de la base de datos
+    schema = client.files.create(
+        file=open("schemas/pec.json", "rb"),
+        purpose="assistants",
+    )
+    print("Esquema subido:", schema.id)
+
+    # Hacer una pregunta al asistente
+    run = client.beta.threads.runs.create(
+        thread_id=thread.id,
+        assistant_id=assistant.id
+    )
+    print("Ejecución iniciada:", run.id)
+
+    # Elimina el hilo de conversación
+    client.beta.threads.delete(thread_id=thread.id)
+    print("Hilo de conversación eliminado:", thread.id)
+
 def openai():
     try:
 
@@ -33,32 +70,10 @@ def openai():
 
         # Cargar el esquema desde un archivo JSON
         schema = Schema.from_json("schemas/pec.json")
-        tables = schema.model_dump()['tables']
 
-        reduced_tables = {
-            table["name"]: {
-                "columns": {
-                    column["name"]: {
-                        key: value
-                        for key, value in column.items()
-                        if value is not None  # Excluir claves con valor None
-                    }
-                    for column in table["columns"]
-                },
-                "primary_keys": table["primary_keys"],
-                "foreign_keys": [
-                    {
-                        "column": fk["column"],
-                        "reference": f"{fk["reference"]["table"]}.{fk["reference"]["column"]}"
-                    }
-                    for fk in table["foreign_keys"]
-                ],
-            }
-            for table in tables
-        }
+        reduced_schema = schema.reduce()
 
-        json_minimizado = json.dumps(reduced_tables, indent=None, separators=(",", ":"))
-        print(f"JSON minimizado: {json_minimizado}")
+        json_minimizado = json.dumps(reduced_schema, indent=None, separators=(",", ":"))
         print(f"Longitud del JSON minimizado: {len(json_minimizado)}")  
 
         # Generar un mensaje simplificado por cada tabla
@@ -67,16 +82,16 @@ def openai():
                 "type": "input_text",
                 "text": json_minimizado,
             } 
+            ,{
+                "type": "input_text",
+                "text": """
+                    Usa inferencia para que me des comentarios sobre todas 
+                    las tablas y columnas que te he pasado como un esquema,
+                    indican la información que contienen y su relación con otras tablas.
+                    La base de datos es el Plan de Estudios de Canarias.
+                """,
+            }
         ]
-        messages.append({
-            "type": "input_text",
-            "text": """
-                Usa inferencia para que me des comentarios sobre todas 
-                las tablas y columnas que te he pasado como un esquema,
-                indican la información que contienen y su relación con otras tablas.
-                La base de datos es el Plan de Estudios de Canarias.
-            """,
-        })
 
         # Crear el historial de mensajes
         conversation = [
@@ -86,9 +101,6 @@ def openai():
             }
         ]
 
-        # Contar los tokens del mensaje
-        tokens = tokenizer.encode(json.dumps(conversation))
-        print(f"Tokens: {len(tokens)}")
         #if len(tokens) > 30000:
         #    print("El mensaje es demasiado largo para el modelo.")
         #    return
@@ -105,7 +117,11 @@ def openai():
 
         # Continuar la conversación
         while True:
-            user_input = input("\nTu mensaje (o 'salir' para terminar): ")
+            
+            # Contar los tokens del mensaje
+            print(f"Tokens: {len(tokenizer.encode(json.dumps(conversation)))}")
+
+            user_input = input("\n----------> Tu mensaje (o 'salir' para terminar): ")
             if user_input.lower() == "salir":
                 break
 
@@ -152,4 +168,5 @@ def main():
     print(f"Tiempo de ejecución: {ellapsed_time:.2f} segundos")
 
 if __name__ == "__main__":
-    main()
+    #main()
+    test()
