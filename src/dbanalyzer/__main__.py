@@ -2,19 +2,15 @@ import sys
 import json
 import lmstudio as lms
 import tiktoken
+import time
 from pprint import pprint
-from time import time
 from openai import OpenAI
 
 from dbschema.schema import Schema
 from dbutils.config import Config
 
-def test():
+def test(apikey: str):
     
-    # Cargar la configuración y obtener la API key
-    config = Config()
-    apikey = config.get_value("openai.apikey")
-
     # Inicializar el cliente de OpenAI
     client = OpenAI(api_key=apikey)
 
@@ -22,7 +18,6 @@ def test():
     assistant = client.beta.assistants.retrieve(
         assistant_id="asst_cNhjPcFXhk0jLPmkW7LienS7"
     )
-    print("Usando asistente:", assistant.name)
 
     # Crea un hilo de conversación
     thread = client.beta.threads.create()
@@ -35,23 +30,48 @@ def test():
     )
     print("Esquema subido:", schema.id)
 
-    # Hacer una pregunta al asistente
-    run = client.beta.threads.runs.create(
+    # Añadir un mensaje del usuario
+    client.beta.threads.messages.create(
+        thread_id=thread.id,
+        role="user",
+        content="Devuélveme el mismo esquema pero añadiendo comentarios a cada tabla y cada columna",
+        attachments=[
+            {
+                "file_id": schema.id,
+                "tools": [ 
+                    { "type": "file_search" }
+                ]
+            }
+        ]
+    )
+    print("Mensaje del usuario añadido al hilo de conversación")
+
+    # Ejecutar el hilo de conversación con el asistente
+    print("Ejecución iniciada:", run.id)
+    run = client.beta.threads.runs.create_and_poll(
         thread_id=thread.id,
         assistant_id=assistant.id
     )
-    print("Ejecución iniciada:", run.id)
+    if run.status == 'completed': 
+        messages = client.beta.threads.messages.list(
+            thread_id=thread.id
+        )
+        # prints last message
+        for message in reversed(messages.data):
+            if message.role == "assistant":
+                print(f"Respuesta del asistente {assistant.name}:\n")
+                print(message.content[0].text.value)
+                break
+    else:
+        print(run.status)
 
-    # Elimina el hilo de conversación
+    # Elimina el archivo y el hilo de conversación
+    client.files.delete(file_id=schema.id)
     client.beta.threads.delete(thread_id=thread.id)
-    print("Hilo de conversación eliminado:", thread.id)
+    print("\nHilo de conversación y adjuntos eliminados:", thread.id)
 
-def openai():
+def openai(apikey: str):
     try:
-
-        # Cargar la configuración y obtener la API key
-        config = Config()
-        apikey = config.get_value("openai.apikey")
 
         # Inicializar el cliente de OpenAI
         client = OpenAI(api_key=apikey)
@@ -74,7 +94,7 @@ def openai():
         reduced_schema = schema.reduce()
 
         json_minimizado = json.dumps(reduced_schema, indent=None, separators=(",", ":"))
-        print(f"Longitud del JSON minimizado: {len(json_minimizado)}")  
+        print(f"Longitud del JSON minimizado: {len(json_minimizado)}")
 
         # Generar un mensaje simplificado por cada tabla
         messages = [
@@ -153,7 +173,11 @@ def openai():
         return
     
 def main():
-    start = time()
+    start = time.time()
+
+    # Cargar la configuración y obtener la API key
+    config = Config()
+    apikey = config.get_value("openai.apikey")
 
     #model = lms.llm("meta-llama-3.1-8b-instruct")
     #chat = lms.Chat("Eres un experto en bases de datos y JSON.")
@@ -162,11 +186,12 @@ def main():
     #result = model.respond("Cuál es el sentido de la vida?")
     #print(result)
 
-    openai()
+    #openai(apikey)
 
-    ellapsed_time = time() - start
+    test(apikey)
+
+    ellapsed_time = time.time() - start
     print(f"Tiempo de ejecución: {ellapsed_time:.2f} segundos")
 
 if __name__ == "__main__":
-    #main()
-    test()
+    main()
