@@ -25,6 +25,13 @@ def main():
 
     # Análisis del esquema de la base de datos
     analyze(apikey, schema)
+    print("Análisis completado.\n")
+
+    # Guardar el resultado en un archivo JSON
+    #output_file = "schemas/pec_analysis.json"
+    #with open(output_file, "w", encoding='utf-8') as f:
+    #    f.write(output)
+    #    print(f"Resultado guardado en {output_file}")
 
     ellapsed_time = time.time() - start
     print(f"Tiempo de ejecución: {ellapsed_time:.2f} segundos")
