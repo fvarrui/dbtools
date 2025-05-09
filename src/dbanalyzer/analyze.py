@@ -2,6 +2,7 @@ import sys
 import json
 import io
 from openai import OpenAI
+from os import path
 
 from dbschema.schema import Schema
 
@@ -16,16 +17,8 @@ def analyze(apikey: str, schema: Schema) -> str:
     )
     print("🤖 Asistente especializado en bases de datos y SQL recuperado:", assistant.name)
 
-    # Crea un hilo de conversación
-    thread = client.beta.threads.create()
-    print("🗣️ Hilo de conversación creado:", thread.id)
-
     # Sube el esquema de la base de datos
     schema_reduced = schema.reduce()
-
-    print(json.dumps(schema_reduced, indent=None, separators=(",", ":")))
-    sys.exit(1)
-
     schema_json = io.BytesIO(json.dumps(schema_reduced, indent=None, separators=(",", ":")).encode('utf-8'))
     schema_json.name = "schema.json"
     uploaded_schema = client.files.create(
@@ -34,31 +27,50 @@ def analyze(apikey: str, schema: Schema) -> str:
     )
     print("📄 Esquema subido:", uploaded_schema.id)
 
-    # Añadir un mensaje del usuario
-    message = client.beta.threads.messages.create(
-        thread_id=thread.id,
-        role="user",
-        content="Se adjunta fichero JSON con el esquema de la base de datos para su análisis.",
-        attachments=[
-            { 
-                "file_id": uploaded_schema.id, 
-                "tools": [{"type": "file_search"}]
-            }
-        ],
-    )
-    print("📤 Mensaje enviado pidiendo que utilice los adjuntos:", message.id)
-
     print("😀 Iniciando análisis del esquema de la base de datos...")
     for table in schema.tables:
 
-        print("\n📤 Enviando petición de análisis para la tabla:", table.name)
+        # Comienza el análisis de la tabla
+        print("\n📤 Iniciando análisis de la tabla:", table.name)
 
-        # Añadir un mensaje del usuario para analizar la tabla
-        client.beta.threads.messages.create(
+        output_file = f"schemas/pec_{table.name}_analysis.json"
+        if path.exists(output_file):
+            print(f"\t⚠️ El archivo {output_file} ya existe. Se omitirá el análisis de la tabla {table.name}.")
+            continue
+
+        # Crea un hilo de conversación
+        thread = client.beta.threads.create()
+        print(f"\t🗣️ Hilo de conversación creado para analizar tabla {table.name}:", thread.id)
+
+        # Añadir un mensaje del usuario
+        """
+        message = client.beta.threads.messages.create(
+            thread_id=thread.id,
+            role="user",
+            content="Se adjunta fichero JSON con el esquema de la base de datos para su análisis.",
+            attachments=[
+                { 
+                    "file_id": uploaded_schema.id, 
+                    "tools": [{"type": "file_search"}]
+                }
+            ],
+        )
+        print("\t📤 Mensaje solicitando inclusión de adjuntos:", message.id)
+        """
+
+        # Añadir un mensaje del usuario al hilo para analizar la tabla
+        message = client.beta.threads.messages.create(
             thread_id=thread.id,
             role="user",
             content=f"Realiza análisis semántico de la tabla {table.name} en el esquema de la base de datos y devuelve el JSON.",
+            attachments=[
+                { 
+                    "file_id": uploaded_schema.id, 
+                    "tools": [{"type": "file_search"}]
+                }
+            ],
         )
+        print(f"\t📤 Mensaje creado solicitando análisis de la tabla {table.name}:", message.id)
 
         # Intenta ejecutar el hilo de conversación con el asistente hasta 3 veces
         MAX_TRIES = 3
@@ -84,7 +96,6 @@ def analyze(apikey: str, schema: Schema) -> str:
                     print(f"\t📥 Recibida respuesta del asistente {assistant.name} acerca de la tabla {table.name}:", message.id)
                     # print(table_analysis.strip())
                     table_json = json.loads(table_analysis)
-                    output_file = f"schemas/pec_{table.name}_analysis.json"
                     with open(output_file, "w", encoding='utf-8') as f:
                         json.dump(table_json, f, indent=4, ensure_ascii=False)
                         print(f"\t💾 Resultado guardado en {output_file}")
