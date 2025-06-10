@@ -18,6 +18,7 @@ classifiers = [
 ]
 keywords = ["db", "tools", "schema", "mapping", "integrity", "check", "migration", "sql" ]
 dependencies = [
+    "BeautifulSoup4",   # HTML/XML parsing
     "lmstudio",         # LM Studio Python API
     "networkx",         # Graphs
     "openai",           # OpenAI API
@@ -47,6 +48,7 @@ dbschema = "dbschema.__main__:main"
 dbmapper = "dbmapper.__main__:main"
 dbutils = "dbutils.__main__:main"
 dbanalyzer = "dbanalyzer.__main__:main"
+ddrsearch = "ddrsearch.__main__:main"
 
 [tool.setuptools]
 include-package-data = true

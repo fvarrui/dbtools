@@ -57,8 +57,8 @@ class Table(BaseModel):
         data = []
         for column in self.columns:
             type = column.type
-            is_pk = "X" if column.name in self.primary_keys else ""
-            is_nullable = "X" if column.nullable else ""
+            is_pk = "🔑" if column.name in self.primary_keys else "❌"
+            is_nullable = "❌" if column.nullable else "✅"
             relations = []
             for fk in self.foreign_keys:
                 if column.name == fk.column:
