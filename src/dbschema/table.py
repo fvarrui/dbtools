@@ -14,6 +14,7 @@ class Table(BaseModel):
     columns: list[Column] = []
     primary_keys: list[str] = []
     foreign_keys: list[ForeignKey] = []
+    schemaName: Optional[str]
 
     @classmethod
     def from_metadata(cls, table_metadata: any):
@@ -32,6 +33,7 @@ class Table(BaseModel):
                 ForeignKey.from_metadata(fk_metadata)
                 for fk_metadata in table_metadata.foreign_keys
             ],
+            schemaName=None
         )
     
     def __lt__(self, other):

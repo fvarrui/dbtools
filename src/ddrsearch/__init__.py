@@ -1,3 +1,3 @@
 __module_name__ = "ddrsearch"
-__module_description__ = "Extrae información de un Data Dictionary Report de Oracle DBMS"
-__module_version__ = "0.0.1"
+__module_description__ = "Analiza el Data Dictionary Report exportado de una base de datos Oracle para extraer información sobre tablas, columnas y relaciones."
+__module_version__ = "0.0.2"

@@ -22,6 +22,7 @@ dependencies = [
     "lmstudio",         # LM Studio Python API
     "networkx",         # Graphs
     "openai",           # OpenAI API
+    "pptree",           # Pretty print trees
     "psycopg2",         # PostgreSQL
     "pydantic",         # Data validation (JSON serialization)
     "pymysql",          # MySQL/MariaDB 

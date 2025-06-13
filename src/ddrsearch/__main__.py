@@ -3,9 +3,11 @@ import argparse
 import json
 import sys
 
-from dbutils import __module_name__, __module_description__, __module_version__
+from pptree import print_tree
+
 from dbutils.customhelp import CustomHelpFormatter
-from ddrsearch.ddr import schema_from_ddr, table_from_ddr, get_table_names
+from ddrsearch import __module_name__, __module_description__, __module_version__
+from ddrsearch.ddr import schema_from_ddr, table_from_ddr, get_table_names, table_uses_tables, tables_used_by_table
 
 def table(table_name: str, ddr_report_dir: str = None, json_file: str = None):
     table_name = table_name.strip()
@@ -72,12 +74,12 @@ def schema(filter: str = r'.*', ddr_report_dir: str = None, json_file: str = Non
     schema = schema_from_ddr(ddr_report_dir, filter)
     json_output = json.dumps(schema.model_dump(), indent=4, ensure_ascii=False)
     with open(json_file, 'w', encoding='utf-8') if json_file else sys.stdout as output_file:
-        output_file.write(json_output)            
+        output_file.write(json_output)
 
 
 def main():
 
-    # define el parser
+    # Define el parser
     parser = argparse.ArgumentParser(
         prog=__module_name__, 
         description=f"{__module_description__} (v{__module_version__})", 
@@ -86,7 +88,7 @@ def main():
         formatter_class=CustomHelpFormatter
     )
 
-    # define los comandos (mutuamente excluyentes)
+    # Define los comandos (mutuamente excluyentes)
     commands = parser.add_argument_group('Comandos')
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda')
@@ -94,11 +96,14 @@ def main():
     commands.add_argument('--schema', metavar='TABLE_FILTER', nargs='?', const='.*', help=f'Genera el esquema de la base de datos de las tablas del Data Dictionary Report. El filtro es una expresión regular que se aplica a los nombres de las tablas. Por defecto, se incluyen todas las tablas.')
     commands.add_argument('--table', metavar='TABLE_NAME', help=f'Muestra información de la tabla indicada del Data Dictionary Report. El nombre de la tabla debe coincidir con el nombre del archivo HTML sin la extensión.')
     commands.add_argument('--list-tables', metavar='TABLE_FILTER', nargs='?', const='^.*$', help=f'Lista los nombres de las tablas del Data Dictionary Report. El filtro es una expresión regular que se aplica a los nombres de las tablas. Si no se especifica, se listan todas las tablas.')
+    commands.add_argument('--used-by', metavar='TABLE_NAME', help=f'Recorre las tablas referenciadas por la tabla indicada en el Data Dictionary Report. El nombre de la tabla debe coincidir con el nombre del archivo HTML sin la extensión. Esta opción no está implementada en este momento.')
+    commands.add_argument('--uses', metavar='TABLE_NAME', help=f'Recorre las tablas que referencian la tabla indicada en el Data Dictionary Report. El nombre de la tabla debe coincidir con el nombre del archivo HTML sin la extensión. Esta opción no está implementada en este momento.')
     
-    # define las opciones adicionales a los comandos
+    # Define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
     options.add_argument('--ddr-report', metavar='DIR', help=f'Directorio del Data Dictionary Report')
     options.add_argument('--json', metavar='OUTPUT_FILE', nargs='?', const='', help='Exporta el resultado en formato JSON. Si no se especifica un archivo, se imprime en la salida estándar.')
+    options.add_argument('--limit', metavar='LIMIT', type=int, default=sys.maxsize, help=f'Límite de resultados a mostrar (por defecto: {sys.maxsize})')
 
     # Parsea los argumentos
     args = parser.parse_args()
@@ -116,6 +121,24 @@ def main():
     
     if args.table is not None:
         table(args.table, args.ddr_report, args.json)
+
+    if args.used_by is not None:
+        table_name = args.used_by.strip()
+        ddr_report_dir = args.ddr_report.strip()
+        if not ddr_report_dir:
+            print("No se ha especificado un directorio para el Data Dictionary Report.")
+            return
+        table_tree = table_uses_tables(table_name, args.ddr_report)
+        print_tree(table_tree)
+
+    if args.uses is not None:
+        table_name = args.uses.strip()
+        ddr_report_dir = args.ddr_report.strip()
+        if not ddr_report_dir:
+            print("No se ha especificado un directorio para el Data Dictionary Report.")
+            return
+        table_tree = tables_used_by_table(table_name, ddr_report_dir, limit=args.limit)
+        print_tree(table_tree)
 
 if __name__ == '__main__':
     main()
