@@ -2,11 +2,13 @@
 
 Conjunto de comandos implementados en Python para facilitar tareas relacionadas con bases de datos relacionales:
 
-- `dbanalyzer`: Analiza la estructura de una base de datos usando IA, obteniendo información semántica de las tablas y columnas.
-- `dbchecker`: Verifica la integridad de una base de datos.
+- [`dbanalyzer`](src/dbanalyzer/README.md): Analiza la estructura de una base de datos usando IA, obteniendo información semántica de las tablas y columnas.
+- [`dbchecker`](src/dbchecker/README.md): Verifica la integridad de una base de datos. [Próximamente]
 - [`dbmapper`](src/dbmapper/README.md): Crea mapas de entre esquemas de bases de datos para facilitar la migración de datos.
-- `dbsequel`: ...
+- [`dbsequel`](src/dbsequel/README.md): Genera consultas SQL para un esquema dado en lenguaje natural utilizando IA. [Próximamente]
 - [`dbschema`](src/dbschema/README.md): Genera un esquema de la base de datos en formato JSON.
+- [`dbutils`](src/dbutils/README.md): Genera un esquema de la base de datos en formato JSON.
+- [`ddrsearch`](src/dbschema/README.md): Extrae información de un DDR (Data Dictionary Report) de una base de datos Oracle.
 
 > Útil para no amargarte la vida.
 

@@ -34,7 +34,7 @@ Opciones:
 
 ### Algunos ejemplos
 
-Aquí  tienes también algunos ejemplos de como se usa el comando `dbmapper`.
+Aquí tienes también algunos ejemplos de como se usa el comando `dbschema`.
 
 Para generar el esquema de la base de datos `mydb` en formato JSON en el fichero `mydb-schema.json`:
 
