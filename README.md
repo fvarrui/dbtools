@@ -8,7 +8,7 @@ Conjunto de comandos implementados en Python para facilitar tareas relacionadas 
 - [`dbsequel`](src/dbsequel/README.md): Genera consultas SQL para un esquema dado en lenguaje natural utilizando IA. [Próximamente]
 - [`dbschema`](src/dbschema/README.md): Genera un esquema de la base de datos en formato JSON.
 - [`dbutils`](src/dbutils/README.md): Genera un esquema de la base de datos en formato JSON.
-- [`ddrsearch`](src/dbschema/README.md): Extrae información de un DDR (Data Dictionary Report) de una base de datos Oracle.
+- [`ddrsearch`](src/ddrsearch/README.md): Extrae información de un DDR (Data Dictionary Report) de una base de datos Oracle.
 
 > 😱 Útil para no amargarte la vida.
 
