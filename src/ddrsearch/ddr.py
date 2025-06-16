@@ -9,11 +9,12 @@ from dbschema.foreign_key import ForeignKey
 from dbschema.reference import Reference
 from dbschema.schema import Schema
 
-from pprint import pprint
 from urllib.parse import unquote
 from pathlib import Path
 from bs4 import BeautifulSoup
-from pptree import Node, pptree
+from pptree import Node
+
+CACHED_TABLES = {}
 
 def normalize_text(text: str) -> str:
     if not text:
@@ -45,7 +46,7 @@ def get_ddr_data(soup : BeautifulSoup, tabIndex: int) -> list[dict]:
         data.append(register)
     return data
 
-def get_table_names(ddr_report_dir, filter=None):
+def get_table_names(ddr_report_dir, filter=None) -> list[str]:
     """
     Obtiene los nombres de las tablas del Data Dictionary Report.    
     :param ddr_report_dir: Directorio donde se encuentra el Data Dictionary Report.
@@ -59,6 +60,28 @@ def get_table_names(ddr_report_dir, filter=None):
                 table_name = Path(filename).stem
                 table_names.append(table_name)  # Elimina la extensión del archivo de la tabla
     return table_names
+
+def get_tables(ddr_report_dir, filter=None) -> list[dict]:
+    tables = []
+    if os.path.exists(ddr_report_dir):
+        for filename in os.listdir(ddr_report_dir):
+            if filename.endswith('.html') and (filter is None or re.match(filter, filename)):
+                table_name = Path(filename).stem
+                table_file = os.path.join(ddr_report_dir, filename)
+                # Cargamos el archivo HTML de la tabla y lo parseamos con BeautifulSoup
+                with open(table_file, 'r', encoding='cp1252') as f:
+                    soup = BeautifulSoup(f, 'html.parser')
+                # Obtenemos los detalles de la tabla
+                details = get_ddr_data(soup, 6)
+                if not details:
+                    continue
+                # Extraemos el comentario y propietario (esquema)
+                comment = next((detail['value'] for detail in details if detail['name'] == 'COMMENTS'), None)
+                tables.append({
+                    'name': table_name,
+                    'comment': normalize_text(comment) if comment != 'null' else None,
+                })
+    return tables
 
 def find_columns(soup : BeautifulSoup) -> list[ForeignKey]:
     columns = get_ddr_data(soup, 0)
@@ -118,18 +141,23 @@ def table_from_ddr(table_file, quiet=False) -> Table:
     :return: Objeto de tabla con la información extraída.
     """
     table_name = Path(table_file).stem
+    # Si la tabla ya está en caché, la retornamos directamente
+    if table_name in CACHED_TABLES:
+        return CACHED_TABLES[table_name]
+    # Modo silencioso: no imprime mensajes de procesamiento
     if not quiet:
         print(f"Procesando tabla: {table_name}") 
-
+    # Cargamos el archivo HTML de la tabla y lo parseamos con BeautifulSoup
     with open(table_file, 'r', encoding='cp1252') as f:
         soup = BeautifulSoup(f, 'html.parser')
-
+    # Obtenemos los detalles de la tabla
     details = get_ddr_data(soup, 6)
     if not details:
         return None
+    # Extraemos el comentario y propietario (esquema)
     comment = next((detail['value'] for detail in details if detail['name'] == 'COMMENTS'), None) 
     owner = next((detail['value'] for detail in details if detail['name'] == 'OWNER'), None)
-    return Table(
+    table = Table(
         name=table_name,
         comment=normalize_text(comment) if comment != 'null' else None,
         columns=find_columns(soup),
@@ -137,6 +165,10 @@ def table_from_ddr(table_file, quiet=False) -> Table:
         foreign_keys=find_foreign_keys(soup),
         schemaName=owner if owner != 'null' else None
     )
+    # Guardamos la tabla en caché
+    CACHED_TABLES[table_name] = table
+    # Devolvemos el objeto de tabla
+    return table
 
 def schema_from_ddr(ddr_report_dir, filter = None) -> Schema:
     """

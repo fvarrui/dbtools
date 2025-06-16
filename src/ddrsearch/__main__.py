@@ -2,12 +2,15 @@ import os
 import argparse
 import json
 import sys
+import time
 
 from pptree import print_tree
+from tabulate import tabulate
+from textwrap import shorten, fill
 
 from dbutils.customhelp import CustomHelpFormatter
 from ddrsearch import __module_name__, __module_description__, __module_version__
-from ddrsearch.ddr import schema_from_ddr, table_from_ddr, get_table_names, table_uses_tables, tables_used_by_table
+from ddrsearch.ddr import schema_from_ddr, table_from_ddr, get_tables, table_uses_tables, tables_used_by_table
 
 def table(table_name: str, ddr_report_dir: str = None, json_file: str = None):
     table_name = table_name.strip()
@@ -47,17 +50,25 @@ def list_tables(filter: str = r'.*', ddr_report_dir: str = None, json_file: str 
         print(f"El directorio especificado no existe: {ddr_report_dir}")
         return
     print(f"Directorio del Data Dictionary Report: {ddr_report_dir} (filtro: {filter})")
-    table_names = get_table_names(ddr_report_dir, filter)
-    if not table_names:
+    tables = get_tables(ddr_report_dir, filter)
+    if not tables:
         print("No se encontraron tablas en el Data Dictionary Report.")
     if json_file is not None:
-        json_output = json.dumps(table_names, indent=4, ensure_ascii=False)
+        json_output = json.dumps(tables, indent=4, ensure_ascii=False)
         with open(json_file, 'w', encoding='utf-8') if json_file else sys.stdout as output_file:
             output_file.write(json_output)
     else:
         print(f"Tablas encontradas (filtro: {filter}):")
-        for table in table_names:
-            print(f"- {table}")
+        headers = ["NAME", "COMMENT"]
+        data = []
+        for table in tables:
+            table_name = table['name']
+            table_comment = fill(
+                table['comment'] if table['comment'] else '',
+                width=100, 
+            )
+            data.append([ table_name, table_comment ])
+        print(tabulate(data, headers=headers, tablefmt="grid"))
 
 
 def schema(filter: str = r'.*', ddr_report_dir: str = None, json_file: str = None):
@@ -113,6 +124,9 @@ def main():
         parser.print_help()
         return
 
+    # Coge el tiempo de inicio
+    start = time.time()
+
     if args.schema is not None:
         schema(args.schema, args.ddr_report, args.json)
 
@@ -139,6 +153,10 @@ def main():
             return
         table_tree = tables_used_by_table(table_name, ddr_report_dir, limit=args.limit)
         print_tree(table_tree)
+
+    # Calcula y muestra el tiempo de ejecución
+    ellapsed_time = time.time() - start
+    print(f"Tiempo de ejecución: {ellapsed_time:.2f} segundos")        
 
 if __name__ == '__main__':
     main()
