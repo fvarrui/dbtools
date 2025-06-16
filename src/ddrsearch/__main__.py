@@ -12,17 +12,17 @@ from dbutils.customhelp import CustomHelpFormatter
 from ddrsearch import __module_name__, __module_description__, __module_version__
 from ddrsearch.ddr import schema_from_ddr, table_from_ddr, get_tables, table_uses_tables, tables_used_by_table
 
-def table(table_name: str, ddr_report_dir: str = None, json_file: str = None):
+def table(table_name: str, ddr_dir_dir: str = None, json_file: str = None):
     table_name = table_name.strip()
     print(f"Buscando la tabla '{table_name}' en el Data Dictionary Report...")
-    if not ddr_report_dir:
+    if not ddr_dir_dir:
         print("No se ha especificado un directorio para el Data Dictionary Report.")
         return
-    if not os.path.exists(ddr_report_dir):
-        print(f"El directorio especificado no existe: {ddr_report_dir}")
+    if not os.path.exists(ddr_dir_dir):
+        print(f"El directorio especificado no existe: {ddr_dir_dir}")
         return
-    print(f"Directorio del Data Dictionary Report: {ddr_report_dir}")
-    file_path = os.path.join(ddr_report_dir, table_name + '.html')
+    print(f"Directorio del Data Dictionary Report: {ddr_dir_dir}")
+    file_path = os.path.join(ddr_dir_dir, table_name + '.html')
     if not os.path.exists(file_path):
         print(f"No se encontró la tabla: {table_name}")
         return
@@ -41,16 +41,16 @@ def table(table_name: str, ddr_report_dir: str = None, json_file: str = None):
         print("Foreign keys:", table.foreign_keys)
 
 
-def list_tables(filter: str = r'.*', ddr_report_dir: str = None, json_file: str = None):
+def list_tables(filter: str = r'.*', ddr_dir_dir: str = None, json_file: str = None):
     print("Listando las tablas del Data Dictionary Report...")
-    if not ddr_report_dir:
+    if not ddr_dir_dir:
         print("No se ha especificado un directorio para el Data Dictionary Report.")
         return
-    if not os.path.exists(ddr_report_dir):
-        print(f"El directorio especificado no existe: {ddr_report_dir}")
+    if not os.path.exists(ddr_dir_dir):
+        print(f"El directorio especificado no existe: {ddr_dir_dir}")
         return
-    print(f"Directorio del Data Dictionary Report: {ddr_report_dir} (filtro: {filter})")
-    tables = get_tables(ddr_report_dir, filter)
+    print(f"Directorio del Data Dictionary Report: {ddr_dir_dir} (filtro: {filter})")
+    tables = get_tables(ddr_dir_dir, filter)
     if not tables:
         print("No se encontraron tablas en el Data Dictionary Report.")
     if json_file is not None:
@@ -59,7 +59,7 @@ def list_tables(filter: str = r'.*', ddr_report_dir: str = None, json_file: str 
             output_file.write(json_output)
     else:
         print(f"Tablas encontradas (filtro: {filter}):")
-        headers = ["NAME", "COMMENT"]
+        headers = ["TABLA", "DESCRIPCIÓN"]
         data = []
         for table in tables:
             table_name = table['name']
@@ -70,19 +70,18 @@ def list_tables(filter: str = r'.*', ddr_report_dir: str = None, json_file: str 
             data.append([ table_name, table_comment ])
         print(tabulate(data, headers=headers, tablefmt="grid"))
 
-
-def schema(filter: str = r'.*', ddr_report_dir: str = None, json_file: str = None):
+def schema(filter: str = r'.*', ddr_dir_dir: str = None, json_file: str = None):
     print("Generando esquema para las tablas del Data Dictionary Report...")
-    if not ddr_report_dir:
+    if not ddr_dir_dir:
         print("No se ha especificado un directorio para el Data Dictionary Report.")
         return
-    if not os.path.exists(ddr_report_dir):
-        print(f"El directorio especificado no existe: {ddr_report_dir}")
+    if not os.path.exists(ddr_dir_dir):
+        print(f"El directorio especificado no existe: {ddr_dir_dir}")
         return
-    ddr_report_dir = ddr_report_dir.strip()
-    print(f"Directorio del Data Dictionary Report: {ddr_report_dir}")
+    ddr_dir_dir = ddr_dir_dir.strip()
+    print(f"Directorio del Data Dictionary Report: {ddr_dir_dir}")
     print(f"Filtro de tablas: {filter}")
-    schema = schema_from_ddr(ddr_report_dir, filter)
+    schema = schema_from_ddr(ddr_dir_dir, filter)
     json_output = json.dumps(schema.model_dump(), indent=4, ensure_ascii=False)
     with open(json_file, 'w', encoding='utf-8') if json_file else sys.stdout as output_file:
         output_file.write(json_output)
@@ -112,7 +111,7 @@ def main():
     
     # Define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
-    options.add_argument('--ddr-report', metavar='DIR', help=f'Directorio del Data Dictionary Report')
+    options.add_argument('--ddr-dir', metavar='DIR', help=f'Directorio del Data Dictionary Report')
     options.add_argument('--json', metavar='OUTPUT_FILE', nargs='?', const='', help='Exporta el resultado en formato JSON. Si no se especifica un archivo, se imprime en la salida estándar.')
     options.add_argument('--limit', metavar='LIMIT', type=int, default=sys.maxsize, help=f'Límite de resultados a mostrar (por defecto: {sys.maxsize})')
 
@@ -128,30 +127,30 @@ def main():
     start = time.time()
 
     if args.schema is not None:
-        schema(args.schema, args.ddr_report, args.json)
+        schema(args.schema, args.ddr_dir, args.json)
 
     if args.list_tables:
-        list_tables(args.list_tables, args.ddr_report, args.json)
+        list_tables(args.list_tables, args.ddr_dir, args.json)
     
     if args.table is not None:
-        table(args.table, args.ddr_report, args.json)
+        table(args.table, args.ddr_dir, args.json)
 
     if args.used_by is not None:
         table_name = args.used_by.strip()
-        ddr_report_dir = args.ddr_report.strip()
-        if not ddr_report_dir:
+        ddr_dir = args.ddr_dir.strip()
+        if not ddr_dir:
             print("No se ha especificado un directorio para el Data Dictionary Report.")
             return
-        table_tree = table_uses_tables(table_name, args.ddr_report)
+        table_tree = table_uses_tables(table_name, args.ddr_dir)
         print_tree(table_tree)
 
     if args.uses is not None:
         table_name = args.uses.strip()
-        ddr_report_dir = args.ddr_report.strip()
-        if not ddr_report_dir:
+        ddr_dir = args.ddr_dir.strip()
+        if not ddr_dir:
             print("No se ha especificado un directorio para el Data Dictionary Report.")
             return
-        table_tree = tables_used_by_table(table_name, ddr_report_dir, limit=args.limit)
+        table_tree = tables_used_by_table(table_name, ddr_dir, limit=args.limit)
         print_tree(table_tree)
 
     # Calcula y muestra el tiempo de ejecución

@@ -46,28 +46,28 @@ def get_ddr_data(soup : BeautifulSoup, tabIndex: int) -> list[dict]:
         data.append(register)
     return data
 
-def get_table_names(ddr_report_dir, filter=None) -> list[str]:
+def get_table_names(ddr_dir, filter=None) -> list[str]:
     """
     Obtiene los nombres de las tablas del Data Dictionary Report.    
-    :param ddr_report_dir: Directorio donde se encuentra el Data Dictionary Report.
+    :param ddr_dir: Directorio donde se encuentra el Data Dictionary Report.
     :param filter: Filtro opcional para los nombres de las tablas (expresión regular).
     :return: Lista de nombres de tablas.
     """
     table_names = []
-    if os.path.exists(ddr_report_dir):
-        for filename in os.listdir(ddr_report_dir):
+    if os.path.exists(ddr_dir):
+        for filename in os.listdir(ddr_dir):
             if filename.endswith('.html') and (filter is None or re.match(filter, filename)):
                 table_name = Path(filename).stem
                 table_names.append(table_name)  # Elimina la extensión del archivo de la tabla
     return table_names
 
-def get_tables(ddr_report_dir, filter=None) -> list[dict]:
+def get_tables(ddr_dir, filter=None) -> list[dict]:
     tables = []
-    if os.path.exists(ddr_report_dir):
-        for filename in os.listdir(ddr_report_dir):
+    if os.path.exists(ddr_dir):
+        for filename in os.listdir(ddr_dir):
             if filename.endswith('.html') and (filter is None or re.match(filter, filename)):
                 table_name = Path(filename).stem
-                table_file = os.path.join(ddr_report_dir, filename)
+                table_file = os.path.join(ddr_dir, filename)
                 # Cargamos el archivo HTML de la tabla y lo parseamos con BeautifulSoup
                 with open(table_file, 'r', encoding='cp1252') as f:
                     soup = BeautifulSoup(f, 'html.parser')
@@ -170,17 +170,17 @@ def table_from_ddr(table_file, quiet=False) -> Table:
     # Devolvemos el objeto de tabla
     return table
 
-def schema_from_ddr(ddr_report_dir, filter = None) -> Schema:
+def schema_from_ddr(ddr_dir, filter = None) -> Schema:
     """
     Crea una lista de objetos de tabla a partir del Data Dictionary Report.
     
-    :param ddr_report_dir: Directorio donde se encuentra el Data Dictionary Report.
+    :param ddr_dir: Directorio donde se encuentra el Data Dictionary Report.
     :return: Lista de objetos de tabla con la información extraída.
     """
     tables = []
-    table_names = get_table_names(ddr_report_dir, filter)
+    table_names = get_table_names(ddr_dir, filter)
     for table_name in table_names:
-        file_path = os.path.join(ddr_report_dir, table_name + '.html')
+        file_path = os.path.join(ddr_dir, table_name + '.html')
         if os.path.exists(file_path):
             table = table_from_ddr(file_path)
             if table:
@@ -188,11 +188,11 @@ def schema_from_ddr(ddr_report_dir, filter = None) -> Schema:
     return Schema(tables=tables)
 
 
-def table_uses_tables(table_name, ddr_report_dir, level=0, visited=[], parent=None, foreignKey=None) -> Node:
+def table_uses_tables(table_name, ddr_dir, level=0, visited=[], parent=None, foreignKey=None) -> Node:
     """
     Crea un nodo de árbol que representa una tabla y sus relaciones con otras tablas.
     :param table_name: Nombre de la tabla a procesar.
-    :param ddr_report_dir: Directorio donde se encuentra el Data Dictionary Report.
+    :param ddr_dir: Directorio donde se encuentra el Data Dictionary Report.
     :param level: Nivel de profundidad en el árbol (para propósitos de indentación).
     :param visited: Lista de tablas ya visitadas para evitar ciclos infinitos.
     :param parent: Nodo padre en el árbol (para construir la jerarquía).
@@ -211,7 +211,7 @@ def table_uses_tables(table_name, ddr_report_dir, level=0, visited=[], parent=No
     visited.append(table_name)
 
     # Extraemos información de la tabla del Data Dictionary Report
-    table_file = os.path.join(ddr_report_dir, table_name + '.html')
+    table_file = os.path.join(ddr_dir, table_name + '.html')
     table = table_from_ddr(table_file, True)
 
     # Si no se pudo procesar la tabla, retornamos el nodo sin hijos
@@ -223,7 +223,7 @@ def table_uses_tables(table_name, ddr_report_dir, level=0, visited=[], parent=No
         referenced_table = fk.reference.table
         table_uses_tables(
             table_name=referenced_table,
-            ddr_report_dir=ddr_report_dir,
+            ddr_dir=ddr_dir,
             level=level + 1,
             visited=visited,
             parent=table_node,
@@ -232,7 +232,7 @@ def table_uses_tables(table_name, ddr_report_dir, level=0, visited=[], parent=No
 
     return table_node
 
-def tables_used_by_table(table_name, ddr_report_dir, level=0, visited=[], parent=None, schema=None, limit=sys.maxsize) -> Node:
+def tables_used_by_table(table_name, ddr_dir, level=0, visited=[], parent=None, schema=None, limit=sys.maxsize) -> Node:
     
     if not schema:
         table_node = Node(table_name, parent=parent)
@@ -248,7 +248,7 @@ def tables_used_by_table(table_name, ddr_report_dir, level=0, visited=[], parent
         return table_node
 
     # Extraemos información de la tabla del Data Dictionary Report
-    table_file = os.path.join(ddr_report_dir, table_name + '.html')
+    table_file = os.path.join(ddr_dir, table_name + '.html')
 
     if not os.path.exists(table_file):
         return table_node
@@ -272,7 +272,7 @@ def tables_used_by_table(table_name, ddr_report_dir, level=0, visited=[], parent
         outterSchema = used_table['esquema_ajeno']
         tables_used_by_table(
             table_name=pointedTable,
-            ddr_report_dir=ddr_report_dir,
+            ddr_dir=ddr_dir,
             level=level + 1,
             visited=visited,
             parent=table_node,
