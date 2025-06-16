@@ -10,7 +10,7 @@ Conjunto de comandos implementados en Python para facilitar tareas relacionadas 
 - [`dbutils`](src/dbutils/README.md): Genera un esquema de la base de datos en formato JSON.
 - [`ddrsearch`](src/dbschema/README.md): Extrae información de un DDR (Data Dictionary Report) de una base de datos Oracle.
 
-> Útil para no amargarte la vida.
+> 😱 Útil para no amargarte la vida.
 
 ## ¿Cómo se instala?
 
@@ -20,7 +20,7 @@ Para instalar **dbtools** en tu sistema, puedes hacerlo desde el repositorio de 
 pip install git+https://github.com/fvarrui/dbtools.git
 ```
 
-> Por supuesto, debes tener Python instalado en tu sistema.
+> 🐍 Por supuesto, debes tener Python instalado en tu sistema.
 
 Si ya has instalado alguna versión de `dbtools`, puedes actualizarlo con el siguiente comando:
 
@@ -32,11 +32,11 @@ pip install --upgrade --force-reinstall --no-cache-dir git+https://github.com/fv
 
 Cada comando tiene su propia ayuda, que se puede obtener ejecutando el comando con la opción `--help`.
 
-Por ejemplo:
-
 ```bash
-dbanalyzer --help
+{db.command} --help
 ```
+
+> ℹ️ Remplaza `{db.command}` por el nombre del comando que quieras usar, por ejemplo `dbanalyzer`, `dbchecker`, etc.
 
 Para obtener más información sobre cada comando, consultar la documentación correspondiente.
 
@@ -62,27 +62,27 @@ trusted_connection=<yes|no>
 > - Las opciones `driver` y `trusted_connection` son específicas de SQL Server.
 
 ```bash
-dbanalyzer --db database <opciones>
+{db.command} --db database <opciones>
 ```
 
 ó 
 
 ```bash
-dbanalyzer --dburl postgresql://user:password@host:port/database <opciones>
+{db.command} --dburl postgresql://user:password@host:port/database <opciones>
 ```
 
-> Siendo `database` el nombre de la sección en el archivo de configuración.
+Siendo `database` el nombre de la sección en el archivo de configuración.
 
 ### Cadenas de conexión
 
-Las cadenas de conexión para los distintos sistemas gestores de bases de datos soportados se muestran a continuación:
+Cadenas de conexión para los distintos sistemas gestores de bases de datos soportados:
 
-| Sistema | Cadena de conexión |
-|---------|---------------------|
-| PostgreSQL | `postgresql+psycopg2://{USER}:{PASSWORD}@{SERVER}:{PORT}/{DB_NAME}` |
-| MySQL | `mysql+pymysql://{USER}:{PASSWORD}@{SERVER}:{PORT}/{DB_NAME}` |
-| SQL Server (SQL Server Authentication) | `mssql+pyodbc://{USER}:{PASSWORD}@{SERVER}}:{PORT}}/{DB_NAME}?driver={DRIVER}` |
-| SQL Server (Windows Authentication) [SSPI] | `mssql+pyodbc://{SERVER}}:{PORT}}/{DB_NAME}?driver={DRIVER}&trusted_connection=yes` |
+| Sistema                                        | Cadena de conexión                                                         |
+| ---------------------------------------------- | -------------------------------------------------------------------------- |
+| **PostgreSQL**                                 | `postgresql://{USER}:{PASSWORD}@{SERVER}:{PORT}/{DB_NAME}`                 |
+| **MySQL**                                      | `mysql://{USER}:{PASSWORD}@{SERVER}:{PORT}/{DB_NAME}`                      |
+| **SQL Server (SQL Server Authentication)**     | `mssql://{USER}:{PASSWORD}@{SERVER}:{PORT}/{DB_NAME}?driver={DRIVER}`      |
+| **SQL Server (Windows Authentication) [SSPI]** | `mssql://{SERVER}:{PORT}/{DB_NAME}?driver={DRIVER}&trusted_connection=yes` |
 
 
 ## Para desarrolladores
