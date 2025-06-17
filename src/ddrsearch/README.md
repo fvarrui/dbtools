@@ -9,9 +9,10 @@ Para saber cómo se usa `ddrsearch` lo mejor es consultar la ayuda:
 ```bash
 $ ddrsearch --help
 
-Uso: ddrsearch (-h | -v | --schema [TABLE_FILTER] | --table TABLE_NAME | --list-tables [TABLE_FILTER] | --used-by TABLE_NAME | --uses TABLE_NAME) [--ddr-report DIR] [--json [OUTPUT_FILE]] [--limit LIMIT]
+Uso: ddrsearch (-h | -v | --schema [TABLE_FILTER] | --table TABLE_NAME | --list-tables [TABLE_FILTER] | --used-by TABLE_NAME | --uses TABLE_NAME | --search SEARCH_TERM) [--ddr-dir DIR] [--json [OUTPUT_FILE]]
+               [--limit LIMIT] [--filter FILTER]
 
-Analiza el Data Dictionary Report exportado de una base de datos Oracle para extraer información sobre tablas, columnas y relaciones. (v0.0.2)
+Analiza el Data Dictionary Report exportado de una base de datos Oracle para extraer información sobre tablas, columnas y relaciones. (v0.0.3)
 
 Comandos:
   -h, --help            Muestra esta ayuda
@@ -27,11 +28,13 @@ Comandos:
                         no está implementada en este momento.
   --uses TABLE_NAME     Recorre las tablas que referencian la tabla indicada en el Data Dictionary Report. El nombre de la tabla debe coincidir con el nombre del archivo HTML sin la extensión. Esta opción no
                         está implementada en este momento.
+  --search SEARCH_TERM  Busca un término en el Data Dictionary Report, devolviendo las tablas y columnas que lo contienen (busca en nombres y comentarios de tablas y columnas).
 
 Opciones:
-  --ddr-report DIR      Directorio del Data Dictionary Report
+  --ddr-dir DIR         Directorio del Data Dictionary Report
   --json [OUTPUT_FILE]  Exporta el resultado en formato JSON. Si no se especifica un archivo, se imprime en la salida estándar.
   --limit LIMIT         Límite de resultados a mostrar (por defecto: 9223372036854775807)
+  --filter FILTER       Filtro utilizado por algunos comandos.
 
 ¡Todo por Doramas!
 ```

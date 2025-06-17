@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dbtools"
-version = "0.1.0"
+version = "0.2.0"
 description = "Database tools for schema mapping, integrity check and migration"
 readme = "README.md"
 authors = [
@@ -14,11 +14,12 @@ license = { file = "LICENSE" }
 classifiers = [
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3",    
 ]
-keywords = ["db", "tools", "schema", "mapping", "integrity", "check", "migration", "sql" ]
+keywords = ["db", "tools", "schema", "mapping", "integrity", "check", "migration", "sql", "ddr" ]
 dependencies = [
     "BeautifulSoup4",   # HTML/XML parsing
+    "colorama",         # Colorize terminal output
     "lmstudio",         # LM Studio Python API
     "networkx",         # Graphs
     "openai",           # OpenAI API
@@ -28,6 +29,7 @@ dependencies = [
     "pymysql",          # MySQL/MariaDB 
     "pyodbc",           # SQL Server
     "python-dotenv",    # Environment variables
+    "rich",             # Rich text and beautiful formatting in the terminal
     "sqlalchemy",       # DB metadata
     "tabulate",         # Pretty tables
     "tiktoken",         # Tokenizer for OpenAI API
@@ -39,7 +41,7 @@ dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
 
 [project.urls]
 Home = "https://github.com/fvarrui/dbtools"
-Documentation = "https://github.com/fvarrui/dbtools/wiki"
+Documentation = "https://github.com/fvarrui/dbtools/blob/main/README.md"
 Source = "https://github.com/fvarrui/dbtools"
 Issues = "https://github.com/fvarrui/dbtools/issues"
 

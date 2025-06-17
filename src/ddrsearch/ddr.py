@@ -83,7 +83,13 @@ def get_tables(ddr_dir, filter=None) -> list[dict]:
                 })
     return tables
 
-def find_columns(soup : BeautifulSoup) -> list[ForeignKey]:
+def find_columns(soup : BeautifulSoup) -> list[Column]:
+    """
+    Encuentra las columnas de la tabla a partir del Data Dictionary Report.
+    :param soup: Objeto BeautifulSoup que representa el contenido del Data Dictionary Report.
+    :return: Lista de columnas encontradas.
+    """
+    # Obtenemos los datos de la tabla de la pestaña "Columnas"
     columns = get_ddr_data(soup, 0)
     cols = []
     for column in columns:
@@ -97,7 +103,7 @@ def find_columns(soup : BeautifulSoup) -> list[ForeignKey]:
         cols.append(col)
     return cols
 
-def find_primary_keys(soup : BeautifulSoup) -> list[ForeignKey]:
+def find_primary_keys(soup : BeautifulSoup) -> list[str]:
     """
     Encuentra las claves primarias de la tabla a partir del Data Dictionary Report.
     :param soup: Objeto BeautifulSoup que representa el contenido del Data Dictionary Report.
@@ -133,10 +139,9 @@ def find_foreign_keys(soup : BeautifulSoup) -> list[ForeignKey]:
         fks.append(fk)
     return fks
 
-def table_from_ddr(table_file, quiet=False) -> Table:
+def table_from_ddr(table_file) -> Table:
     """
     Crea un objeto de tabla a partir del archivo del Data Dictionary Report.
-    
     :param table_file: Ruta al archivo del Data Dictionary Report.
     :return: Objeto de tabla con la información extraída.
     """
@@ -144,9 +149,6 @@ def table_from_ddr(table_file, quiet=False) -> Table:
     # Si la tabla ya está en caché, la retornamos directamente
     if table_name in CACHED_TABLES:
         return CACHED_TABLES[table_name]
-    # Modo silencioso: no imprime mensajes de procesamiento
-    if not quiet:
-        print(f"Procesando tabla: {table_name}") 
     # Cargamos el archivo HTML de la tabla y lo parseamos con BeautifulSoup
     with open(table_file, 'r', encoding='cp1252') as f:
         soup = BeautifulSoup(f, 'html.parser')
@@ -173,7 +175,6 @@ def table_from_ddr(table_file, quiet=False) -> Table:
 def schema_from_ddr(ddr_dir, filter = None) -> Schema:
     """
     Crea una lista de objetos de tabla a partir del Data Dictionary Report.
-    
     :param ddr_dir: Directorio donde se encuentra el Data Dictionary Report.
     :return: Lista de objetos de tabla con la información extraída.
     """
@@ -204,20 +205,16 @@ def table_uses_tables(table_name, ddr_dir, level=0, visited=[], parent=None, for
         table_node = Node(table_name, parent=parent)
     else:
         table_node = Node(f".{foreignKey.column} → {foreignKey.reference.table}", parent=parent)
-
     # Evitamos ciclos infinitos
     if table_name in visited:
         return table_node
     visited.append(table_name)
-
     # Extraemos información de la tabla del Data Dictionary Report
     table_file = os.path.join(ddr_dir, table_name + '.html')
     table = table_from_ddr(table_file, True)
-
     # Si no se pudo procesar la tabla, retornamos el nodo sin hijos
     if not table:
         return table_node
-
     # Recorremos las claves foráneas de la tabla y creamos nodos para las tablas referenciadas
     for fk in table.foreign_keys:
         referenced_table = fk.reference.table
@@ -229,16 +226,24 @@ def table_uses_tables(table_name, ddr_dir, level=0, visited=[], parent=None, for
             parent=table_node,
             foreignKey=fk
         )
-
     return table_node
 
 def tables_used_by_table(table_name, ddr_dir, level=0, visited=[], parent=None, schema=None, limit=sys.maxsize) -> Node:
-    
+    """
+    Crea un nodo de árbol que representa una tabla y las tablas que usa.
+    :param table_name: Nombre de la tabla a procesar.
+    :param ddr_dir: Directorio donde se encuentra el Data Dictionary Report.
+    :param level: Nivel de profundidad en el árbol (para propósitos de indentación).
+    :param visited: Lista de tablas ya visitadas para evitar ciclos infinitos.
+    :param parent: Nodo padre en el árbol (para construir la jerarquía).
+    :param schema: Esquema de la tabla (opcional).
+    :param limit: Límite de profundidad para evitar ciclos infinitos.
+    :return: Nodo de árbol que representa la tabla y las tablas que usa.
+    """
     if not schema:
         table_node = Node(table_name, parent=parent)
     else:
         table_node = Node(f"[{schema}].{table_name}", parent=parent)
-
     # Evitamos ciclos infinitos
     if table_name in visited:
         return table_node    
@@ -246,27 +251,22 @@ def tables_used_by_table(table_name, ddr_dir, level=0, visited=[], parent=None, 
 
     if level >= limit:
         return table_node
-
     # Extraemos información de la tabla del Data Dictionary Report
     table_file = os.path.join(ddr_dir, table_name + '.html')
-
     if not os.path.exists(table_file):
-        return table_node
-    
+        return table_node 
     table = table_from_ddr(table_file, True)
-
     if not schema:
         schema = table.schemaName
-
     # Si no se pudo procesar la tabla, retornamos el nodo sin hijos
     if not table:
         return table_node
-
     # Obtiene las tablas usadas por la tabla actual
     with open(table_file, 'r', encoding='cp1252') as f:
         soup = BeautifulSoup(f, 'html.parser')
+    # Obtenemos los datos de la tabla de la pestaña "Usado por"
     data = get_ddr_data(soup, 10)
-    
+    # Extrae las tablas que usan (referencian) la tabla actual
     for used_table in data:
         pointedTable = used_table['tabla_ajena']
         outterSchema = used_table['esquema_ajeno']
@@ -279,6 +279,30 @@ def tables_used_by_table(table_name, ddr_dir, level=0, visited=[], parent=None, 
             schema=outterSchema if outterSchema != schema else None,
             limit=limit
         )
-
     return table_node
 
+def search_in_table(table: Table, search_term: str) -> list[dict]:
+    """
+    Busca un término en una tabla y sus columnas.
+    :param table: Objeto Table donde se realizará la búsqueda.
+    :param search_term: Término a buscar (case insensitive).
+    :return: Lista de diccionarios con los resultados encontrados.
+    """
+    search_term = search_term.lower()
+    results = []
+    # Busca en el nombre de la tabla
+    if search_term in table.name.lower() or search_term in (table.comment or '').lower():
+        results.append({
+            'table': table.name,
+            'column': None,
+            'comment': table.comment,
+        })
+    # Busca en las columnas de la tabla
+    for column in table.columns:
+        if search_term in column.name.lower() or search_term in (column.comment or '').lower():
+            results.append({
+                'table': table.name,
+                'column': column.name,
+                'comment': column.comment,
+            })
+    return results

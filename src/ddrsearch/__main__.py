@@ -4,15 +4,20 @@ import json
 import sys
 import time
 
+from colorama import Fore, Style, init
+from rich.console import Console
 from pptree import print_tree
 from tabulate import tabulate
 from textwrap import shorten, fill
 
 from dbutils.customhelp import CustomHelpFormatter
 from ddrsearch import __module_name__, __module_description__, __module_version__
-from ddrsearch.ddr import schema_from_ddr, table_from_ddr, get_tables, table_uses_tables, tables_used_by_table
+from ddrsearch.ddr import schema_from_ddr, table_from_ddr, get_tables, table_uses_tables, tables_used_by_table, get_table_names, search_in_table
 
-def table(table_name: str, ddr_dir_dir: str = None, json_file: str = None):
+def coloring(text: str, highlight: str, color: str = Fore.GREEN) -> str:
+    return text.replace(highlight, f"{color}{highlight}{Style.RESET_ALL}")
+
+def show_table(table_name: str, ddr_dir_dir: str = None, json_file: str = None):
     table_name = table_name.strip()
     print(f"Buscando la tabla '{table_name}' en el Data Dictionary Report...")
     if not ddr_dir_dir:
@@ -86,8 +91,46 @@ def schema(filter: str = r'.*', ddr_dir_dir: str = None, json_file: str = None):
     with open(json_file, 'w', encoding='utf-8') if json_file else sys.stdout as output_file:
         output_file.write(json_output)
 
+def search(search_term: str, ddr_dir_dir: str = None, filter: str = r'.*'):
+    print(f"Buscando '{search_term}' en el Data Dictionary Report...")
+    if not ddr_dir_dir:
+        print("No se ha especificado un directorio para el Data Dictionary Report.")
+        return
+    if not os.path.exists(ddr_dir_dir):
+        print(f"El directorio especificado no existe: {ddr_dir_dir}")
+        return
+    ddr_dir_dir = ddr_dir_dir.strip()
+    print(f"Directorio del Data Dictionary Report: {ddr_dir_dir} (filtro: {filter})")
+    table_names = get_table_names(ddr_dir_dir, filter=filter)
+    search_term = search_term.lower()
+    all_results = []
+    console = Console(log_time=False)
+    with console.status("") as status:
+        count = 0
+        for table_name in table_names:
+            table = table_from_ddr(os.path.join(ddr_dir_dir, table_name + '.html'))
+            table_results = search_in_table(table, search_term)
+            all_results.extend(table_results)
+            count += 1
+            status.update(f"Buscando en tablas ... {count:5}/{len(table_names)}: {table_name}")
+    if all_results:
+        headers = ["TABLA", "COLUMNA", "DESCRIPCIÓN"]
+        data = []
+        for result in all_results:
+            table_name = coloring(result['table'], search_term)
+            column_name = coloring(result['column'], search_term) if result['column'] else ''
+            comment = fill(
+                coloring(result['comment'], search_term) if result['comment'] else '',
+                width=100, 
+            )
+            data.append([table_name, column_name, comment])
+        print(tabulate(data, headers=headers, tablefmt="grid"))        
+    else:
+        print(f"No se encontraron resultados para '{search_term}'.")        
 
 def main():
+
+    init()
 
     # Define el parser
     parser = argparse.ArgumentParser(
@@ -106,14 +149,16 @@ def main():
     commands.add_argument('--schema', metavar='TABLE_FILTER', nargs='?', const='.*', help=f'Genera el esquema de la base de datos de las tablas del Data Dictionary Report. El filtro es una expresión regular que se aplica a los nombres de las tablas. Por defecto, se incluyen todas las tablas.')
     commands.add_argument('--table', metavar='TABLE_NAME', help=f'Muestra información de la tabla indicada del Data Dictionary Report. El nombre de la tabla debe coincidir con el nombre del archivo HTML sin la extensión.')
     commands.add_argument('--list-tables', metavar='TABLE_FILTER', nargs='?', const='^.*$', help=f'Lista los nombres de las tablas del Data Dictionary Report. El filtro es una expresión regular que se aplica a los nombres de las tablas. Si no se especifica, se listan todas las tablas.')
-    commands.add_argument('--used-by', metavar='TABLE_NAME', help=f'Recorre las tablas referenciadas por la tabla indicada en el Data Dictionary Report. El nombre de la tabla debe coincidir con el nombre del archivo HTML sin la extensión. Esta opción no está implementada en este momento.')
-    commands.add_argument('--uses', metavar='TABLE_NAME', help=f'Recorre las tablas que referencian la tabla indicada en el Data Dictionary Report. El nombre de la tabla debe coincidir con el nombre del archivo HTML sin la extensión. Esta opción no está implementada en este momento.')
+    commands.add_argument('--used-by', metavar='TABLE_NAME', help='Recorre las tablas referenciadas por la tabla indicada en el Data Dictionary Report. El nombre de la tabla debe coincidir con el nombre del archivo HTML sin la extensión. Esta opción no está implementada en este momento.')
+    commands.add_argument('--uses', metavar='TABLE_NAME', help='Recorre las tablas que referencian la tabla indicada en el Data Dictionary Report. El nombre de la tabla debe coincidir con el nombre del archivo HTML sin la extensión. Esta opción no está implementada en este momento.')
+    commands.add_argument('--search', metavar='SEARCH_TERM', help='Busca un término en el Data Dictionary Report, devolviendo las tablas y columnas que lo contienen (busca en nombres y comentarios de tablas y columnas).')
     
     # Define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
     options.add_argument('--ddr-dir', metavar='DIR', help=f'Directorio del Data Dictionary Report')
     options.add_argument('--json', metavar='OUTPUT_FILE', nargs='?', const='', help='Exporta el resultado en formato JSON. Si no se especifica un archivo, se imprime en la salida estándar.')
     options.add_argument('--limit', metavar='LIMIT', type=int, default=sys.maxsize, help=f'Límite de resultados a mostrar (por defecto: {sys.maxsize})')
+    options.add_argument('--filter', metavar='FILTER', help=f'Filtro utilizado por algunos comandos.')
 
     # Parsea los argumentos
     args = parser.parse_args()
@@ -133,7 +178,7 @@ def main():
         list_tables(args.list_tables, args.ddr_dir, args.json)
     
     if args.table is not None:
-        table(args.table, args.ddr_dir, args.json)
+        show_table(args.table, args.ddr_dir, args.json)
 
     if args.used_by is not None:
         table_name = args.used_by.strip()
@@ -152,6 +197,9 @@ def main():
             return
         table_tree = tables_used_by_table(table_name, ddr_dir, limit=args.limit)
         print_tree(table_tree)
+
+    if args.search is not None:
+        search(args.search, args.ddr_dir, args.filter)
 
     # Calcula y muestra el tiempo de ejecución
     ellapsed_time = time.time() - start

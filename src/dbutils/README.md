@@ -1,6 +1,6 @@
-# ddrsearch
+# dbutils
 
-Utilidades de soporte de `dbtools` para crear y gestionar ficheros de configuración con las conexiones a las bases de datos.
+Utilidades de soporte de `dbtools` para crear y gestionar ficheros de configuración con las conexiones a las bases de datos y testear dichas conexiones.
 
 ## ¿Cómo se usa?
 
