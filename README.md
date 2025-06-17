@@ -40,7 +40,7 @@ Cada comando tiene su propia ayuda, que se puede obtener ejecutando el comando c
 
 Para obtener más información sobre cada comando, consultar la documentación correspondiente.
 
-Las conexiones a la base de datos se configuran en el archivo de configuración `dbtools.ini` y usando la opción `--db`, o bien proporcionando la cadena de conexión con la opción `--dburl` en la línea de comandos.
+Las conexiones a la base de datos se configuran en el archivo de configuración `$HOME/.dbtools/dbtools.ini` y usando la opción `--db-name`, o bien proporcionando la cadena de conexión con la opción `--db-url` en la línea de comandos.
 
 Ejemplo de archivo de configuración `dbtools.ini`:
 
@@ -62,13 +62,13 @@ trusted_connection=<yes|no>
 > - Las opciones `driver` y `trusted_connection` son específicas de SQL Server.
 
 ```bash
-{db.command} --db database <opciones>
+{db.command} --db-name database <opciones>
 ```
 
 ó 
 
 ```bash
-{db.command} --dburl postgresql://user:password@host:port/database <opciones>
+{db.command} --db-url postgresql://user:password@host:port/database <opciones>
 ```
 
 Siendo `database` el nombre de la sección en el archivo de configuración.
