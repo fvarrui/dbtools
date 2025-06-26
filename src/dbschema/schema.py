@@ -9,6 +9,21 @@ class Schema(BaseModel):
     tables: list[Table] = []
 
     @classmethod
+    def get_table_from_metadata(schema_metadata, name: str) -> Table | None:
+        """
+        Retrieves a table from the schema metadata by its name.
+        Args:
+            schema_metadata: The metadata of the schema containing the tables.
+            name: The name of the table to retrieve.
+        Returns:
+            Table: The table object if found, otherwise None.
+        """
+        for table_name, table_metadata in schema_metadata.tables.items():
+            if table_name.lower() == name.lower():
+                return Table.from_metadata(table_metadata)
+        return None
+
+    @classmethod
     def from_metadata(cls, metadata: any, table_names: list[str] = None) -> "Schema":
         tables = []
         for table_name, table_metadata in metadata.tables.items():

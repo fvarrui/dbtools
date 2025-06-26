@@ -36,6 +36,9 @@ class Table(BaseModel):
             schemaName=None
         )
     
+    def search_columns(self, search_term: str):
+        return [ column for column in self.columns if search_term.lower() in column.name.lower() or search_term.lower() in (column.comment or '').lower() ]
+    
     def __lt__(self, other):
         if not isinstance(other, Table):
             return NotImplemented
@@ -51,16 +54,21 @@ class Table(BaseModel):
         if not isinstance(value, Table):
             return NotImplemented
         return self.name == value.name
-
+    
     def print(self):
-        print("Tabla       :", self.name)
-        print("Descripción :", self.comment)
+        fks = set()
+        for fk in self.foreign_keys:
+            fks.add(fk.column)
+        print("Tabla           :", self.name)
+        print("Descripción     :", self.comment if self.comment else "")
+        print("Clave primaria  :", ", ".join(self.primary_keys) if self.primary_keys else "Ninguna")
+        print("Claves foráneas :", ", ".join(fks) if fks else "Ninguna")
         headers = ["PK", "COLUMN_NAME", "TYPE", "NULLABLE", "RELATION", "COMMENT"]
         data = []
         for column in self.columns:
             type = column.type
             is_pk = "🔑" if column.name in self.primary_keys else "❌"
-            is_nullable = "❌" if column.nullable else "✅"
+            is_nullable = "✅" if column.nullable else "❌"
             relations = []
             for fk in self.foreign_keys:
                 if column.name == fk.column:
