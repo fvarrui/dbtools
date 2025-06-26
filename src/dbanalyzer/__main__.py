@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import json
@@ -36,7 +37,7 @@ def main():
     options = parser.add_argument_group('Opciones')
     options.add_argument('--db-url', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
     options.add_argument('--db-name', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DB_INIFILE}")
-    options.add_argument('--json', metavar='FILE', nargs='?', const='', help='Entrada o salida en formato JSON. Si no se especifica un fichero, se utiliza la entrada y salida estándar.')
+    options.add_argument('--output', metavar='DIR', nargs='?', const='.', help='Directorio de salida para guardar los resultados del análisis semántico. Si no se especifica, se guardará en el directorio actual.')
 
     # Parsea los argumentos
     args = parser.parse_args()
@@ -50,7 +51,7 @@ def main():
 
     # Carga la clave de API de OpenAI desde la configuración    
     apikey = Config().get_value("openai.apikey")
-    print(f"🔑 Clave de API de OpenAI: {apikey if apikey else 'No especificada'}")
+    print(f"🔑 Clave de API de OpenAI: {'✅ Encontrada' if apikey else '❌ No especificada'}")
     if not apikey:
         print("No se ha especificado la clave de API de OpenAI. Por favor, configura 'openai.apikey' en el fichero de configuración.", file=sys.stderr)
         sys.exit(1)
@@ -88,14 +89,18 @@ def main():
 
         # Verifica si se ha obtenido una tabla válida
         if not table:
-            print(f"⚠️ No se ha podido analizar la tabla '{table_name}'. Asegúrate de que existe en la base de datos.")
+            print(f"❌ No se ha podido analizar la tabla '{table_name}'. Asegúrate de que existe en la base de datos.")
             sys.exit(1)
         
         # Imprime el resultado del análisis semántico
         table.print()
 
-        if args.json is not None:
-            json_file = args.json if args.json else f"schemas/{table_name}.json"
+        if args.output is not None:
+            output_dir = args.output
+            if not os.path.exists(output_dir) or not os.path.isdir(output_dir):
+                print(f"⚠️ El directorio de salida '{output_dir}' no existe. Creando el directorio...")
+                os.makedirs(output_dir, exist_ok=True)
+            json_file = f"{output_dir}/{table_name}.json"
             print(f"📒 Guardando el resultado del análisis semántico de {table_name} en {json_file}")
             with open(json_file, "w", encoding="utf-8") as f:
                 json.dump(table.model_dump(), f, indent=4, ensure_ascii=False)

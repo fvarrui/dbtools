@@ -1,10 +1,9 @@
+import sys
 import json
 from openai import OpenAI
 
 from dbschema.database import Database
 from dbschema.table import Table
-from dbutils.config import Config
-from dbutils.dbini import DBIni
 
 from dbanalyzer.functions import tools, list_tables, get_table_schema, get_table_data
 
@@ -22,7 +21,7 @@ def analyze_table(apikey: str, database: Database, table_name: str) -> Table:
 
     client = OpenAI(api_key=apikey)
     model = "gpt-4.1-mini"
-    temperature = 0.4 if model.startswith("gpt") else None
+    temperature = 0.1 if model.startswith("gpt") else None
 
     with open("src/dbanalyzer/prompt.md", "r", encoding="utf-8") as file:
         instructions = file.read()
@@ -36,11 +35,13 @@ def analyze_table(apikey: str, database: Database, table_name: str) -> Table:
             "role": "user", 
             "content": f"""
                 Haz un análisis semántico de la tabla '{table_name}' y proporciona su esquema comentado. 
-                Si necesitas información de tablas relacionadas, puedes ir encadenando más llamadas a funciones,
-                de modo que puedas ir recabando información de tablas relacionadas si la necesitas. Los campos 
-                que ya tengan comentarios en la tabla, deben dejarse como están, añadiendo tu interpretación entre 
-                paréntesis. Recuerda que puedes obtener el esquema y datos de cualquier tabla relacionada para 
-                ayudarte a interpretar los campos de '{table_name}'.
+                Añade ejemplos significativos de datos a los comentarios de cada campo, si es posible,
+                y en caso de que sean referencias a otras tablas, muestra algún campo relevante de la otra tabla,
+                el valor de algún campo descriptivo. Si necesitas información de tablas relacionadas, puedes 
+                ir encadenando más llamadas a funciones, de modo que puedas ir recabando información de tablas 
+                relacionadas. Aprovecha los comentarios que  ya tengan tablas y columnas el esquema, mejorándolos. 
+                Recuerda que puedes obtener el esquema y  datos de cualquier tabla relacionada para ayudarte a 
+                interpretar los campos de '{table_name}'.
             """
         },
     ]
@@ -78,32 +79,15 @@ def analyze_table(apikey: str, database: Database, table_name: str) -> Table:
             })
 
     # Cuando ya no hay tool calls, procesa la respuesta final
-    result = json.loads(response.output_text)    
-    print("✅ Análisis semántico completado con éxito.")
-    table = Table.model_validate(result)
-    table.schemaName = database.name
+    try:        
+        # Coge sólo la última respuesta
+        print("✅ Análisis semántico completado con éxito.")
+        table = response.output_parsed
+        table.schemaName = database.name
+    except json.JSONDecodeError as e:
+        print(f"❌ Error al procesar la respuesta del modelo: {e}", file=sys.stderr)
+        print("🤖 La respuesta del modelo no es un JSON válido:")
+        print(response.output_text)
+        raise e
+    
     return table
-
-#dburl = DBIni.load().get_url("PincelPreDB")
-
-#print(f"⚙️ Conectando a la base de datos: {dburl}...")
-#database = Database(dburl)
-#database.connect()
-#print("✅ Conexión establecida!")
-
-#table = get_table_schema(database, "PEC_EstudiosGeneral")
-#json = table.model_dump_json(indent=4, exclude_none=True)
-#print(json)
-
-#data = get_table_data(database, "GEN_TEspDocentes", limit=5)
-#print(json.dumps(data, indent=4))
-
-#print(database.list_tables())
-
-#table_name = "PEC_TAsignas"
-#result_table = analyze_table(apikey, database, table_name)
-#output = f"schemas/{table_name}.json"
-#print(f"📒 Guardando el resultado del análisis semántico de {table_name} en {output}")
-#with open(output, "w", encoding="utf-8") as f:
-#    json.dump(result_table.model_dump(), f, indent=4, ensure_ascii=False)
-#result_table.print()
