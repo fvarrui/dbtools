@@ -1,111 +1,109 @@
-import sys
 import json
-import io
 from openai import OpenAI
-from os import path
 
-from dbschema.schema import Schema
+from dbschema.database import Database
+from dbschema.table import Table
+from dbutils.config import Config
+from dbutils.dbini import DBIni
 
-def analyze(apikey: str, schema: Schema) -> str:
+from dbanalyzer.functions import tools, list_tables, get_table_schema, get_table_data
 
-    # Inicializar el cliente de OpenAI
+def call_function(fn_name, database, args):
+    print(f"⚙️ Invocando la función '{fn_name}' con los argumentos: {args}")
+    if fn_name == "list_tables":
+        return json.dumps(list_tables(database))
+    if fn_name == "get_table_schema":
+        return get_table_schema(database, **args).model_dump_json(exclude_none=True)
+    if fn_name == "get_table_data":
+        return json.dumps(get_table_data(database, **args))
+
+def analyze_table(apikey: str, database: Database, table_name: str) -> Table:
+    print(f"🔍 Iniciando análisis semántico de la tabla '{table_name}'...")
+
     client = OpenAI(api_key=apikey)
+    model = "gpt-4.1-mini"
+    temperature = 0.4 if model.startswith("gpt") else None
 
-    # Recupera el asistente especializado en bases de datos y SQL
-    assistant = client.beta.assistants.retrieve(
-        assistant_id="asst_cNhjPcFXhk0jLPmkW7LienS7"
-    )
-    print("🤖 Asistente especializado en bases de datos y SQL recuperado:", assistant.name)
+    with open("src/dbanalyzer/prompt.md", "r", encoding="utf-8") as file:
+        instructions = file.read()
 
-    # Sube el esquema de la base de datos
-    schema_reduced = schema.reduce()
-    schema_json = io.BytesIO(json.dumps(schema_reduced, indent=None, separators=(",", ":")).encode('utf-8'))
-    schema_json.name = "schema.json"
-    uploaded_schema = client.files.create(
-        file=schema_json,       # archivo JSON del esquema de la base de datos
-        purpose="assistants",   # contexto para el asistente,
-    )
-    print("📄 Esquema subido:", uploaded_schema.id)
+    input_messages = [
+        {
+            "role": "developer", 
+            "content": instructions
+        },
+        {
+            "role": "user", 
+            "content": f"""
+                Haz un análisis semántico de la tabla '{table_name}' y proporciona su esquema comentado. 
+                Si necesitas información de tablas relacionadas, puedes ir encadenando más llamadas a funciones,
+                de modo que puedas ir recabando información de tablas relacionadas si la necesitas. Los campos 
+                que ya tengan comentarios en la tabla, deben dejarse como están, añadiendo tu interpretación entre 
+                paréntesis. Recuerda que puedes obtener el esquema y datos de cualquier tabla relacionada para 
+                ayudarte a interpretar los campos de '{table_name}'.
+            """
+        },
+    ]
 
-    print("😀 Iniciando análisis del esquema de la base de datos...")
-    for table in schema.tables:
-
-        # Comienza el análisis de la tabla
-        print("\n📤 Iniciando análisis de la tabla:", table.name)
-
-        output_file = f"schemas/pec_{table.name}_analysis.json"
-        if path.exists(output_file):
-            print(f"\t⚠️ El archivo {output_file} ya existe. Se omitirá el análisis de la tabla {table.name}.")
-            continue
-
-        # Crea un hilo de conversación
-        thread = client.beta.threads.create()
-        print(f"\t🗣️ Hilo de conversación creado para analizar tabla {table.name}:", thread.id)
-
-        # Añadir un mensaje del usuario
-        """
-        message = client.beta.threads.messages.create(
-            thread_id=thread.id,
-            role="user",
-            content="Se adjunta fichero JSON con el esquema de la base de datos para su análisis.",
-            attachments=[
-                { 
-                    "file_id": uploaded_schema.id, 
-                    "tools": [{"type": "file_search"}]
-                }
-            ],
+    response = None
+    while True:
+        print("➡️ Enviando mensaje al modelo...")
+        response = client.responses.parse(
+            model=model,
+            input=input_messages,
+            tools=tools,
+            tool_choice="auto",  # o "required" si quieres forzar tools
+            text_format=Table,
+            temperature=temperature,
         )
-        print("\t📤 Mensaje solicitando inclusión de adjuntos:", message.id)
-        """
+        print(f"⬅️ Respuesta recibida (outputs: {len(response.output)}, output_text: {"✅" if response.output_text else "❌"})")
 
-        # Añadir un mensaje del usuario al hilo para analizar la tabla
-        message = client.beta.threads.messages.create(
-            thread_id=thread.id,
-            role="user",
-            content=f"Realiza análisis semántico de la tabla {table.name} en el esquema de la base de datos y devuelve el JSON.",
-            attachments=[
-                { 
-                    "file_id": uploaded_schema.id, 
-                    "tools": [{"type": "file_search"}]
-                }
-            ],
-        )
-        print(f"\t📤 Mensaje creado solicitando análisis de la tabla {table.name}:", message.id)
+        # Procesa tool calls si existen (nos quedamos sólo con los que son de tipo function_call)
+        tool_calls = [tc for tc in response.output if getattr(tc, "type", None) == "function_call"]
+        if not tool_calls:
+            # Si no hay tool calls, salimos
+            break
 
-        # Intenta ejecutar el hilo de conversación con el asistente hasta 3 veces
-        MAX_TRIES = 3
-        tries = 1
-        run = None
-        while tries <= MAX_TRIES and (run is None or run.status != "completed"):
-            # Ejecutar el hilo de conversación con el asistente
-            print(f"\t🎲 Ejecución del asistente {assistant.name} para la tabla {table.name}... (intento {tries} de {MAX_TRIES})")
-            run = client.beta.threads.runs.create_and_poll(
-                thread_id=thread.id, 
-                assistant_id=assistant.id
-            )
-            tries += 1
-        
-        if run.status == "completed":
-            print("\t✅ Ejecución completada con éxito")
-            # Recuperar el mensaje del asistente
-            messages = client.beta.threads.messages.list(thread_id=thread.id)
-            # prints last message
-            for message in messages.data:
-                if message.role == "assistant":
-                    table_analysis = message.content[0].text.value
-                    print(f"\t📥 Recibida respuesta del asistente {assistant.name} acerca de la tabla {table.name}:", message.id)
-                    # print(table_analysis.strip())
-                    table_json = json.loads(table_analysis)
-                    with open(output_file, "w", encoding='utf-8') as f:
-                        json.dump(table_json, f, indent=4, ensure_ascii=False)
-                        print(f"\t💾 Resultado guardado en {output_file}")
-                    break
-        else:
-            print("\t❌ Error en la ejecución:", run.status)
-            
+        for tool_call in tool_calls:
+            name = tool_call.name
+            args = json.loads(tool_call.arguments)
+            result = call_function(name, database, args)
+            print(f"\t✅ Llamada a función {name} con argumentos {args} completada con éxito.")
+            # Añade el resultado como function_call_output
+            input_messages.append(tool_call)
+            input_messages.append({
+                "type": "function_call_output",
+                "call_id": tool_call.call_id,
+                "output": str(result),
+            })
 
-    # Elimina el archivo y el hilo de conversación
-    client.files.delete(file_id=uploaded_schema.id)
-    client.beta.threads.delete(thread_id=thread.id)
-    print("\nHilo de conversación y adjuntos eliminados:", thread.id)
+    # Cuando ya no hay tool calls, procesa la respuesta final
+    result = json.loads(response.output_text)    
+    print("✅ Análisis semántico completado con éxito.")
+    table = Table.model_validate(result)
+    table.schemaName = database.name
+    return table
 
+#dburl = DBIni.load().get_url("PincelPreDB")
+
+#print(f"⚙️ Conectando a la base de datos: {dburl}...")
+#database = Database(dburl)
+#database.connect()
+#print("✅ Conexión establecida!")
+
+#table = get_table_schema(database, "PEC_EstudiosGeneral")
+#json = table.model_dump_json(indent=4, exclude_none=True)
+#print(json)
+
+#data = get_table_data(database, "GEN_TEspDocentes", limit=5)
+#print(json.dumps(data, indent=4))
+
+#print(database.list_tables())
+
+#table_name = "PEC_TAsignas"
+#result_table = analyze_table(apikey, database, table_name)
+#output = f"schemas/{table_name}.json"
+#print(f"📒 Guardando el resultado del análisis semántico de {table_name} en {output}")
+#with open(output, "w", encoding="utf-8") as f:
+#    json.dump(result_table.model_dump(), f, indent=4, ensure_ascii=False)
+#result_table.print()
