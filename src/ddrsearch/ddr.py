@@ -298,11 +298,10 @@ def search_in_table(table: Table, search_term: str) -> list[dict]:
             'comment': table.comment,
         })
     # Busca en las columnas de la tabla
-    for column in table.columns:
-        if search_term in column.name.lower() or search_term in (column.comment or '').lower():
-            results.append({
-                'table': table.name,
-                'column': column.name,
-                'comment': column.comment,
-            })
+    for column in table.search_columns(search_term):
+        results.append({
+            'table': table.name,
+            'column': column.name,
+            'comment': column.comment,
+        })
     return results
