@@ -2,6 +2,7 @@ from urllib.parse import urlparse
 from sqlalchemy import create_engine, inspect, MetaData, Select
 from sqlalchemy.engine import Connection, CursorResult
 
+from dbschema.table import Table
 from dbschema.schema import Schema
 from utils.encoding import serializable_dict
 
@@ -46,6 +47,27 @@ class Database:
 
         # Generar el esquema de la base de datos
         return Schema.from_metadata(metadata, table_names)
+    
+    def get_table(self, name: str) -> Table:
+        """
+        Recupera el esquema de una tabla específica en la base de datos
+            :param name: Nombre de la tabla a recuperar
+            :returns: Esquema de la tabla
+        """
+        metadata = MetaData()
+        metadata.reflect(bind=self.engine, only=[name])
+        for table_name, table_metadata in metadata.tables.items():
+            if table_name.lower() == name.lower():
+                return Table.from_metadata(table_metadata)
+        return None
+    
+    def table_exists(self, name: str) -> bool:
+        """
+        Verifica si una tabla existe en la base de datos
+            :param name: Nombre de la tabla a verificar
+            :returns: True si la tabla existe, False en caso contrario
+        """
+        return name in self.inspector.get_table_names()
 
     def list_tables(self, filter=None) -> list[str]:
         """

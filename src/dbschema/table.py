@@ -1,3 +1,4 @@
+import json
 from pydantic import BaseModel
 from tabulate import tabulate
 from textwrap import shorten
@@ -36,8 +37,11 @@ class Table(BaseModel):
             schemaName=None
         )
     
-    def search_columns(self, search_term: str):
+    def search_columns(self, search_term: str) -> list[Column]:
         return [ column for column in self.columns if search_term.lower() in column.name.lower() or search_term.lower() in (column.comment or '').lower() ]
+    
+    def has_column(self, column_name: str) -> bool:
+        return any(column.name == column_name for column in self.columns)
     
     def __lt__(self, other):
         if not isinstance(other, Table):
@@ -88,3 +92,11 @@ class Table(BaseModel):
                 ]
             )
         print(tabulate(data, headers=headers, tablefmt="grid"))
+
+    def save(self, json_file: str):
+        """
+        Guarda la tabla en un archivo JSON.
+        :param file_path: Ruta del archivo donde se guardará la tabla.
+        """
+        with open(json_file, "w", encoding="utf-8") as f:
+            json.dump(self.model_dump(), f, indent=4, ensure_ascii=False)

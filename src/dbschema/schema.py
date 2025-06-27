@@ -61,3 +61,11 @@ class Schema(BaseModel):
             }
             for table in self.tables
         }
+
+    def save(self, json_file: str):
+        """
+        Guarda el esquema en un archivo JSON.
+        :param file_path: Ruta del archivo donde se guardará el esquema.
+        """
+        with open(json_file, "w", encoding="utf-8") as f:
+            json.dump(self.model_dump(), f, indent=4, ensure_ascii=False)
