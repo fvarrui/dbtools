@@ -1,6 +1,7 @@
 import sys
 import json
-from openai import OpenAI
+import time
+from openai import OpenAI, RateLimitError
 
 from dbschema.database import Database
 from dbschema.table import Table
@@ -12,7 +13,7 @@ def analyze_table(apikey: str, database: Database, table_name: str) -> Table:
 
     client = OpenAI(api_key=apikey)
     model = "gpt-4.1-mini"
-    temperature = 0.1 if model.startswith("gpt") else None
+    temperature = 0.15 if model.startswith("gpt") else None
 
     with open("src/dbanalyzer/prompt.md", "r", encoding="utf-8") as file:
         instructions = file.read()
@@ -30,7 +31,7 @@ def analyze_table(apikey: str, database: Database, table_name: str) -> Table:
                 y en caso de que sean referencias a otras tablas, muestra algún campo relevante de la otra tabla,
                 el valor de algún campo descriptivo. Si necesitas información de tablas relacionadas, puedes 
                 ir encadenando más llamadas a funciones, de modo que puedas ir recabando información de tablas 
-                relacionadas. Aprovecha los comentarios que  ya tengan tablas y columnas el esquema, mejorándolos. 
+                relacionadas. Aprovecha los comentarios que ya tengan tablas y columnas del esquema, mejorándolos. 
                 Recuerda que puedes obtener el esquema y  datos de cualquier tabla relacionada para ayudarte a 
                 interpretar los campos de '{table_name}'. Antes de pedir datos de una tabla relacionada, comprueba
                 si existe en la base de datos, y puedes usar las funciones para esto.
@@ -39,16 +40,33 @@ def analyze_table(apikey: str, database: Database, table_name: str) -> Table:
     ]
 
     response = None
+    tries = 0
     while True:
-        print("➡️ Enviando mensaje al modelo...")
-        response = client.responses.parse(
-            model=model,
-            input=input_messages,
-            tools=tools,
-            tool_choice="auto",  # o "required" si quieres forzar tools
-            text_format=Table,
-            temperature=temperature,
-        )
+
+        try:
+            tries += 1
+            print(f"➡️ Enviando mensaje al modelo... (intento {tries} de 3)")
+            response = client.responses.parse(
+                model=model,
+                input=input_messages,
+                tools=tools,
+                tool_choice="auto",  # o "required" si quieres forzar tools
+                text_format=Table,
+                temperature=temperature,
+            )
+            tries = 0 # Reinicia el contador de intentos si la llamada fue exitosa
+        except RateLimitError as e:
+            print(f"⚠️ Se ha excedido el límite de tokens por minuto. Esperando 1 minuto para reintentar... ({e})", file=sys.stderr)
+            if tries < 3:                
+                time.sleep(60)  # Espera 1 minuto antes de reintentar
+                continue  # Si hay un error de límite de tasa, simplemente continuamos y esperamos a que se resuelva
+            else:
+                print("❌ No se ha podido completar el análisis semántico tras 3 intentos. Abortando.", file=sys.stderr)
+                break
+        except Exception as e:
+            print(f"❌ Error al enviar el mensaje al modelo: {e}", file=sys.stderr)
+            raise e
+            
         print(f"⬅️ Respuesta recibida (outputs: {len(response.output)}, output_text: {"✅" if response.output_text else "❌"})")
 
         # Procesa tool calls si existen (nos quedamos sólo con los que son de tipo function_call)

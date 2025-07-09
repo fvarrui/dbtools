@@ -3,7 +3,7 @@ import inspect
 import json
 from typing import get_type_hints
 
-from sqlalchemy import MetaData, text
+from sqlalchemy import text
 from dbschema.database import Database
 from dbschema.table import Table
 
@@ -130,18 +130,26 @@ def get_table_data(database: Database, table_name: str, limit: int = 10) -> list
     try:
         print(f"🗒️ Obteniendo datos de la tabla '{table_name}' con un límite de {limit} filas...")
         table = database.get_table(table_name)  # Verifica si la tabla existe
-        columns_list = [ f"{col.name}" for col in table.columns ] if table else []
-        columns_str = (", " + ", ".join(columns_list)) if columns_list else ""
-        # Si la tabla tiene una columna TMS, la usamos para ordenar
-        stmt = text(
-            f"""
-            SELECT TOP {limit} *
-            FROM {table_name}
-            WHERE 0.10 >= CAST(CHECKSUM(NEWID(){columns_str}) & 0x7fffffff AS float) / CAST (0x7fffffff AS int)
-            ORDER BY NEWID()
-            """
-        )
-        return database.execute(stmt)
+        total = database.count_rows(table_name)
+        if total == 0:
+            print(f"⚠️ La tabla '{table_name}' está vacía. No se obtendrán datos.")
+            return []
+        if limit > total:
+            stmt = text(f"SELECT * FROM {table_name}")
+        else:
+            columns_list = [ f"{col.name}" for col in table.columns ] if table else []
+            columns_str = (", " + ", ".join(columns_list)) if columns_list else ""        
+            stmt = text(
+                f"""
+                SELECT TOP {limit} *
+                FROM {table_name}
+                WHERE 0.10 >= CAST(CHECKSUM(NEWID(){columns_str}) & 0x7fffffff AS float) / CAST (0x7fffffff AS int)
+                ORDER BY NEWID()
+                """
+            )
+        data = database.execute(stmt)
+        print(f"✅ Datos obtenidos de la tabla '{table_name}': {len(data)} filas.")
+        return data;
     except Exception as e:
         print(f"❌ Error al obtener los datos de la tabla '{table_name}': {e}")
         return []

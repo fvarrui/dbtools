@@ -68,7 +68,7 @@ def main():
         try:
             database = Database(db_url)
             database.connect()
-            logger.info(f"👍 Conectado a la base de datos '{database.server}\{database.name}'")
+            logger.info(f"👍 Conectado a la base de datos '{database.server}\\{database.name}'")
         except Exception as e:
             logger.error(f"¡No se ha podido conectar a la base de datos!", e)
             sys.exit(1)
@@ -158,7 +158,7 @@ def main():
 
             except Exception as e:
 
-                logger.error(f"❌ No se pudo analizar la tabla '{table_name}'", e)
+                logger.error(f"❌ No se pudo analizar la tabla '{table_name}': {e}")
                 stats["errors"] += [{
                     "table": table_name,
                     "error": str(e)

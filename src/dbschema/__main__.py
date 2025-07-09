@@ -28,13 +28,14 @@ def main():
     commands.add_argument('--schema', metavar='FILTER', nargs='?', const='', help='Genera el esquema de la base de datos. Si se especifica un prefijo, sólo se incluirán las tablas que empiecen por ese prefijo. La opción --json genera el resultado en un formato JSON.')
     commands.add_argument('--list-tables', metavar='FILTER', nargs='?', const='', help='Listar todas las tablas')
     commands.add_argument('--list-views', metavar='FILTER', nargs='?', const='', help='Listar todas las vistas')
-    commands.add_argument('--search', metavar='SEARCHTERM', help='Buscar tablas o columnas que contengan el término de búsqueda en el esquema especificado con la opción --json.')
+    commands.add_argument('--search', metavar='TERM', help='Buscar tablas o columnas que contengan el término de búsqueda en el esquema especificado con la opción --json.')
     
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
     options.add_argument('--db-url', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
     options.add_argument('--db-name', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DB_INIFILE}")
     options.add_argument('--json', metavar='FILE', nargs='?', const='', help='Entrada o salida en formato JSON. Si no se especifica un fichero, se utiliza la entrada y salida estándar.')
+    options.add_argument('--output', metavar='DIR', nargs='?', const='.', help='Directorio de salida para los ficheros generados. Por defecto, el directorio actual.')
 
     # Parsea los argumentos
     args = parser.parse_args()
@@ -100,25 +101,26 @@ def main():
         print(f"\n{len(table_names)} tablas encontradas")
         return
 
-    # Generar el esquema
+    # Generar el esquema de la base de datos
     if args.schema is not None:
+
+        # Si no se ha especificado una base de datos, muestra un mensaje de error
         if database is None:
-            print("No se ha especificado una base de datos. Por favor, utiliza --db-url o --db-name para conectarte a una base de datos.")
+            print("❌ No se ha especificado una base de datos. Por favor, utiliza --db-url o --db-name para conectarte a una base de datos.")
             sys.exit(1)
 
         prefix = args.schema
 
-        # Generar el esquema de la base de datos
-
-        print(f"Generando esquema de la base de datos...")
+        print(f"⚙️ Generando esquema de la base de datos...")
         if prefix:
-            print(f"- Incluyendo sólo tablas con prefijo: {prefix}")
+            print(f"\t- Incluyendo sólo tablas con prefijo: {prefix}")
         else:
-            print(f"- Incluyendo todas las tablas")
+            print(f"\t- Incluyendo todas las tablas")
 
         schema = database.get_schema(prefix=prefix)
 
         if schema is None:
+            print("❌ No se ha podido generar el esquema de la base de datos. Por favor, comprueba que la base de datos contiene tablas.", file=sys.stderr)
             sys.exit(1)
 
         # Guardar en un fichero o mostrar por pantalla
@@ -137,7 +139,7 @@ def main():
             if len(args.json) > 0:
                 with open(args.json, "w") as f:
                     f.write(result_json)
-                print(f"\nEsquema guardado en: {args.json}")
+                print(f"\n✅ Esquema guardado en: {args.json}")
             # Mostrar el resultado en formato JSON en la consola
             else:
                 print(f"\n{result_json}")

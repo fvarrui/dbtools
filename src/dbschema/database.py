@@ -1,5 +1,5 @@
 from urllib.parse import urlparse
-from sqlalchemy import create_engine, inspect, MetaData, Select
+from sqlalchemy import create_engine, inspect, MetaData, Select, text
 from sqlalchemy.engine import Connection, CursorResult
 
 from dbschema.table import Table
@@ -102,6 +102,16 @@ class Database:
             "server": self.server,
             "port": self.port
         }
+    
+    def count_rows(self, table_name: str) -> int:
+        """
+        Cuenta el número de filas de una tabla
+            :param table_name: Nombre de la tabla a contar
+            :returns: Número de filas de la tabla
+        """
+        query = text(f"SELECT COUNT(*) as total FROM {table_name}")
+        result = self.execute(query)
+        return result[0]['total'] if result else 0
     
     def execute(self, query : Select | str) -> list[dict]:
         """
