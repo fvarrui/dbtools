@@ -52,6 +52,7 @@ dbmapper = "dbmapper.__main__:main"
 dbutils = "dbutils.__main__:main"
 dbanalyzer = "dbanalyzer.__main__:main"
 ddrsearch = "ddrsearch.__main__:main"
+dbquery = "dbquery.__main__:main"
 
 [tool.setuptools]
 include-package-data = true

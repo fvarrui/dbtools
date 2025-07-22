@@ -100,3 +100,14 @@ class Table(BaseModel):
         """
         with open(json_file, "w", encoding="utf-8") as f:
             json.dump(self.model_dump(), f, indent=4, ensure_ascii=False)
+
+    @staticmethod
+    def load(json_file: str) -> "Table":
+        """
+        Carga una tabla desde un archivo JSON.
+        :param file_path: Ruta del archivo desde donde se cargará la tabla.
+        :return: Objeto Table cargado desde el archivo JSON.
+        """
+        with open(json_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return Table.model_validate(data)
