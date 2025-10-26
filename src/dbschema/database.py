@@ -103,6 +103,9 @@ class Database:
             "port": self.port
         }
     
+    def __str__(self):
+        return f"Database: {self.name} ({self.type})"
+    
     def count_rows(self, table_name: str) -> int:
         """
         Cuenta el número de filas de una tabla

@@ -20,7 +20,6 @@ keywords = ["db", "tools", "schema", "mapping", "integrity", "check", "migration
 dependencies = [
     "BeautifulSoup4",   # HTML/XML parsing
     "colorama",         # Colorize terminal output
-    "lmstudio",         # LM Studio Python API
     "networkx",         # Graphs
     "openai",           # OpenAI API
     "pptree",           # Pretty print trees
@@ -30,6 +29,7 @@ dependencies = [
     "pyodbc",           # SQL Server
     "python-dotenv",    # Environment variables
     "rich",             # Rich text and beautiful formatting in the terminal
+    "sqlacodegen",      # DB schema to SQLAlchemy models  
     "sqlalchemy",       # DB metadata
     "tabulate",         # Pretty tables
     "tiktoken",         # Tokenizer for OpenAI API
@@ -53,6 +53,7 @@ dbutils = "dbutils.__main__:main"
 dbanalyzer = "dbanalyzer.__main__:main"
 ddrsearch = "ddrsearch.__main__:main"
 dbquery = "dbquery.__main__:main"
+dborm = "dborm.__main__:main"
 
 [tool.setuptools]
 include-package-data = true

@@ -4,6 +4,7 @@ from dbutils.dbconfig import DBConfig
 
 DBTOOLS_DIR = os.path.join(os.path.expanduser("~"), ".dbtools")
 DB_INIFILE = "dbtools.ini"
+DEFAULT_DB_INIFILE = os.path.join(DBTOOLS_DIR, DB_INIFILE)
 
 class DBIni():
 
