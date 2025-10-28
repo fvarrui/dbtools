@@ -5,6 +5,8 @@ from dbschema.database import Database
 
 def generate_orm_code(dburl, prefix, output_dir='.'):
 
+    print(f"Generando las clases ORM en el directorio '{output_dir}'...")
+
     database = Database(dburl)
     database.connect()
 

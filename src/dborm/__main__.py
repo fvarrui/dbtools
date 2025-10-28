@@ -5,10 +5,8 @@ import argparse
 from dborm import __module_name__, __module_description__, __module_version__, logger
 from dborm.dborm import generate_orm_code
 
-from dbutils.config import Config, DEFAULT_CONFIG_INIFILE
-from dbutils.dbini import DBIni, DB_INIFILE, DEFAULT_DB_INIFILE
+from dbutils.dbini import DBIni, DB_INIFILE
 from dbutils.customhelp import CustomHelpFormatter
-from dbutils.dbutils import test_connection
 
 def main():
 
