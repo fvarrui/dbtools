@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dbtools"
-version = "0.3.0"
+version = "0.4.0"
 description = "Database tools for schema mapping, integrity check and migration"
 readme = "README.md"
 authors = [
@@ -54,6 +54,7 @@ dbanalyzer = "dbanalyzer.__main__:main"
 ddrsearch = "ddrsearch.__main__:main"
 dbquery = "dbquery.__main__:main"
 dborm = "dborm.__main__:main"
+dbcode = "dbcode.__main__:main"
 
 [tool.setuptools]
 include-package-data = true

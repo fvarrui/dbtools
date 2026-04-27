@@ -1,3 +1,4 @@
+import os
 import sys
 import json
 import argparse
@@ -35,7 +36,7 @@ def main():
     options.add_argument('--db-url', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
     options.add_argument('--db-name', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DB_INIFILE}")
     options.add_argument('--json', metavar='FILE', nargs='?', const='', help='Entrada o salida en formato JSON. Si no se especifica un fichero, se utiliza la entrada y salida estándar.')
-    options.add_argument('--output', metavar='DIR', nargs='?', const='.', help='Directorio de salida para los ficheros generados. Por defecto, el directorio actual.')
+    options.add_argument('--output', metavar='DIR', nargs='?', const='.', help='Directorio de salida para los ficheros generados. Por defecto, el directorio actual. Combinado con --schema --json (sin fichero), genera un JSON por cada tabla.')
 
     # Parsea los argumentos
     args = parser.parse_args()
@@ -126,23 +127,33 @@ def main():
         # Guardar en un fichero o mostrar por pantalla
         if args.json is not None:
 
-            # Añade información de la base de datos junto con el esquema
-            result = {
-                "database": database.__dict__(),
-                "schema": schema.model_dump()
-            }
-         
-            # Convertir el resultado en JSON
-            result_json = json.dumps(result, indent=4)
-
-            # Guardar el resultado en un fichero
+            # Caso 1: --json FILE → un único fichero con database + schema
             if len(args.json) > 0:
+                result = {
+                    "database": database.__dict__(),
+                    "schema": schema.model_dump()
+                }
                 with open(args.json, "w") as f:
-                    f.write(result_json)
+                    f.write(json.dumps(result, indent=4))
                 print(f"\n✅ Esquema guardado en: {args.json}")
-            # Mostrar el resultado en formato JSON en la consola
+
+            # Caso 2: --json (sin fichero) + --output DIR → un JSON por tabla
+            elif args.output is not None:
+                os.makedirs(args.output, exist_ok=True)
+                for table in schema.tables:
+                    file_path = os.path.join(args.output, f"{table.name}.json")
+                    with open(file_path, "w") as f:
+                        f.write(json.dumps(table.model_dump(), indent=4))
+                    print(f"  ✅ {file_path}")
+                print(f"\n✅ {len(schema.tables)} tablas exportadas a: {args.output}")
+
+            # Caso 3: --json sin fichero ni --output → stdout
             else:
-                print(f"\n{result_json}")
+                result = {
+                    "database": database.__dict__(),
+                    "schema": schema.model_dump()
+                }
+                print(f"\n{json.dumps(result, indent=4)}")
 
         else:
 
