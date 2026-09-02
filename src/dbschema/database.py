@@ -34,14 +34,15 @@ class Database:
         """
 
         # Recuperando la lista de tablas de la base de datos con el prefijo indicado
-        table_names = self.list_tables(filter=prefix) if prefix else None
+        table_names = self.list_tables(filter=prefix)
 
         if not table_names:
-            print(f"- Tablas a incluir: ❌ No se han encontrado tablas con el prefijo '{prefix}'")
+            motivo = f" con el prefijo '{prefix}'" if prefix else ""
+            print(f"- Tablas a incluir: ❌ No se han encontrado tablas{motivo}")
             return None
 
         # Cargar la estructura de la base de datos existente
-        print("- Tablas a incluir: ✅", table_names or "Todas")
+        print("- Tablas a incluir: ✅", table_names)
         metadata = MetaData()
         metadata.reflect(bind=self.engine, only=table_names)
 
