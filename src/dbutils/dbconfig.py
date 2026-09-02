@@ -23,6 +23,8 @@ DBMS_DEFAULT_CONFIG = {
     "mssql": {
         "library": "pyodbc",
         "template": "mssql${library}://${credentials}@${host}:${port}/${database}?driver=${driver}&trusted_connection=${trusted_connection}",
+        # Named instances (host\instance) omit the port — SQL Server Browser resolves the dynamic port
+        "template_named_instance": "mssql${library}://${credentials}@${host}/${database}?driver=${driver}&trusted_connection=${trusted_connection}",
         "port": 1433,
         "driver": "ODBC Driver 17 for SQL Server"
     },
@@ -129,12 +131,12 @@ class DBConfig():
         if username is not None and password is None:
             password = ''
 
-        # Crea una instancia de DBConfig con los valores descompuestos        
+        # Crea una instancia de DBConfig con los valores descompuestos
         return cls(
             type = db_type,
             username = username,
             password = password,
-            host = url_parsed.hostname or "",
+            host = unquote_plus(url_parsed.hostname or ""),
             port = int(url_parsed.port) if url_parsed.port else None,
             database = unquote_plus(url_parsed.path[1:]) if url_parsed.path else "",
             driver = unquote_plus(query_params["driver"]) if "driver" in query_params else None,
@@ -170,29 +172,36 @@ class DBConfig():
             str: Representación en cadena de la configuración de la base de datos.
         """
 
-        # Obtiene la plantilla de la URL de conexión para el SGBD especificado
-        template = Template(DBMS_DEFAULT_CONFIG[self.type]["template"])
+        # Para instancias con nombre de MSSQL (host\instancia) se usa una plantilla sin puerto,
+        # ya que el SQL Server Browser Service resuelve el puerto dinámico de la instancia.
+        is_named_instance = self.type == "mssql" and "\\" in self.host
+        db_config = DBMS_DEFAULT_CONFIG[self.type]
+        template_key = "template_named_instance" if is_named_instance and "template_named_instance" in db_config else "template"
+        template = Template(db_config[template_key])
 
         # Compone las credenciales de la URL de conexión
         if self.username:
             password = self.password if not censored else DBConfig.censor(self.password)
             credentials_template = Template(CREDENTIALS_TEMPLATE)
             credentials = credentials_template.substitute(
-                username=quote_plus(self.username) if self.username else "", 
+                username=quote_plus(self.username) if self.username else "",
                 password=quote_plus(password) if password != PASSWORD_PLACEHOLDER else PASSWORD_PLACEHOLDER
             )
         else:
             credentials = ""
 
+        # La barra invertida en nombres de instancia MSSQL debe codificarse en la URL
+        host = quote_plus(self.host, safe=".-_~") if is_named_instance else self.host
+
         # Sustituye los marcadores de posición por los valores de la sección
         url = template.substitute(
-            library=f"+{DBMS_DEFAULT_CONFIG[self.type]["library"]}" if include_lib else "",
-            credentials=credentials, 
-            host=self.host, 
-            port=self.port, 
-            database=quote_plus(self.database), 
-            driver=quote_plus(self.driver) if self.driver else "", 
-            trusted_connection=self.trusted_connection        
+            library=f"+{db_config['library']}" if include_lib else "",
+            credentials=credentials,
+            host=host,
+            port=self.port,
+            database=quote_plus(self.database),
+            driver=quote_plus(self.driver) if self.driver else "",
+            trusted_connection=self.trusted_connection
         )
 
         # Si se especifican marcadores de posición, los sustituye por sus valores
