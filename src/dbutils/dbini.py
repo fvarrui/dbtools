@@ -96,10 +96,9 @@ class DBIni():
             section_name (str): Nombre de la sección a añadir.
             config (dict): Diccionario con la configuración a añadir.
         """
-        if section_name not in self.config:
-            self.config.add_section(section_name)
-        else:
-            raise ValueError(f"La sección '{section_name}' ya existe en el archivo de configuración")
+        if section_name in self.config:
+            self.config.remove_section(section_name)  # elimina claves obsoletas antes de recrearla
+        self.config.add_section(section_name)
         for key, value in config.to_section().items():
             self.config.set(section_name, key, str(value))
 
