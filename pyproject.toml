@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dbtools"
-version = "0.4.0"
+version = "0.5.0"
 description = "Database tools for schema mapping, integrity check and migration"
 readme = "README.md"
 authors = [
