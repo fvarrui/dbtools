@@ -8,9 +8,9 @@ from sqlalchemy import text
 from dbtools.query import __module_name__, __module_description__
 from dbtools.query.natlang import generate_query
 from dbtools.schema.database import Database
-from dbtools.utils.config import Config
+from dbtools.config.settings import Config
 from dbtools.utils.customhelp import CustomHelpFormatter
-from dbtools.utils.dbini import DB_INIFILE, DBIni
+from dbtools.config.dbini import DB_INIFILE, DBIni
 
 def db_connect(args):
     database = None

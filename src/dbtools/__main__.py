@@ -3,17 +3,17 @@ import sys
 
 from dbtools import __module_name__, __module_description__, __module_version__
 
-# subcomando -> (subpaquete de dbtools, pendiente de implementar)
+# subcomando (= nombre del subpaquete de dbtools) -> pendiente de implementar
 SUBCOMMANDS = {
-    "analyzer":  ("analyzer", False),
-    "checker":   ("checker", True),
-    "code":      ("code", False),
-    "config":    ("utils", False),
-    "ddrsearch": ("ddrsearch", False),
-    "mapper":    ("mapper", False),
-    "orm":       ("orm", False),
-    "query":     ("query", False),
-    "schema":    ("schema", False),
+    "analyzer":  False,
+    "checker":   True,
+    "code":      False,
+    "config":    False,
+    "ddrsearch": False,
+    "mapper":    False,
+    "orm":       False,
+    "query":     False,
+    "schema":    False,
 }
 
 
@@ -23,14 +23,12 @@ def print_help():
     print("Subcomandos:")
     width = max(len(name) for name in SUBCOMMANDS)
     for name in sorted(SUBCOMMANDS):
-        subpackage_name, pending = SUBCOMMANDS[name]
         # Sólo se importa el __init__ del subpaquete (barato, sin efectos secundarios) para
         # leer su __module_description__: es la única fuente de la descripción, así nunca
         # puede desincronizarse de la que muestra "dbtools <subcomando> --help".
-        subpackage = importlib.import_module(f"dbtools.{subpackage_name}")
-        description = subpackage.__module_description__
-        suffix = " [próximamente]" if pending else ""
-        print(f"  {name:<{width}}  {description}{suffix}")
+        subpackage = importlib.import_module(f"dbtools.{name}")
+        suffix = " [próximamente]" if SUBCOMMANDS[name] else ""
+        print(f"  {name:<{width}}  {subpackage.__module_description__}{suffix}")
     print("\nOpciones:")
     print("  -h, --help     Muestra esta ayuda")
     print("  -v, --version  Muestra la versión")
@@ -55,10 +53,9 @@ def main():
         print_help()
         sys.exit(1)
 
-    subpackage_name, pending = SUBCOMMANDS[subcommand]
-    subpackage = importlib.import_module(f"dbtools.{subpackage_name}")
+    subpackage = importlib.import_module(f"dbtools.{subcommand}")
 
-    if pending:
+    if SUBCOMMANDS[subcommand]:
         print(f"⚠️ '{subcommand}' todavía no está implementado. {subpackage.__module_description__}.")
         return
 
@@ -66,7 +63,7 @@ def main():
     subpackage.__module_name__ = f"dbtools {subcommand}"
 
     sys.argv = [subpackage.__module_name__] + argv[1:]
-    submodule = importlib.import_module(f"dbtools.{subpackage_name}.__main__")
+    submodule = importlib.import_module(f"dbtools.{subcommand}.__main__")
     submodule.main()
 
 

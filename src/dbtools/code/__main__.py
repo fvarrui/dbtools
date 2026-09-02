@@ -9,7 +9,7 @@ from dbtools.code import __module_name__, __module_description__
 from dbtools.code.code_repository import CodeRepository
 from dbtools.schema.database import Database
 from dbtools.utils.customhelp import CustomHelpFormatter
-from dbtools.utils.dbini import DB_INIFILE, DBIni
+from dbtools.config.dbini import DB_INIFILE, DBIni
 
 
 def _connect(args) -> Database | None:

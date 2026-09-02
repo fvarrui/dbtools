@@ -8,9 +8,9 @@ from dbtools.analyzer.analyze import analyze_table
 
 from dbtools.schema.database import Database
 
-from dbtools.utils.dbini import DB_INIFILE, DBIni
+from dbtools.config.dbini import DB_INIFILE, DBIni
 from dbtools.utils.customhelp import CustomHelpFormatter
-from dbtools.utils.config import Config
+from dbtools.config.settings import Config
    
 def main():
 

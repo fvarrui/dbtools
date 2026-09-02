@@ -8,7 +8,7 @@ from tabulate import tabulate
 from dbtools.schema import __module_name__, __module_description__
 from dbtools.schema.database import Database
 from dbtools.utils.customhelp import CustomHelpFormatter
-from dbtools.utils.dbini import DB_INIFILE, DBIni
+from dbtools.config.dbini import DB_INIFILE, DBIni
 
 def main():
 

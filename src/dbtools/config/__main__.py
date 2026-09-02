@@ -4,12 +4,12 @@ from getpass import getpass
 
 from tabulate import tabulate
 
-from dbtools.utils import __module_name__, __module_description__
-from dbtools.utils.config import Config, CONFIG_INIFILE
-from dbtools.utils.dbconfig import DBConfig, DBMS_DEFAULT_CONFIG
-from dbtools.utils.dbini import DBIni, DB_INIFILE, DBTOOLS_DIR
+from dbtools.config import __module_name__, __module_description__
+from dbtools.config.settings import Config, CONFIG_INIFILE
+from dbtools.config.dbconfig import DBConfig, DBMS_DEFAULT_CONFIG
+from dbtools.config.dbini import DBIni, DB_INIFILE, DBTOOLS_DIR
 from dbtools.utils.customhelp import CustomHelpFormatter
-from dbtools.utils.connection import test_connection
+from dbtools.config.connection import test_connection
 
 DEFAULT_CONFIG_INIFILE = os.path.join(DBTOOLS_DIR, CONFIG_INIFILE)
 DEFAULT_DB_INIFILE = os.path.join(DBTOOLS_DIR, DB_INIFILE)

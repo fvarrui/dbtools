@@ -5,7 +5,7 @@ import argparse
 from dbtools.orm import __module_name__, __module_description__, logger, configure_logging
 from dbtools.orm.dborm import generate_orm_code
 
-from dbtools.utils.dbini import DBIni, DB_INIFILE
+from dbtools.config.dbini import DBIni, DB_INIFILE
 from dbtools.utils.customhelp import CustomHelpFormatter
 
 def main():

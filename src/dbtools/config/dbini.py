@@ -1,6 +1,6 @@
 import os
 from configparser import ConfigParser
-from dbtools.utils.dbconfig import DBConfig
+from dbtools.config.dbconfig import DBConfig
 
 DBTOOLS_DIR = os.path.join(os.path.expanduser("~"), ".dbtools")
 DB_INIFILE = "dbtools.ini"

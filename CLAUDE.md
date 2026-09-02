@@ -38,7 +38,7 @@ There is no test suite currently. Development dependencies (pytest, black, isort
 
 DBTools is a Python 3.12+ suite of CLI database utilities, all exposed through a **single entry point**: the `dbtools` command. Every module is a subpackage of `dbtools` (`src/dbtools/schema/`, `src/dbtools/analyzer/`, ...) — only `dbtools` itself is registered in `pyproject.toml`'s `[project.scripts]`; the old standalone commands (`dbschema`, `dbanalyzer`, etc.) no longer exist, and neither do the old flat top-level packages.
 
-`src/dbtools/__main__.py` is a thin dispatcher: `SUBCOMMANDS` maps a subcommand name (`schema`, `analyzer`, ...) to its subpackage name (usually the same string; `config` → `utils`, the one case where the CLI name and the package name differ). For a real subcommand it lazily imports only `dbtools.<subpackage>.__main__` and delegates `sys.argv` to that module's own `main()` — each subpackage's argparse setup is untouched, and unrelated subpackages' import-time side effects never fire (e.g. `analyzer`/`orm` used to create a log file just by being imported; that init now lives in `configure_logging()`, called explicitly from their own `main()`, specifically so `dbtools --help` can safely import every subpackage's `__init__.py` to read its description without side effects — see below). It also monkeypatches the target subpackage's `__module_name__` to `"dbtools <subcommand>"` before importing `__main__`, so that subcommand's own `--help` shows the real invocation as its `prog`.
+`src/dbtools/__main__.py` is a thin dispatcher: `SUBCOMMANDS` maps a subcommand name to whether it's pending (not implemented) — the subcommand name always equals its subpackage name (`dbtools schema` ↔ `dbtools.schema`). For a real subcommand it lazily imports only `dbtools.<subcommand>.__main__` and delegates `sys.argv` to that module's own `main()` — each subpackage's argparse setup is untouched, and unrelated subpackages' import-time side effects never fire (e.g. `analyzer`/`orm` used to create a log file just by being imported; that init now lives in `configure_logging()`, called explicitly from their own `main()`, specifically so `dbtools --help` can safely import every subpackage's `__init__.py` to read its description without side effects — see below). It also monkeypatches the target subpackage's `__module_name__` to `"dbtools <subcommand>"` before importing `__main__`, so that subcommand's own `--help` shows the real invocation as its `prog`.
 
 `dbtools --help` builds its subcommand listing by importing each subpackage and reading `__module_description__` live — there is no separate copy of the descriptions to keep in sync. When adding a new module: give it `__module_name__`/`__module_description__` in its own `__init__.py` (avoid any I/O or heavy work at import time — only cheap, side-effect-free code belongs there, since it runs on every `dbtools --help`), and register it in `SUBCOMMANDS` rather than adding a new `[project.scripts]` entry.
 
@@ -47,7 +47,7 @@ DBTools is a Python 3.12+ suite of CLI database utilities, all exposed through a
 | Subcommand | Subpackage | Purpose | Status |
 |--------|--------|---------|--------|
 | `schema` | `dbtools.schema` | Extract database schemas to Pydantic models / JSON | Stable |
-| `config` | `dbtools.utils` | Shared config, logging, connection pooling, CLI helpers | Stable |
+| `config` | `dbtools.config` | Manage `config.ini`/`dbtools.ini`, connection testing | Stable |
 | `analyzer` | `dbtools.analyzer` | AI-powered semantic analysis of tables/columns via OpenAI | Stable |
 | `mapper` | `dbtools.mapper` | Similarity-based schema matching between two databases | Stable |
 | `orm` | `dbtools.orm` | SQLAlchemy ORM class generation via sqlacodegen | Stable |
@@ -58,20 +58,23 @@ DBTools is a Python 3.12+ suite of CLI database utilities, all exposed through a
 
 ### Dependency Flow
 
-Most tools depend on the two foundation subpackages:
+Most tools depend on the foundation subpackages:
 
 ```
 dbtools.schema  ←  database/schema/table/column Pydantic models + SQLAlchemy extraction
-dbtools.utils   ←  config.ini / dbtools.ini loading, DB connection pools, CLI helpers
+dbtools.config  ←  config.ini / dbtools.ini loading, DB connection pools, connection testing
+dbtools.utils   ←  domain-agnostic helpers with no CLI of their own: CustomHelpFormatter, JSON serialization
 
-dbtools.analyzer   →  schema + utils + OpenAI API (GPT-4.1-mini, tool_use pattern)
+dbtools.analyzer   →  schema + config + utils + OpenAI API (GPT-4.1-mini, tool_use pattern)
 dbtools.mapper     →  schema + utils + SequenceMatcher similarity scoring
-dbtools.orm        →  schema + utils + sqlacodegen
-dbtools.code       →  schema + utils (routine listing/extraction, no schema dependency for the routines themselves)
-dbtools.query      →  schema + utils + OpenAI API (natural language → SQL via natlang.py)
-dbtools.ddrsearch  →  BeautifulSoup4 → produces dbtools.schema-compatible models
+dbtools.orm        →  schema + config + utils + sqlacodegen
+dbtools.code       →  schema + config + utils (routine listing/extraction, no schema dependency for the routines themselves)
+dbtools.query      →  schema + config + utils + OpenAI API (natural language → SQL via natlang.py)
+dbtools.ddrsearch  →  BeautifulSoup4 + utils → produces dbtools.schema-compatible models
 dbtools.checker    →  schema + networkx (graph-based FK/cycle analysis)
 ```
+
+`dbtools.utils` is pure shared library code (no `__main__.py`, no `__module_name__`/`__module_description__` — it isn't a `SUBCOMMANDS` entry). `dbtools.config` is both a subcommand (`dbtools config`) and a library other subpackages import for `dbtools.ini`/`config.ini` access.
 
 ### Pydantic Schema Models (`src/dbtools/schema/`)
 
@@ -79,12 +82,12 @@ dbtools.checker    →  schema + networkx (graph-based FK/cycle analysis)
 
 All models are `pydantic.BaseModel` and support JSON round-trip serialization. Factory class methods (`from_metadata()`, `from_json()`) decouple extraction from storage. Pass schema data between tools as JSON files.
 
-### Configuration (`src/dbtools/utils/`)
+### Configuration (`src/dbtools/config/`)
 
 Two INI files are read from `$HOME/.dbtools/`:
 
-- `config.ini` — global settings (e.g., OpenAI API key)
-- `dbtools.ini` — named database connections (one INI section per DB)
+- `config.ini` (`settings.py`'s `Config` class) — global settings (e.g., OpenAI API key)
+- `dbtools.ini` (`dbini.py`'s `DBIni` class, `dbconfig.py`'s `DBConfig` value object) — named database connections (one INI section per DB)
 
 CLI commands accept `--db-name <name>` (looks up `dbtools.ini`) or `--db-url <url>` (direct SQLAlchemy URL) — both require a value; the bare flag with nothing after it is a parse error, not "unset". Supported databases: PostgreSQL (`psycopg2`), MySQL (`pymysql`), SQL Server (`pyodbc`, including named instances `host\instance`).
 
