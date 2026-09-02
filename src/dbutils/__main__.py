@@ -89,10 +89,12 @@ def main():
     commands.add_argument('--create-config', action='store_true', help=f'Crea el fichero de configuración (por defecto: {DEFAULT_CONFIG_INIFILE})')
     commands.add_argument('--create-db-config', metavar='DIR', nargs='?', const='', help=f'Crea el fichero de configuración de las bases de datos (por defecto: {DEFAULT_DB_INIFILE})')
     commands.add_argument('--test-connection', metavar='DIR', nargs='?', const='', help=f'Prueba la conexión a la base de datos')
+    commands.add_argument('--get-url', metavar='DIR', nargs='?', const='', help=f'Devuelve la URL de conexión para un --db-name dado')
     
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
     options.add_argument('--db-name', metavar='NAME', nargs='?', help='Nombre de la configuración de la base de datos')
+    options.add_argument('--db-url', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
 
     # Parsea los argumentos
     args = parser.parse_args()
@@ -136,21 +138,41 @@ def main():
     
     if args.test_connection is not None:
         try:
+            if args.db_url:
+                connection_url = args.db_url
+                label = args.db_url
+            elif args.db_name:
+                if args.test_connection == '':
+                    db_config_path = DEFAULT_DB_INIFILE
+                else:
+                    db_config_path = os.path.join(args.test_connection, DB_INIFILE)
+                config = DBIni(db_config_path)
+                db_config = config.get_config(args.db_name)
+                connection_url = db_config.to_url()
+                label = args.db_name
+            else:
+                raise ValueError("Se debe indicar --db-name o --db-url")
+            print(f"Probando la conexión: {label}...")
+            ok, error = test_connection(connection_url)
+            if ok:
+                print(f"- Conexión exitosa.")
+            else:
+                print(f"- Error al conectar: {error}")
+        except ValueError as e:
+            print(f"Error: {e}")
+        return
+
+    if args.get_url is not None:
+        try:
             if not args.db_name:
                 raise ValueError("No se ha indicado el nombre de la configuración de la base de datos")
-            if args.test_connection == '':
+            if args.get_url == '':
                 db_config_path = DEFAULT_DB_INIFILE
             else:
-                db_config_path = os.path.join(args.test_connection, DB_INIFILE)
-            print(f"Probando la conexión a la base de datos {args.db_name} en {db_config_path}...")
+                db_config_path = os.path.join(args.get_url, DB_INIFILE)
             config = DBIni(db_config_path)
-            if args.db_name:
-                db_config = config.get_config(args.db_name)
-                ok, error = test_connection(db_config.to_url())
-                if ok:
-                    print(f"- Conexión a la base de datos {args.db_name} exitosa.")
-                else:
-                    print(f"- Error al conectar a la base de datos {args.db_name}: {error}")
+            db_config = config.get_config(args.db_name)
+            print(db_config.to_url())
         except ValueError as e:
             print(f"Error: {e}")
         return
