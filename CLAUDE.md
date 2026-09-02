@@ -20,36 +20,37 @@ pip install -e .
 # Install from GitHub
 pip install git+https://github.com/fvarrui/dbtools.git
 
-# Run any CLI tool
-dbschema --help
-dbanalyzer --help
-dbmapper --help
-dborm --help
-dbcode --help
-dbquery --help
-dbutils --help
-ddrsearch --help
+# Single entry point: every tool is a `dbtools` subcommand
+dbtools --help
+dbtools schema --help
+dbtools analyzer --help
+dbtools mapper --help
+dbtools orm --help
+dbtools code --help
+dbtools query --help
+dbtools config --help
+dbtools ddrsearch --help
 ```
 
 There is no test suite currently. Development dependencies (pytest, black, isort, bumpver, pip-tools) are listed in `pyproject.toml` but tests have not been written.
 
 ## Architecture
 
-DBTools is a Python 3.12+ suite of CLI database utilities. All modules live under `src/` and are registered as entry points in `pyproject.toml`.
+DBTools is a Python 3.12+ suite of CLI database utilities, all exposed through a **single entry point**: the `dbtools` command. `src/dbtools/__main__.py` is a thin dispatcher — it maps a subcommand name (`schema`, `analyzer`, ...) to a module package and delegates `sys.argv` to that module's own `main()`, imported lazily (only the invoked subcommand's package is imported, so unrelated modules' import-time side effects — e.g. log file creation in `dbanalyzer`/`dborm` — never fire). Each module still lives under `src/` as its own package with its own `__main__.py`/argparse parser; only `dbtools` is registered in `pyproject.toml`'s `[project.scripts]` — the old standalone commands (`dbschema`, `dbanalyzer`, etc.) no longer exist.
 
 ### Module Overview
 
-| Module | Purpose | Status |
-|--------|---------|--------|
-| `dbschema` | Extract database schemas to Pydantic models / JSON | Stable |
-| `dbutils` | Shared config, logging, connection pooling, CLI helpers | Stable |
-| `dbanalyzer` | AI-powered semantic analysis of tables/columns via OpenAI | Stable |
-| `dbmapper` | Similarity-based schema matching between two databases | Stable |
-| `dborm` | SQLAlchemy ORM class generation via sqlacodegen | Stable |
-| `dbcode` | Lists, searches and extracts stored procedures/functions (SQL or JSON) | Stable |
-| `dbquery` | Natural language → SQL, using an LLM against the extracted schema | Stable |
-| `ddrsearch` | Parse Oracle Data Dictionary Report HTML files | Stable |
-| `dbchecker` | Data integrity / missing-relationship checks | Stub — hardcoded to `schemas/pec.json`, not yet a real CLI |
+| Subcommand | Module | Purpose | Status |
+|--------|--------|---------|--------|
+| `schema` | `dbschema` | Extract database schemas to Pydantic models / JSON | Stable |
+| `config` | `dbutils` | Shared config, logging, connection pooling, CLI helpers | Stable |
+| `analyzer` | `dbanalyzer` | AI-powered semantic analysis of tables/columns via OpenAI | Stable |
+| `mapper` | `dbmapper` | Similarity-based schema matching between two databases | Stable |
+| `orm` | `dborm` | SQLAlchemy ORM class generation via sqlacodegen | Stable |
+| `code` | `dbcode` | Lists, searches and extracts stored procedures/functions (SQL or JSON) | Stable |
+| `query` | `dbquery` | Natural language → SQL, using an LLM against the extracted schema | Stable |
+| `ddrsearch` | `ddrsearch` | Parse Oracle Data Dictionary Report HTML files | Stable |
+| `checker` | `dbchecker` | Data integrity / missing-relationship checks | Stub — `dbtools checker` prints a "not implemented" notice; underlying script is hardcoded to `schemas/pec.json`, not yet a real CLI |
 
 ### Dependency Flow
 
@@ -89,4 +90,4 @@ Uses the OpenAI tool_use (function calling) pattern. `dbanalyzer` defines a stru
 
 ### CLI Pattern
 
-Every module uses a custom `CustomHelpFormatter` (`dbutils/customhelp.py`) and mutually exclusive argument groups to enforce exactly one action per invocation. This pattern is consistent across all `__main__.py` files.
+Every module uses a custom `CustomHelpFormatter` (`dbutils/customhelp.py`) and mutually exclusive argument groups to enforce exactly one action per invocation, with `-h/--help` defined manually inside that group (`add_help=False`) rather than argparse's default. Each parser is built with `prog=__module_name__`, read from the module's own `__init__.py`; `dbtools/__main__.py` monkeypatches that package attribute to `"dbtools <subcommand>"` before importing the submodule so `--help`/usage output shows the real invocation. This pattern is consistent across all `__main__.py` files — when adding a new module, follow it and register the subcommand in `dbtools/__main__.py`'s `SUBCOMMANDS` dict rather than adding a new `[project.scripts]` entry.

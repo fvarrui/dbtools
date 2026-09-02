@@ -1,15 +1,16 @@
 # DBTools
 
-Conjunto de comandos implementados en Python para facilitar tareas relacionadas con bases de datos relacionales:
+Conjunto de comandos implementados en Python para facilitar tareas relacionadas con bases de datos relacionales, accesibles todos a través de un único comando `dbtools`:
 
-- [`dbanalyzer`](src/dbanalyzer/README.md): Analiza la estructura de una base de datos usando IA, obteniendo información semántica de las tablas y columnas.
-- [`dbchecker`](src/dbchecker/README.md): Verifica la integridad de una base de datos. [Próximamente]
-- [`dbcode`](src/dbcode/README.md): Lista, busca y extrae procedimientos y funciones almacenadas en formato SQL o JSON.
-- [`dbmapper`](src/dbmapper/README.md): Crea mapas de entre esquemas de bases de datos para facilitar la migración de datos.
-- [`dbsequel`](src/dbsequel/README.md): Genera consultas SQL para un esquema dado en lenguaje natural utilizando IA. [Próximamente]
-- [`dbschema`](src/dbschema/README.md): Genera un esquema de la base de datos en formato JSON.
-- [`dbutils`](src/dbutils/README.md): Utilidades de soporte de `dbtools` para crear y gestionar ficheros de configuración con las conexiones a las bases de datos.
-- [`ddrsearch`](src/ddrsearch/README.md): Extrae información de un DDR (Data Dictionary Report) de una base de datos Oracle.
+- [`dbtools analyzer`](src/dbanalyzer/README.md): Analiza la estructura de una base de datos usando IA, obteniendo información semántica de las tablas y columnas.
+- [`dbtools checker`](src/dbchecker/README.md): Verifica la integridad de una base de datos. [Próximamente]
+- [`dbtools code`](src/dbcode/README.md): Lista, busca y extrae procedimientos y funciones almacenadas en formato SQL o JSON.
+- [`dbtools config`](src/dbutils/README.md): Crea y gestiona los ficheros de configuración con las conexiones a las bases de datos.
+- [`dbtools ddrsearch`](src/ddrsearch/README.md): Extrae información de un DDR (Data Dictionary Report) de una base de datos Oracle.
+- [`dbtools mapper`](src/dbmapper/README.md): Crea mapas entre esquemas de bases de datos para facilitar la migración de datos.
+- [`dbtools orm`](src/dborm/README.md): Genera clases ORM (SQLAlchemy) a partir del esquema de la base de datos.
+- [`dbtools query`](src/dbquery/README.md): Genera consultas SQL para un esquema dado en lenguaje natural utilizando IA.
+- [`dbtools schema`](src/dbschema/README.md): Genera un esquema de la base de datos en formato JSON.
 
 > 😱 Útil para no amargarte la vida.
 
@@ -31,15 +32,16 @@ pip install --upgrade --force-reinstall --no-cache-dir git+https://github.com/fv
 
 ## ¿Cómo se usa?
 
-Cada comando tiene su propia ayuda, que se puede obtener ejecutando el comando con la opción `--help`.
+Todos los comandos cuelgan de `dbtools`, en forma de subcomandos. Ejecuta `dbtools --help` para ver el listado completo, y `dbtools <subcomando> --help` para la ayuda de cada uno.
 
 ```bash
-{db.command} --help
+dbtools --help
+dbtools {subcomando} --help
 ```
 
-> ℹ️ Remplaza `{db.command}` por el nombre del comando que quieras usar, por ejemplo `dbanalyzer`, `dbchecker`, etc.
+> ℹ️ Remplaza `{subcomando}` por el subcomando que quieras usar, por ejemplo `schema`, `analyzer`, etc.
 
-Para obtener más información sobre cada comando, consultar la documentación correspondiente.
+Para obtener más información sobre cada subcomando, consultar la documentación correspondiente.
 
 Las conexiones a la base de datos se configuran en el archivo de configuración `$HOME/.dbtools/dbtools.ini` y usando la opción `--db-name`, o bien proporcionando la cadena de conexión con la opción `--db-url` en la línea de comandos.
 
@@ -63,13 +65,13 @@ trusted_connection=<yes|no>
 > - Las opciones `driver` y `trusted_connection` son específicas de SQL Server.
 
 ```bash
-{db.command} --db-name database <opciones>
+dbtools {subcomando} --db-name database <opciones>
 ```
 
 ó 
 
 ```bash
-{db.command} --db-url postgresql://user:password@host:port/database <opciones>
+dbtools {subcomando} --db-url postgresql://user:password@host:port/database <opciones>
 ```
 
 Siendo `database` el nombre de la sección en el archivo de configuración.
