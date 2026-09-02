@@ -5,7 +5,7 @@ import argparse
 from tabulate import tabulate
 
 from sqlalchemy import text
-from dbquery import __module_name__, __module_description__, __module_version__
+from dbquery import __module_name__, __module_description__
 from dbquery.natlang import generate_query
 from dbschema.database import Database
 from dbutils.config import Config
@@ -48,10 +48,10 @@ def main():
 
     # define el parser
     parser = argparse.ArgumentParser(
-        prog=__module_name__, 
-        description=f"{__module_description__} (v{__module_version__})", 
-        epilog='¡No me pidas un deseo, pídeme datos! ... pero pídelos por favor', 
-        add_help=False, 
+        prog=__module_name__,
+        description=__module_description__,
+        epilog='¡No me pidas un deseo, pídeme datos! ... pero pídelos por favor',
+        add_help=False,
         formatter_class=CustomHelpFormatter
     )
 
@@ -59,7 +59,6 @@ def main():
     commands = parser.add_argument_group('Comandos')
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda')
-    commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__module_name__} v{__module_version__}')
     commands.add_argument('--sql', metavar='QUERY', nargs='?', const='', help='Devuelve el resultado de una consulta SQL')
     commands.add_argument('--sql-file', metavar='FILE', nargs='?', const='', help='Devuelve el resultado de una consulta SQL proporcionada en un fichero')
     commands.add_argument('--nat-lang', '-nl', metavar='QUERY', nargs='?', const='', help='Devuelve el resultado de una consulta en lenguaje natural')

@@ -4,7 +4,7 @@ import argparse
 
 from tabulate import tabulate
 
-from dbmapper import __module_name__, __module_description__, __module_version__
+from dbmapper import __module_name__, __module_description__
 from dbmapper.mapper import Mapper
 
 from dbschema.schema import Schema
@@ -14,13 +14,12 @@ from dbutils.customhelp import CustomHelpFormatter
 def main():
 
     # define el parser
-    parser = argparse.ArgumentParser(prog=__module_name__, description=f"{__module_description__} (v{__module_version__})", epilog='A mapear tus esquemitas', add_help=False, formatter_class=CustomHelpFormatter)
+    parser = argparse.ArgumentParser(prog=__module_name__, description=__module_description__, epilog='A mapear tus esquemitas', add_help=False, formatter_class=CustomHelpFormatter)
 
     # define los comandos (mutuamente excluyentes)
     commands = parser.add_argument_group('Comandos')
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda')
-    commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__module_name__} v{__module_version__}')
     commands.add_argument('--map', action='store_true', help='Genera el mapa de emparejamiento')
 
     # define las opciones adicionales a los comandos

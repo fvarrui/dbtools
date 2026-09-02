@@ -2,7 +2,7 @@ import os
 import sys
 import argparse
 
-from dborm import __module_name__, __module_description__, __module_version__, logger
+from dborm import __module_name__, __module_description__, logger
 from dborm.dborm import generate_orm_code
 
 from dbutils.dbini import DBIni, DB_INIFILE
@@ -12,10 +12,10 @@ def main():
 
     # define el parser
     parser = argparse.ArgumentParser(
-        prog=__module_name__, 
-        description=f"{__module_description__} (v{__module_version__})", 
-        epilog='Y dborm dijo: ¡Háganse tus clases!', 
-        add_help=False, 
+        prog=__module_name__,
+        description=__module_description__,
+        epilog='Y dborm dijo: ¡Háganse tus clases!',
+        add_help=False,
         formatter_class=CustomHelpFormatter
     )
 
@@ -23,7 +23,6 @@ def main():
     commands = parser.add_argument_group('Comandos')
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda')
-    commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__module_name__} v{__module_version__}')
     commands.add_argument('--gen-classes', metavar='PREFIX', nargs='?', const='', help='Genera las clases ORM para la base de datos. Si se especifica un prefijo, sólo se incluirán las tablas que empiecen por ese prefijo.')
     
     # define las opciones adicionales a los comandos

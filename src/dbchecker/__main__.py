@@ -1,6 +1,6 @@
 from networkx import DiGraph, simple_cycles
 
-from dbchecker import __module_name__, __module_description__, __module_name__, __module_version__
+from dbchecker import __module_name__, __module_description__
 from dbschema.schema import Schema
 
 def find_missing_relationships(schema):

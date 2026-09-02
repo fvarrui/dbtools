@@ -2,7 +2,6 @@ import os
 import re
 import sys
 
-from dbutils import __module_name__, __module_description__, __module_version__
 from dbschema.table import Table
 from dbschema.column import Column
 from dbschema.foreign_key import ForeignKey

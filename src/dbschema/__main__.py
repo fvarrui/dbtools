@@ -5,7 +5,7 @@ import argparse
 
 from tabulate import tabulate
 
-from dbschema import __module_name__, __module_description__, __module_version__
+from dbschema import __module_name__, __module_description__
 from dbschema.database import Database
 from dbutils.customhelp import CustomHelpFormatter
 from dbutils.dbini import DB_INIFILE, DBIni
@@ -14,10 +14,10 @@ def main():
 
     # define el parser
     parser = argparse.ArgumentParser(
-        prog=__module_name__, 
-        description=f"{__module_description__} (v{__module_version__})", 
-        epilog='¡Un gran esquema conlleva una gran responsabilidad!', 
-        add_help=False, 
+        prog=__module_name__,
+        description=__module_description__,
+        epilog='¡Un gran esquema conlleva una gran responsabilidad!',
+        add_help=False,
         formatter_class=CustomHelpFormatter
     )
 
@@ -25,7 +25,6 @@ def main():
     commands = parser.add_argument_group('Comandos')
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda')
-    commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__module_name__} v{__module_version__}')
     commands.add_argument('--schema', metavar='FILTER', nargs='?', const='', help='Genera el esquema de la base de datos. Si se especifica un prefijo, sólo se incluirán las tablas que empiecen por ese prefijo. La opción --json genera el resultado en un formato JSON.')
     commands.add_argument('--list-tables', metavar='FILTER', nargs='?', const='', help='Listar todas las tablas')
     commands.add_argument('--list-views', metavar='FILTER', nargs='?', const='', help='Listar todas las vistas')

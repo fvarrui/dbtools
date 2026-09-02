@@ -11,7 +11,7 @@ from tabulate import tabulate
 from textwrap import shorten, fill
 
 from dbutils.customhelp import CustomHelpFormatter
-from ddrsearch import __module_name__, __module_description__, __module_version__
+from ddrsearch import __module_name__, __module_description__
 from ddrsearch.ddr import schema_from_ddr, table_from_ddr, get_tables, table_uses_tables, tables_used_by_table, get_table_names, search_in_table
 
 def coloring(text: str, highlight: str, color: str = Fore.GREEN) -> str:
@@ -134,10 +134,10 @@ def main():
 
     # Define el parser
     parser = argparse.ArgumentParser(
-        prog=__module_name__, 
-        description=f"{__module_description__} (v{__module_version__})", 
-        epilog='¡Todo por Doramas!', 
-        add_help=False, 
+        prog=__module_name__,
+        description=__module_description__,
+        epilog='¡Todo por Doramas!',
+        add_help=False,
         formatter_class=CustomHelpFormatter
     )
 
@@ -145,7 +145,6 @@ def main():
     commands = parser.add_argument_group('Comandos')
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda')
-    commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__module_name__} v{__module_version__}')
     commands.add_argument('--schema', metavar='TABLE_FILTER', nargs='?', const='.*', help=f'Genera el esquema de la base de datos de las tablas del Data Dictionary Report. El filtro es una expresión regular que se aplica a los nombres de las tablas. Por defecto, se incluyen todas las tablas.')
     commands.add_argument('--table', metavar='TABLE_NAME', help=f'Muestra información de la tabla indicada del Data Dictionary Report. El nombre de la tabla debe coincidir con el nombre del archivo HTML sin la extensión.')
     commands.add_argument('--list-tables', metavar='TABLE_FILTER', nargs='?', const='^.*$', help=f'Lista los nombres de las tablas del Data Dictionary Report. El filtro es una expresión regular que se aplica a los nombres de las tablas. Si no se especifica, se listan todas las tablas.')

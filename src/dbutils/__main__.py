@@ -2,7 +2,7 @@ import os
 import argparse
 from getpass import getpass
 
-from dbutils import __module_name__, __module_description__, __module_version__
+from dbutils import __module_name__, __module_description__
 from dbutils.config import Config, CONFIG_INIFILE
 from dbutils.dbconfig import DBConfig, DBMS_DEFAULT_CONFIG
 from dbutils.dbini import DBIni, DB_INIFILE, DBTOOLS_DIR
@@ -74,10 +74,10 @@ def main():
 
     # define el parser
     parser = argparse.ArgumentParser(
-        prog=__module_name__, 
-        description=f"{__module_description__} (v{__module_version__})", 
-        epilog='¡Déjame ayudarte!', 
-        add_help=False, 
+        prog=__module_name__,
+        description=__module_description__,
+        epilog='¡Déjame ayudarte!',
+        add_help=False,
         formatter_class=CustomHelpFormatter
     )
 
@@ -85,7 +85,6 @@ def main():
     commands = parser.add_argument_group('Comandos')
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda')
-    commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__module_name__} v{__module_version__}')
     commands.add_argument('--create-config', action='store_true', help=f'Crea el fichero de configuración (por defecto: {DEFAULT_CONFIG_INIFILE})')
     commands.add_argument('--create-db-config', metavar='DIR', nargs='?', const='', help=f'Crea el fichero de configuración de las bases de datos (por defecto: {DEFAULT_DB_INIFILE})')
     commands.add_argument('--test-connection', metavar='DIR', nargs='?', const='', help=f'Prueba la conexión a la base de datos')

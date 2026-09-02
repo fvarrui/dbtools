@@ -3,7 +3,7 @@ import sys
 import time
 import argparse
 
-from dbanalyzer import __module_name__, __module_description__, __module_version__, logger
+from dbanalyzer import __module_name__, __module_description__, logger
 from dbanalyzer.analyze import analyze_table
 
 from dbschema.database import Database
@@ -16,10 +16,10 @@ def main():
 
     # define el parser
     parser = argparse.ArgumentParser(
-        prog=__module_name__, 
-        description=f"{__module_description__} (v{__module_version__})", 
+        prog=__module_name__,
+        description=__module_description__,
         epilog='¡IA-stoy aquí para hacer lo que tú no quieres hacer!',
-        add_help=False, 
+        add_help=False,
         formatter_class=CustomHelpFormatter
     )
 
@@ -27,7 +27,6 @@ def main():
     commands = parser.add_argument_group('Comandos')
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda')
-    commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__module_name__} v{__module_version__}')
     commands.add_argument('--analyze-table', metavar='TABLE_NAME', help='Realiza el análisis semántico de la tabla especificada.')
     commands.add_argument('--analyze-schema', metavar='FILTER', nargs='?', const='', help='Analiza todas las tablas con el prefijo indicado, o todas las tablas de la base de datos si no se especifica un prefijo. La opción --json genera el resultado en un formato JSON.')
     

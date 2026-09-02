@@ -5,7 +5,7 @@ import argparse
 
 from tabulate import tabulate
 
-from dbcode import __module_name__, __module_description__, __module_version__
+from dbcode import __module_name__, __module_description__
 from dbcode.code_repository import CodeRepository
 from dbschema.database import Database
 from dbutils.customhelp import CustomHelpFormatter
@@ -93,7 +93,7 @@ def main():
     # define el parser
     parser = argparse.ArgumentParser(
         prog=__module_name__,
-        description=f"{__module_description__} (v{__module_version__})",
+        description=__module_description__,
         epilog='El código almacenado también merece amor.',
         add_help=False,
         formatter_class=CustomHelpFormatter,
@@ -103,7 +103,6 @@ def main():
     commands = parser.add_argument_group('Comandos')
     commands = commands.add_mutually_exclusive_group(required=True)
     commands.add_argument('-h', '--help', action='store_true', help='Muestra esta ayuda')
-    commands.add_argument('-v', '--version', action='version', help='Mostrar versión', version=f'{__module_name__} v{__module_version__}')
     commands.add_argument('--list-procedures', metavar='FILTER', nargs='?', const='', help='Lista los procedimientos almacenados. Filtra por substring del nombre si se indica.')
     commands.add_argument('--list-functions', metavar='FILTER', nargs='?', const='', help='Lista las funciones almacenadas. Filtra por substring del nombre si se indica.')
     commands.add_argument('--list', metavar='FILTER', nargs='?', const='', help='Lista todos los procedimientos y funciones. Filtra por substring del nombre si se indica.')

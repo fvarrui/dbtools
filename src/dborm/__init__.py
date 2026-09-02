@@ -4,7 +4,6 @@ import logging
 
 __module_name__ = "dborm"
 __module_description__ = "Generador de clases ORM a partir del esquema de la base de datos"
-__module_version__ = "0.1.0"
 
 # Configura el logger
 timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
