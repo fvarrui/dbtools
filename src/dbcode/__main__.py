@@ -111,8 +111,8 @@ def main():
 
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
-    options.add_argument('--db-url', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
-    options.add_argument('--db-name', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DB_INIFILE}")
+    options.add_argument('--db-url', metavar='URL', help='URL de conexión a la base de datos')
+    options.add_argument('--db-name', metavar='DB', help=f"Nombre de la base de datos en el fichero {DB_INIFILE}")
     options.add_argument('--json', metavar='FILE', nargs='?', const='', help='Salida en formato JSON. Si no se especifica un fichero, se utiliza la salida estándar.')
     options.add_argument('--output', metavar='DIR', nargs='?', const='.', help='Directorio de salida. Combinado con --extract o --search, genera un fichero .sql por rutina.')
 

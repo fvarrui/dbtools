@@ -65,8 +65,8 @@ def main():
     
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
-    options.add_argument('--db-url', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
-    options.add_argument('--db-name', metavar='DB', nargs='?', help=f"Nombre de la base de datos en el fichero {DB_INIFILE}")
+    options.add_argument('--db-url', metavar='URL', help='URL de conexión a la base de datos')
+    options.add_argument('--db-name', metavar='DB', help=f"Nombre de la base de datos en el fichero {DB_INIFILE}")
     options.add_argument('--json', metavar='FILE', nargs='?', const='', help='Entrada o salida en formato JSON. Si no se especifica un fichero, se utiliza la entrada y salida estándar.')
     options.add_argument('--output', metavar='DIR', nargs='?', const='.', help='Directorio de salida para los ficheros generados. Por defecto, el directorio actual.')
     options.add_argument('--schema', metavar='DIR', nargs='?', const='.', help='Directorio con el esquema de la base de datos en formato JSON. Necesario para consultas en lenguaje natural.')

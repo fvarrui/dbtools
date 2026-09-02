@@ -22,6 +22,14 @@ class DBIni():
         if os.path.exists(inifile):
             self.config.read(inifile)
  
+    def list_sections(self) -> list[str]:
+        """
+        Lista los nombres de las secciones del archivo .ini.
+        Returns:
+            list[str]: Lista de nombres de las secciones.
+        """
+        return self.config.sections()
+
     def exists(self, section_name: str) -> bool:
         """
         Comprueba si una sección existe en el archivo .ini.

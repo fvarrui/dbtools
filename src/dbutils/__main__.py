@@ -2,6 +2,8 @@ import os
 import argparse
 from getpass import getpass
 
+from tabulate import tabulate
+
 from dbutils import __module_name__, __module_description__
 from dbutils.config import Config, CONFIG_INIFILE
 from dbutils.dbconfig import DBConfig, DBMS_DEFAULT_CONFIG
@@ -89,11 +91,13 @@ def main():
     commands.add_argument('--create-db-config', metavar='DIR', nargs='?', const='', help=f'Crea el fichero de configuración de las bases de datos (por defecto: {DEFAULT_DB_INIFILE})')
     commands.add_argument('--test-connection', metavar='DIR', nargs='?', const='', help=f'Prueba la conexión a la base de datos')
     commands.add_argument('--get-url', metavar='DIR', nargs='?', const='', help=f'Devuelve la URL de conexión para un --db-name dado')
-    
+    commands.add_argument('--list-db', action='store_true', help=f'Lista los nombres de las configuraciones de bases de datos del fichero {DB_INIFILE} que se alcance (directorio actual o {DBTOOLS_DIR})')
+    commands.add_argument('--show-db', metavar='NAME', help='Muestra la configuración completa de la base de datos indicada')
+
     # define las opciones adicionales a los comandos
     options = parser.add_argument_group('Opciones')
-    options.add_argument('--db-name', metavar='NAME', nargs='?', help='Nombre de la configuración de la base de datos')
-    options.add_argument('--db-url', metavar='URL', nargs='?', help='URL de conexión a la base de datos')
+    options.add_argument('--db-name', metavar='NAME', help='Nombre de la configuración de la base de datos')
+    options.add_argument('--db-url', metavar='URL', help='URL de conexión a la base de datos')
 
     # Parsea los argumentos
     args = parser.parse_args()
@@ -173,5 +177,30 @@ def main():
             db_config = config.get_config(args.db_name)
             print(db_config.to_url())
         except ValueError as e:
+            print(f"Error: {e}")
+        return
+
+    if args.list_db:
+        try:
+            config = DBIni.load()
+            names = sorted(config.list_sections())
+            print(f"Configuraciones de bases de datos en {config.inifile}:\n")
+            if names:
+                print(tabulate([[name] for name in names], headers=["DB_NAME"], tablefmt="grid"))
+            print(f"\n{len(names)} configuraciones encontradas")
+        except FileNotFoundError as e:
+            print(f"Error: {e}")
+        return
+
+    if args.show_db is not None:
+        try:
+            config = DBIni.load()
+            db_config = config.get_config(args.show_db)
+            section = db_config.to_section()
+            if "password" in section:
+                section["password"] = DBConfig.censor(section["password"])
+            print(f"Configuración de '{args.show_db}' en {config.inifile}:\n")
+            print(tabulate(section.items(), headers=["CAMPO", "VALOR"], tablefmt="grid"))
+        except (FileNotFoundError, ValueError) as e:
             print(f"Error: {e}")
         return
