@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(grep -E \"^-.*\\\\.\\(md|txt|yml|yaml|toml\\)$\")",
-      "Bash(python -c \"import ast; ast.parse\\(open\\('src/dbcode/__main__.py', encoding='utf-8'\\).read\\(\\)\\); ast.parse\\(open\\('src/dbcode/code_repository.py', encoding='utf-8'\\).read\\(\\)\\); ast.parse\\(open\\('src/dbcode/routine.py', encoding='utf-8'\\).read\\(\\)\\); ast.parse\\(open\\('src/dbcode/__init__.py', encoding='utf-8'\\).read\\(\\)\\); print\\('OK'\\)\")"
-    ]
-  }
-}

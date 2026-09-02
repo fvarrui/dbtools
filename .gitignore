@@ -161,3 +161,6 @@ cython_debug/
 dbtools.ini
 /schemas
 /data
+
+# Claude Code local settings
+.claude/settings.local.json
